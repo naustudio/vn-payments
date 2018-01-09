@@ -1,4 +1,5 @@
 import express from 'express';
+import exphbs from 'express-handlebars';
 import path from 'path';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -8,8 +9,18 @@ const app = express();
 app.disable('x-powered-by');
 
 // View engine setup
-app.set('views', path.join(__dirname, '../views'));
-app.set('view engine', 'pug');
+const hbs = exphbs.create({
+	extname: '.hbs',
+	defaultLayout: 'default',
+	// Specify helpers which are only registered on this instance.
+	// helpers: {
+	// 		foo: function () { return 'FOO!'; },
+	// 		bar: function () { return 'BAR!'; }
+	// }
+});
+
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
 
 app.use(
 	logger('dev', {
