@@ -8,10 +8,13 @@ import routes from './routes';
 const app = express();
 app.disable('x-powered-by');
 
+// fix views folder location
+app.set('views', './example/views');
 // View engine setup
 const hbs = exphbs.create({
 	extname: '.hbs',
 	defaultLayout: 'default',
+	layoutsDir: './example/views/layouts',
 	// Specify helpers which are only registered on this instance.
 	// helpers: {
 	// 		foo: function () { return 'FOO!'; },
@@ -29,7 +32,7 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, './public')));
 
 // Routes
 app.use('/', routes);

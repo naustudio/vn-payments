@@ -1,7 +1,7 @@
 // Nau standard eslint rules, save it as .eslintrc.js
 module.exports = {
 	root: true,
-	extends: ['nau'],
+	extends: 'eslint:recommended',
 	rules: {
 		'comma-dangle': [
 			'error',
@@ -13,10 +13,7 @@ module.exports = {
 				functions: 'never',
 			},
 		],
-		'import/prefer-default-export': 'off',
-		'jest/no-focused-tests': 'error',
-		'jest/no-identical-title': 'error',
-		'import/no-extraneous-dependencies': 'off',
+		'no-console': 'off',
 	},
 	globals: {
 		Modernizr: true,
@@ -24,20 +21,12 @@ module.exports = {
 	},
 	env: {
 		browser: true,
-		es6: true,
-		node: true,
-		jest: true,
+		jquery: true,
 	},
-	parser: 'babel-eslint',
 	parserOptions: {
-		ecmaVersion: 8,
-		sourceType: 'module',
+		ecmaVersion: 5,
 		ecmaFeatures: {
 			impliedStrict: true,
-			// 'jsx': true,
-			// 'classes': true,
 		},
 	},
-	plugins: ['import', 'jest'],
-	settings: {},
 };

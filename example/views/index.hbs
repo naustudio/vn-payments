@@ -1,0 +1,47 @@
+
+<h1>{{ title }}</h1>
+<p>Welcome to #{{title}}</p>
+
+<form action="/payment/checkout" method="POST" autocomplete class="ui form" >
+	<div class="ui stacked segment">
+		<div class="field">
+			<label for="email-input">Email</label>
+			<div class="ui left icon input">
+				<i class="mail icon"></i>
+				<input id="email-input" type="text" name="email" placeholder="Email adress">
+			</div>
+		</div>
+		<div class="field">
+			<label for="phone-input">Phone Number</label>
+			<div class="ui left icon input">
+				<i class="phone icon"></i>
+				<input id="phone-input" type="text" name="phoneNumber" placeholder="Phone number">
+			</div>
+		</div>
+		<div class="field">
+			<label for="amout-input">Phone Number</label>
+			<div class="ui left icon input">
+				<i class="dollar icon"></i>
+				<input id="amout-input" type="text" name="amount" placeholder="Amount to pay">
+			</div>
+		</div>
+		<div class="grouped fields">
+			<label for="fruit">Select payment method:</label>
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input type="radio" name="paymentMethod" checked="" tabindex="0" class="hidden" value="onepayDomestic">
+					<label>Onpay Domestic</label>
+				</div>
+			</div>
+			<div class="field">
+				<div class="ui radio checkbox">
+					<input type="radio" name="paymentMethod" tabindex="0" class="hidden" value="onepayInternational">
+					<label>Onepay International <i class="mastercard icon"></i><i class="visa icon"></i></label>
+				</div>
+			</div>
+		</div>
+		<input type="submit" class="ui large teal submit button" value="Login">
+	</div>
+
+	<div class="ui error message"></div>
+</form>
