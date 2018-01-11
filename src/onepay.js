@@ -369,7 +369,7 @@ OnePay.payloadDefaults = {
 	deliveryAddress      : '',
 	deliveryCity         : '',
 	deliveryCountry      : '',
-	customerEmail        : '',
+	customerEmail        : null, // do not use '' since it will be validated with Email RegExp
 	customerPhone        : '',
 	deliveryProvince     : '',
 	locale               : OnePay.LOCALE_VN,
