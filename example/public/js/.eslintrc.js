@@ -1,23 +1,8 @@
-// Nau standard eslint rules, save it as .eslintrc.js
+// this eslint config will be merged with project's config
 module.exports = {
-	root: true,
 	extends: 'eslint:recommended',
 	rules: {
-		'comma-dangle': [
-			'error',
-			{
-				arrays: 'always-multiline',
-				objects: 'always-multiline',
-				imports: 'always-multiline',
-				exports: 'always-multiline',
-				functions: 'never',
-			},
-		],
 		'no-console': 'off',
-	},
-	globals: {
-		Modernizr: true,
-		hyperform: true,
 	},
 	env: {
 		browser: true,

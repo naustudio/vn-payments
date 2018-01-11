@@ -355,8 +355,6 @@ OnePay.TEST_INTL_MERCHANT = 'TESTONEPAY';
 OnePay.TEST_INTL_ACCESS_CODE = '6BEB2546';
 OnePay.TEST_INTL_SECURE_SECRET = '6D0870CDE5F24F34F3915FB0045120DB';
 
-OnePay.TEST_RETURN_URL = '/onepay/callback';
-
 /* prettier-ignore */
 OnePay.payloadDefaults = {
 	againLink            : '',
@@ -369,13 +367,11 @@ OnePay.payloadDefaults = {
 	deliveryAddress      : '',
 	deliveryCity         : '',
 	deliveryCountry      : '',
-	customerEmail        : '',
+	customerEmail        : null, // do not use '' since it will be validated with Email RegExp
 	customerPhone        : '',
 	deliveryProvince     : '',
 	locale               : OnePay.LOCALE_VN,
-	returnUrl            : OnePay.TEST_RETURN_URL,
 	title                : 'VPC 3-Party',
-	transactionId        : '',
 	customerId           : '',
 	vpcAccessCode        : '',
 	vpcCommand           : OnePay.VPC_COMMAND,

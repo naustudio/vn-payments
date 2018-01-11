@@ -1,5 +1,5 @@
 # vn-payments
-
+[![Travis CI build status](https://travis-ci.org/naustudio/node-vn-payments.svg?branch=develop "Travis CI build status")](https://travis-ci.org/naustudio/node-vn-payments)
 
 
 ## Getting started
