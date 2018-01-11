@@ -17,9 +17,9 @@
     "__prestart": "npm run -s build",
     "start": "nodemon example/index.js --exec \"node -r dotenv/config\"",
     "clean": "rimraf dist",
-    "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
+    "build": "npm run lint && jest && npm run clean && mkdir -p dist && babel src -s -D -d dist",
     "test": "jest --watch",
-    "lint": "esw -w src test"
+    "lint": "esw src test example"
   },
   "keywords": [
     "express",
