@@ -1,5 +1,6 @@
 # vn-payments
 [![Travis CI build status](https://travis-ci.org/naustudio/node-vn-payments.svg?branch=develop "Travis CI build status")](https://travis-ci.org/naustudio/node-vn-payments)
+[![codecov](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop/graph/badge.svg)](https://codecov.io/gh/naustudio/node-vn-payments)
 
 
 ## Getting started
