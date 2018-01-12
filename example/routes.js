@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { OnePay } from '../src/onepay';
+import { VNPay } from '../src/vnpay';
 
 const routes = Router();
 
@@ -25,6 +26,12 @@ const onepayDom = new OnePay({
 	secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
 });
 
+const vnpay = new VNPay({
+	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vnppay.html',
+	merchant: 'COCOSIN',
+	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
+});
+
 routes.post('/payment/checkout', (req, res) => {
 	const userAgent = req.headers['user-agent'];
 	console.log('userAgent', userAgent);
@@ -38,10 +45,7 @@ routes.post('/payment/checkout', (req, res) => {
 	const params = Object.assign({}, req.body);
 
 	const amount = parseInt(params.amount, 10);
-	console.log('amount', amount);
 	const now = new Date();
-
-	// console.log('params', JSON.stringify(params));
 
 	const checkoutData = {
 		amount,
@@ -66,10 +70,22 @@ routes.post('/payment/checkout', (req, res) => {
 		customerId: params.email,
 	};
 
-	// console.log('checkout params:', checkoutData);
-	const onepayCheckout = params.paymentMethod === 'onepayInternational' ? onepayIntl : onepayDom;
+	let checkoutMethod = '';
+	switch (params.paymentMethod) {
+		case 'onepayInternational':
+			checkoutMethod = onepayIntl;
+			break;
+		case 'onepayDomestic':
+			checkoutMethod = onepayDom;
+			break;
+		case 'vnpay':
+			checkoutMethod = vnpay;
+			break;
+		default:
+			break;
+	}
 
-	const checkoutUrl = onepayCheckout.buildCheckoutUrl(checkoutData);
+	const checkoutUrl = checkoutMethod.buildCheckoutUrl(checkoutData);
 
 	res.writeHead(301, { Location: checkoutUrl.href });
 	res.end();
