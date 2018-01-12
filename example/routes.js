@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { OnePay } from '../src/onepay';
 import { VNPay } from '../src/vnpay';
+import { SohaPay } from '../src/sohapay';
 
 const routes = Router();
 
@@ -8,7 +9,29 @@ const routes = Router();
  * GET home page
  */
 routes.get('/', (req, res) => {
-	res.render('index', { title: 'Shopping List' });
+	res.render('index', { title: 'Nau Store' });
+});
+
+/**
+ * GET thank you page
+ */
+routes.get('/success', (req, res) => {
+	res.render('result', {
+		title: 'Nau Store',
+		isSucceed: true,
+		email: 'tu.nguyen@naustud.io',
+		orderId: '6433',
+		price: '5000000',
+	});
+});
+
+routes.get('/fail', (req, res) => {
+	res.render('result', {
+		title: 'Nau Store',
+		email: 'tu.nguyen@naustud.io',
+		orderId: '6433',
+		price: '5000000',
+	});
 });
 
 const onepayIntl = new OnePay({
@@ -29,6 +52,12 @@ const onepayDom = new OnePay({
 const vnpay = new VNPay({
 	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vnppay.html',
 	merchant: 'COCOSIN',
+	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
+});
+
+const sohapay = new SohaPay({
+	paymentGateway: 'https://sohapay.vn/payment.php',
+	merchant: 'SOHAPAY',
 	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
 });
 
@@ -80,6 +109,9 @@ routes.post('/payment/checkout', (req, res) => {
 			break;
 		case 'vnpay':
 			checkoutMethod = vnpay;
+			break;
+		case 'sohapay':
+			checkoutMethod = sohapay;
 			break;
 		default:
 			break;

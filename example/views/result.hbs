@@ -1,0 +1,76 @@
+<div class="container">
+
+	<h1>{{ title }}</h1>
+
+	<div class="content ui grid">
+		<div class="nine wide column">
+
+			{{#if isSucceed}}
+				<div class="result__content">
+					<span class="result__icon-wrapper result__item">
+						<img src="./img/checkmark.svg" alt="">
+					</span>
+					<h2 class="result__title result__item">Thank you for you purchase!</h2>
+					<p class="result__email-announcer result__item">
+						A comfirmation email has been sent to <i>{{ email }}</i>
+						<div class="result__order-number result__item">Order #{{ orderId }}</div>
+					</p>
+					<a class="ui primary button result__item" href="http://localhost:8080">
+						Continue shoping
+					</a>
+					<a href="#" onclick="window.print();return false;" class="result__print-link result__item">
+						<i class="print icon"></i>
+						Print receipt
+					</a>
+				</div>
+			{{else}}
+				<div class="result__content">
+					<span class="result__icon-wrapper result__item">
+						<img src="./img/close.svg" alt="">
+					</span>
+					<h2 class="result__title result__item">Something wrong with your order</h2>
+				</div>
+			{{/if}}
+		</div>
+		<div class="seven wide column ">
+			<div class="result__order-summary-wrapper">
+				<h3 class="result__order-summary__title result__content--pd">Order summary</h3>
+				<div class="result__order-item-wrapper result__content--pd">
+					<span class="result__order-item__image">
+						<img src="./img/adidas-boost.jpeg" alt="">
+					</span>
+					<h4 class="result__order-item__name">Adidas boost</h4>
+				</div>
+				<div class="result__paying-info result__content--pd">
+					<div class="result__paying-info-wrapper">
+						<span class="result__paying-info__label">Subtotal</span>
+						<span>
+							<span class="result__paying-info__value" data-allow-decimal-padding="false">{{ price }}</span> VND
+						</span>
+					</div>
+					<div class="result__paying-info-wrapper">
+						<span class="result__paying-info__label">Shipping</span>
+						<span class="result__paying-info__value">Free</span>
+					</div>
+					<div class="result__paying-info-wrapper">
+						<span class="result__paying-info__label">Taxes</span>
+						<span class="result__paying-info__value">0</span>
+					</div>
+					<div class="result__paying-info-wrapper">
+						<span class="result__paying-info__label">Total</span>
+						<span>
+							<span class="result__paying-info__value" data-allow-decimal-padding="false">{{ price }}</span> VND
+						</span>
+					</div>
+				</div>
+				<div class="result__paying-info-wrapper result__content--pd">
+					<span class="result__paying-info__label">Paid</span>
+					<span class="main-color">
+						<span class="result__paying-info__value" data-allow-decimal-padding="false">{{ price }}</span> VND
+					</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

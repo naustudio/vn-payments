@@ -4,6 +4,7 @@ $(function() {
 	$('.ui.radio.checkbox').checkbox();
 
 	$('#amount-input').autoNumeric('init');
+	$('.result__paying-info__value').autoNumeric('init');
 
 	$('.ui .autofill-checkbox').on('change', function(e) {
 		var isChecked = e.target.checked;
