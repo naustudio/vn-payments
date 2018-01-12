@@ -11,8 +11,14 @@ import { toUpperCase, vnPayDateFormat, createMd5Hash } from './utils';
 /* prettier-ignore */
 const vnpayDataSchema = new SimpleSchema({
 	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
+	againLink            : { type: String },
 	clientIp             : { type: String, max: 16 },
 	currency             : { type: String, allowedValues: ['VND'] },
+	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
+	billingCountry       : { type: String, optional: true, max: 255 },
+	billingPostCode      : { type: String, optional: true, max: 255 },
+	billingStateProvince : { type: String, optional: true, max: 255 },
+	billingStreet        : { type: String, optional: true, max: 255 },
 	customerEmail        : { type: String, optional: true, max: 255, regEx: SimpleSchema.RegEx.Email },
 	customerId           : { type: String, optional: true, max: 255 },
 	customerPhone        : { type: String, optional: true, max: 255 },
@@ -27,7 +33,7 @@ const vnpayDataSchema = new SimpleSchema({
 	orderType            : { type: String, max: 40 },
 	returnUrl            : { type: String, max: 255 },
 	transactionId        : { type: String, max: 40 },
-	vnpSecretKey         : { type: String, max: 8 },
+	vnpSecretKey         : { type: String, max: 32 },
 	vnpMerchant          : { type: String, max: 16 },
 	vnpCommand           : { type: String, max: 16 },
 	vnpVersion           : { type: String, max: 2 },
@@ -87,7 +93,6 @@ class VNPay {
 
 		data.vnpSecretKey = config.secureSecret;
 		data.vnpMerchant = config.merchant;
-		data.createdDate = vnPayDateFormat(new Date());
 
 		// Input type checking
 		vnpayDataSchema.validate(data);
@@ -106,10 +111,10 @@ class VNPay {
 			vnp_TxnRef         : data.orderId,
 			vnp_OrderInfo      : data.orderInfo,
 			vnp_OrderType      : data.orderType,
-			vnp_Amount         : String(data.amount * 100),
+			vnp_Amount         : String(data.amount),
 			vnp_ReturnUrl      : data.returnUrl,
 			vnp_IpAddr         : data.clientIp,
-			vnp_CreateDate     : data.createdDate,
+			vnp_CreateDate     : vnPayDateFormat(new Date()),
 		};
 
 		if (data.bankCode) {
@@ -118,7 +123,7 @@ class VNPay {
 
 		// Step 2. Create the target redirect URL at VNPay server
 		const redirectUrl = new URL(config.paymentGateway);
-		const secureCode = [data.vnpSecretKey];
+		const secureCode = [];
 
 		Object.keys(arrParam)
 			.sort()
@@ -141,7 +146,8 @@ class VNPay {
 		/* Step 3. calculate the param checksum with md5*/
 
 		if (secureCode.length > 0) {
-			redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(secureCode.join('&')));
+			redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
+			redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
 		}
 
 		// console.log('redirectUrl:', redirectUrl);
@@ -163,7 +169,7 @@ class VNPay {
 		delete data.vnp_SecureHash;
 
 		if (config.secureSecret.length > 0) {
-			const secureCode = [config.secureSecret];
+			const secureCode = [];
 
 			Object.keys(data)
 				.sort() // need to sort the key by alphabetically
@@ -175,7 +181,7 @@ class VNPay {
 					}
 				});
 
-			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(secureCode.join('&')))) {
+			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(config.secureSecret + createMd5Hash(secureCode.join('&')))) {
 				return true;
 			}
 		}
@@ -212,7 +218,7 @@ class VNPay {
 }
 
 // should not be changed
-VNPay.GATEWAY_DOSMESTIC = 'http://sandbox.vnpayment.vn/paymentv2/vnppay.html';
+VNPay.GATEWAY_DOSMESTIC = 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
 VNPay.VNP_VERSION = '2';
 VNPay.VNP_COMMAND = 'pay';
 // vnpay only support VND
@@ -240,6 +246,7 @@ VNPay.payloadDefaults = {
 	transactionId        : '',
 	customerId           : '',
 	vnpVersion           : VNPay.VNP_VERSION,
+	vnpCommand 			 : VNPay.VNP_COMMAND,
 };
 
 /* eslint-disable no-unused-vars */

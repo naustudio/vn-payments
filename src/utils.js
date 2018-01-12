@@ -63,7 +63,7 @@ export function to2DigitNumber(number) {
  * @param {*} date
  */
 export function vnPayDateFormat(date) {
-	if (date.constructor.name === 'Date') {
+	if (date.constructor.name !== 'Date') {
 		throw new Error('vnPayDateFormat:param must be a date');
 	}
 
