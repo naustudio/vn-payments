@@ -27,7 +27,7 @@ const onepayDom = new OnePay({
 });
 
 const vnpay = new VNPay({
-	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vnppay.html',
+	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
 	merchant: 'COCOSIN',
 	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
 });
@@ -78,7 +78,9 @@ routes.post('/payment/checkout', (req, res) => {
 		case 'onepayDomestic':
 			checkoutMethod = onepayDom;
 			break;
-		case 'vnpay':
+		case 'vnPay':
+			checkoutData.orderInfo = 'Thanh toan giay adidas';
+			checkoutData.orderType = 'fashion';
 			checkoutMethod = vnpay;
 			break;
 		default:
