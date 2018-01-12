@@ -4,48 +4,8 @@
  */
 /*eslint-disable no-shadow, key-spacing, no-param-reassign*/
 import SimpleSchema from 'simpl-schema';
-import crypto from 'crypto';
 import { URL } from 'url';
-
-/**
- * Convenient function to convert String to upper case
- * @param {*} s
- */
-function toUpperCase(s = '') {
-	if (typeof s !== 'string') {
-		throw new Error('toUpperCase:param must be string');
-	}
-
-	return s.toUpperCase();
-}
-
-/**
- * Equivalent to PHP's `pack` function, use Node native Buffer
- * Note: PHP
- *     pack('H*', secretCode)
- * is equivalent to Node
- *     Buffer.from(secretCode, 'hex')
- *
- * @param {*} secret
- * @param {*} encoding
- */
-function pack(secret, encoding = 'hex') {
-	return Buffer.from(secret, encoding);
-}
-
-/**
- * Equivalent to PHP's `hash_hmac` function
- * @param  {[type]} code       [description]
- * @param  {[type]} secureCode [description]
- * @param  {[type]} pack       [description]
- * @return {[type]}            [description]
- */
-function hashHmac(code, secureCode, pack) {
-	const hmac = crypto.createHmac(code, pack);
-	hmac.update(secureCode);
-
-	return hmac.digest('hex');
-}
+import { toUpperCase, pack, hashHmac } from './utils';
 
 // The schema is based on field data requirements from OnePay's dev document
 /* prettier-ignore */
