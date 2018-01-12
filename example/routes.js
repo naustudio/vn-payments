@@ -7,7 +7,7 @@ const routes = Router();
  * GET home page
  */
 routes.get('/', (req, res) => {
-	res.render('index', { title: 'Express Babel' });
+	res.render('index', { title: 'Shopping List' });
 });
 
 const onepayIntl = new OnePay({
@@ -37,8 +37,7 @@ routes.post('/payment/checkout', (req, res) => {
 
 	const params = Object.assign({}, req.body);
 
-	const amount = parseInt(params.amount, 10);
-	console.log('amount', amount);
+	const amount = parseInt(params.amount.replace(/,/g, ''), 10);
 	const now = new Date();
 
 	// console.log('params', JSON.stringify(params));
