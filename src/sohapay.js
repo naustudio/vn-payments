@@ -2,9 +2,8 @@
  * @author Tu Nguyen
  */
 
-/*eslint-disable no-shadow, key-spacing, no-param-reassign*/
 import SimpleSchema from 'simpl-schema';
-import { URL } from 'url';
+// import { URL } from 'url';
 
 // The schema is based on field data requirements from VNPay's dev document
 /* prettier-ignore */
@@ -39,20 +38,52 @@ const sohaPayConfigSchema = new SimpleSchema({
 });
 
 class SohaPay {
-	constructor(config) {
-		this.config = Object.assign({}, config);
-		sohaPayConfigSchema.validate(this.config);
+	constructor(config = {}) {
+		this.config = config;
+		SohaPay.configSchema.validate(this.config);
 	}
 
+	/**
+	 * Build checkout URL to redirect to the payment gateway
+	 *
+	 * @param  {Object} payload Object that contains needed data for the URL builder
+	 * @return {URL}    The URL object used to redirect
+	 */
 	buildCheckoutUrl(payload) {
+		// Mảng các tham số chuyển tới Onepay Payment
+		const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
+
+		console.log('data', data);
 	}
 
-	verifyReturnUrl(data) {
+	/**
+	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
+	 *
+	 * @param {*} payload
+	 */
+	validateCheckoutPayload(payload) {
+		SohaPay.checkoutSchema.validate(payload);
+	}
+
+	get checkoutPayloadDefaults() {
+		return {};
+	}
+
+	/**
+	 * Verify return query string from payment gateway
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`)
+	 * @return {boolean}      Whether the return query params are genuine (hash checksum check)
+	 */
+	verifyReturnUrl(query) {
+		const data = Object.assign({}, query);
+		console.log('data', data);
+
 		return false;
 	}
-
-	static getReturnUrlStatus(responseCode) {
-	}
 }
+// static properties
+SohaPay.configSchema = sohaPayConfigSchema;
+SohaPay.checkoutSchema = sohapayDataSchema;
 
 export { SohaPay };
