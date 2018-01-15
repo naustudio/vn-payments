@@ -1848,6 +1848,7 @@ $.fn.form.settings = {
 
     // value is most likely url
     url: function(value) {
+			console.log('test', value);
       return $.fn.form.settings.regExp.url.test(value);
     },
 

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { OnePayDomestic, OnePayInternational } from '../src/onepay';
 import { VNPay } from '../src/vnpay';
 import { SohaPay } from '../src/sohapay';
+import { createMd5Hash } from '../src/utils';
 
 const routes = Router();
 
@@ -10,6 +11,8 @@ const routes = Router();
  */
 routes.get('/', (req, res) => {
 	res.render('index', { title: 'Nau Store' });
+
+	console.log(createMd5Hash('NauStudio'));
 });
 
 /**
@@ -63,18 +66,14 @@ const sohapay = new SohaPay({
 routes.post('/payment/checkout', (req, res) => {
 	const userAgent = req.headers['user-agent'];
 	console.log('userAgent', userAgent);
-
 	const clientIp =
 		req.headers['x-forwarded-for'] ||
 		req.connection.remoteAddress ||
 		req.socket.remoteAddress ||
 		(req.connection.socket ? req.connection.socket.remoteAddress : null);
-
 	const params = Object.assign({}, req.body);
-
 	const amount = parseInt(params.amount.replace(/,/g, ''), 10);
 	const now = new Date();
-
 	const checkoutData = {
 		amount,
 		clientIp,
@@ -97,7 +96,6 @@ routes.post('/payment/checkout', (req, res) => {
 		transactionId: `node-${now.toISOString()}`, // same as orderId (we don't have retry mechanism)
 		customerId: params.email,
 	};
-
 	let checkoutMethod = '';
 	switch (params.paymentMethod) {
 		case 'onepayInternational':
@@ -118,9 +116,7 @@ routes.post('/payment/checkout', (req, res) => {
 		default:
 			break;
 	}
-
 	const checkoutUrl = checkoutMethod.buildCheckoutUrl(checkoutData);
-
 	res.writeHead(301, { Location: checkoutUrl.href });
 	res.end();
 });
