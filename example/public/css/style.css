@@ -81,6 +81,10 @@ a {
 	align-items: center;
 }
 
+.result__content--center {
+	text-align: center;
+}
+
 .result__item {
 	margin: 15px 0;
 }
@@ -152,6 +156,14 @@ a {
 
 .result__paying-info__value {
 	font-weight: 700;
+}
+
+.result__billing-address {
+	border: 1px solid #bbb;
+	border-radius: 5px;
+	background-color: rgb(250, 250, 250);
+	width: 100%;
+	padding: 20px;
 }
 
 

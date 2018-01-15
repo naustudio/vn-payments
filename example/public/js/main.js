@@ -15,8 +15,8 @@ $(function() {
 			form.lastname.value = 'Địch';
 			form.address.value = '441 Cách Mạng Tháng Tám';
 			form.district.value = '10';
-			form.ward.value = '13';
-			form.city.value = 'Hồ Chí Minh';
+			form.postal.value = '700000';
+			form.country.value = 'Hồ Chí Minh';
 			form.email.value = 'tu.nguyen@naustud.io';
 			form.phoneNumber.value = '0999999999';
 		} else {
@@ -24,8 +24,8 @@ $(function() {
 			form.lastname.value = '';
 			form.address.value = '';
 			form.district.value = '';
-			form.ward.value = '';
-			form.city.value = '';
+			form.postal.value = '';
+			form.country.value = '';
 			form.email.value = '';
 			form.phoneNumber.value = '';
 		}

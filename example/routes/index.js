@@ -60,11 +60,11 @@ routes.post('/payment/checkout', (req, res) => {
 		clientIp,
 		locale: 'vn',
 		// TODO: fill in billing address and ship address with address fields from form
-		billingCity: '',
+		billingCity: params.district || '',
 		billingCountry: '',
-		billingPostCode: '',
-		billingStateProvince: '',
-		billingStreet: '',
+		billingPostCode: params.postal || '',
+		billingStateProvince: params.country || '',
+		billingStreet: params.address || '',
 		currency: 'VND',
 		deliveryAddress: '',
 		deliveryCity: '',
@@ -127,6 +127,10 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 		email: res.locals.email,
 		orderId: res.locals.orderId,
 		price: res.locals.price,
+		billingStreet: res.billingStreet,
+		billingCountry: res.billingCountry,
+		billingDistrict: res.billingDistrict,
+		billingPostalCode: res.billingPostalCode,
 	});
 });
 

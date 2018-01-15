@@ -25,8 +25,24 @@ export function checkoutOnePayDomestic(req, res) {
 	return checkoutUrl;
 }
 
-export function callbackOnePayDomestic(/* req, res */) {
-	console.log('TODO: verify return params and decide status here');
+export function callbackOnePayDomestic(req, res) {
+	const query = req.query;
+
+	const isReturnQueryValid = onepayDom.verifyReturnUrl(query);
+
+	if (isReturnQueryValid) {
+		res.locals.email = 'tu.nguyen@naustud.io';
+		res.locals.orderId = query.vpc_TransactionNo || '';
+		res.locals.price = query.vpc_Amount ? parseInt(query.vpc_Amount, 10) / 100 : 0;
+
+		if (query.vpc_TxnResponseCode === '0') {
+			res.locals.isSucceed = true;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	} else {
+		res.locals.isSucceed = false;
+	}
 }
 
 export function checkoutOnePayInternational(req, res) {
@@ -41,6 +57,26 @@ export function checkoutOnePayInternational(req, res) {
 	return checkoutUrl;
 }
 
-export function callbackOnePayInternational(/*req , res */) {
-	console.log('TODO: verify return params and decide status here');
+export function callbackOnePayInternational(req, res) {
+	const query = req.query;
+
+	const isReturnQueryValid = onepayIntl.verifyReturnUrl(query);
+
+	if (isReturnQueryValid) {
+		res.locals.email = 'tu.nguyen@naustud.io';
+		res.locals.orderId = query.vpc_TransactionNo || '';
+		res.locals.price = query.vpc_Amount ? parseInt(query.vpc_Amount, 10) / 100 : 0;
+		res.billingStreet = query.vpc_AVS_Street01;
+		res.billingCountry = query.vpc_AVS_StateProv;
+		res.billingDistrict = query.vpc_AVS_City;
+		res.billingPostalCode = query.vpc_AVS_PostCode;
+
+		if (query.vpc_TxnResponseCode === '0') {
+			res.locals.isSucceed = true;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	} else {
+		res.locals.isSucceed = false;
+	}
 }
