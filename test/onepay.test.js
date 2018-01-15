@@ -1,10 +1,10 @@
-import { OnePay } from '../src/onepay';
+import { OnePayDomestic, OnePayInternational } from '../src/onepay';
 
-describe('OnePay Domestic', () => {
+describe('OnePayDomestic', () => {
 	let onepayDom;
 
 	beforeEach(() => {
-		onepayDom = new OnePay({
+		onepayDom = new OnePayDomestic({
 			paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
 			merchant: 'ONEPAY',
 			accessCode: 'D67342C2',
@@ -12,7 +12,17 @@ describe('OnePay Domestic', () => {
 		});
 	});
 
-	describe('OnePay.buildCheckoutUrl', () => {
+	describe('OnePayDomestic static properties', () => {
+		it('should inherit from OnePay', () => {
+			expect(OnePayDomestic.VPC_VERSION).toEqual('2');
+			expect(OnePayDomestic.VPC_COMMAND).toEqual('pay');
+			expect(OnePayDomestic.CURRENCY_VND).toEqual('VND');
+			expect(OnePayDomestic.LOCALE_EN).toEqual('en');
+			expect(OnePayDomestic.LOCALE_VN).toEqual('vn');
+		});
+	});
+
+	describe('OnePayDomestic.buildCheckoutUrl', () => {
 		it('should return correct payment request URL all details', () => {
 			// we'll use this demo URL from OnePay developer website for authenticity
 			// https://mtf.onepay.vn/onecomm-pay/vpc.op?Title=onepay+paygate&vpc_AccessCode=D67342C2&vpc_Amount=100&vpc_Command=pay&vpc_Currency=VND&vpc_Customer_Email=support%40onepay.vn&vpc_Customer_Id=thanhvt&vpc_Customer_Phone=840904280949&vpc_Locale=vn&vpc_MerchTxnRef=2018-01-11T14%3A46%3A11.115Z&vpc_Merchant=ONEPAY&vpc_OrderInfo=2018-01-11T14%3A46%3A11.115Z&vpc_ReturnURL=http%3A%2F%2Flocalhost%2F%7Ethanh%2Fnoidia_php%2Fdr.php&vpc_SHIP_City=Ha+Noi&vpc_SHIP_Country=Viet+Nam&vpc_SHIP_Provice=Hoan+Kiem&vpc_SHIP_Street01=39A+Ngo+Quyen&vpc_TicketNo=127.0.0.1&vpc_Version=2&vpc_SecureHash=DDC85640D5B2D72AC46A16FBCD3E0DF7B4E05DB1818E2A0A423C2A31FAFF39E4
@@ -160,34 +170,66 @@ describe('OnePay Domestic', () => {
 					onepayDom.buildCheckoutUrl(checkoutPayload);
 				}).not.toThrow();
 			});
+
+			it('should throw errors at wrong returnUrl input', () => {
+				checkoutPayload.returnUrl = '';
+				expect(() => {
+					onepayDom.buildCheckoutUrl(checkoutPayload);
+				}).toThrow('Return url failed regular expression validation');
+
+				checkoutPayload.returnUrl = '//localhost:8080';
+				expect(() => {
+					onepayDom.buildCheckoutUrl(checkoutPayload);
+				}).toThrow('Return url failed regular expression validation');
+
+				checkoutPayload.returnUrl = 'example.com/checkout';
+				expect(() => {
+					onepayDom.buildCheckoutUrl(checkoutPayload);
+				}).toThrow('Return url failed regular expression validation');
+
+				checkoutPayload.returnUrl = 'http://localhost:8080/';
+				expect(() => {
+					onepayDom.buildCheckoutUrl(checkoutPayload);
+				}).not.toThrow();
+			});
 		});
 	});
 
-	describe('OnePayDom.verifyReturnUrl', () => {
+	describe('OnePayDomestic.verifyReturnUrl', () => {
 		it('should verify the return URL', () => {
 			console.log('TODO: OnePayDom.verifyReturnUrl');
 		});
 	});
 });
 
-describe('OnePay International', () => {
+describe('OnePayInternational', () => {
 	let onepayIntl;
 
 	beforeEach(() => {
-		onepayIntl = new OnePay({
+		onepayIntl = new OnePayInternational({
 			paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
 			merchant: 'TESTONEPAY',
 			accessCode: '6BEB2546',
 			secureSecret: '6D0870CDE5F24F34F3915FB0045120DB',
-			againLink: 'http://localhost/~thanh/quocte_php/',
 		});
 	});
 
-	describe('OnePay.buildCheckoutUrl', () => {
+	describe('OnePayInternational static properties', () => {
+		it('should inherit from OnePay', () => {
+			expect(OnePayInternational.VPC_VERSION).toEqual('2');
+			expect(OnePayInternational.VPC_COMMAND).toEqual('pay');
+			expect(OnePayInternational.CURRENCY_VND).toEqual('VND');
+			expect(OnePayInternational.LOCALE_EN).toEqual('en');
+			expect(OnePayInternational.LOCALE_VN).toEqual('vn');
+		});
+	});
+
+	describe('OnePayInternational.buildCheckoutUrl', () => {
 		it('should return correct payment request URL all details', () => {
 			// we'll use this demo URL from OnePay developer website for authenticity
 			// https://mtf.onepay.vn/vpcpay/vpcpay.op?AVS_City=Hanoi&AVS_Country=VN&AVS_PostCode=10000&AVS_StateProv=Hoan+Kiem&AVS_Street01=194+Tran+Quang+Khai&AgainLink=http%253A%252F%252Flocalhost%252F%257Ethanh%252Fquocte_php%252F&Title=VPC+3-Party&vpc_AccessCode=6BEB2546&vpc_Amount=1000000&vpc_Command=pay&vpc_Customer_Email=support%40onepay.vn&vpc_Customer_Id=thanhvt&vpc_Customer_Phone=840904280949&vpc_Locale=en&vpc_MerchTxnRef=2018011121565445977757&vpc_Merchant=TESTONEPAY&vpc_OrderInfo=JSECURETEST01&vpc_ReturnURL=http%3A%2F%2Flocalhost%2F%7Ethanh%2Fquocte_php%2Fdr.php&vpc_SHIP_City=Ha+Noi&vpc_SHIP_Country=Viet+Nam&vpc_SHIP_Provice=Hoan+Kiem&vpc_SHIP_Street01=39A+Ngo+Quyen&vpc_TicketNo=%3A%3A1&vpc_Version=2&vpc_SecureHash=6A1F6F957E74559083B97D38DF109E5E18292D8516785CA7E794FBB59717A654
 			const checkoutPayload = {
+				againLink: 'http://localhost/~thanh/quocte_php/',
 				amount: 10000,
 				clientIp: '::1',
 				locale: 'en',
@@ -220,6 +262,7 @@ describe('OnePay International', () => {
 			// we'll use this demo URL from OnePay developer website for authenticity
 			// https://mtf.onepay.vn/vpcpay/vpcpay.op?AgainLink=http%253A%252F%252Flocalhost%252F%257Ethanh%252Fquocte_php%252F&Title=VPC+3-Party&vpc_AccessCode=6BEB2546&vpc_Amount=1000000&vpc_Command=pay&vpc_Customer_Id=thanhvt&vpc_Locale=en&vpc_MerchTxnRef=2018-01-11T15%3A22%3A56.437Z&vpc_Merchant=TESTONEPAY&vpc_OrderInfo=2018-01-11T15%3A22%3A56.437Z&vpc_ReturnURL=http%3A%2F%2Flocalhost%2F%7Ethanh%2Fquocte_php%2Fdr.php&vpc_TicketNo=127.0.0.1&vpc_Version=2&vpc_SecureHash=CD5AE671AACD30ED1A754050A3C3C8951AD4CF99DBB168F66A856137C82C8EFC
 			const checkoutPayload = {
+				againLink: 'http://localhost/~thanh/quocte_php/',
 				amount: 10000,
 				clientIp: '127.0.0.1',
 				locale: 'en',
@@ -251,6 +294,12 @@ describe('OnePay International', () => {
 
 	it('should throw errors at missing required details', () => {
 		const checkoutPayload = {};
+
+		expect(() => {
+			onepayIntl.buildCheckoutUrl(checkoutPayload);
+		}).toThrow('Again link is required');
+
+		checkoutPayload.againLink = 'http://localhost:8080';
 		expect(() => {
 			onepayIntl.buildCheckoutUrl(checkoutPayload);
 		}).toThrow('Amount is required');
@@ -286,6 +335,7 @@ describe('OnePay International', () => {
 
 		beforeEach(() => {
 			checkoutPayload = {
+				againLink: 'http://localhost:8080',
 				amount: 100,
 				clientIp: '127.0.0.1',
 				orderId: 'TEST123',
@@ -327,6 +377,28 @@ describe('OnePay International', () => {
 
 			checkoutPayload.customerEmail = 'valid@email.xyz';
 
+			expect(() => {
+				onepayIntl.buildCheckoutUrl(checkoutPayload);
+			}).not.toThrow();
+		});
+
+		it('should throw errors at wrong returnUrl input', () => {
+			checkoutPayload.returnUrl = '';
+			expect(() => {
+				onepayIntl.buildCheckoutUrl(checkoutPayload);
+			}).toThrow('Return url failed regular expression validation');
+
+			checkoutPayload.returnUrl = '//localhost:8080';
+			expect(() => {
+				onepayIntl.buildCheckoutUrl(checkoutPayload);
+			}).toThrow('Return url failed regular expression validation');
+
+			checkoutPayload.returnUrl = 'example.com/checkout';
+			expect(() => {
+				onepayIntl.buildCheckoutUrl(checkoutPayload);
+			}).toThrow('Return url failed regular expression validation');
+
+			checkoutPayload.returnUrl = 'http://localhost:8080/';
 			expect(() => {
 				onepayIntl.buildCheckoutUrl(checkoutPayload);
 			}).not.toThrow();

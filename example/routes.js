@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { OnePay } from '../src/onepay';
+import { OnePayDomestic, OnePayInternational } from '../src/onepay';
 import { VNPay } from '../src/vnpay';
 import { SohaPay } from '../src/sohapay';
 
@@ -34,15 +34,14 @@ routes.get('/fail', (req, res) => {
 	});
 });
 
-const onepayIntl = new OnePay({
+const onepayIntl = new OnePayInternational({
 	paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
 	merchant: 'TESTONEPAY',
 	accessCode: '6BEB2546',
 	secureSecret: '6D0870CDE5F24F34F3915FB0045120DB',
-	againLink: 'http://localhost:8080',
 });
 
-const onepayDom = new OnePay({
+const onepayDom = new OnePayDomestic({
 	paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
 	merchant: 'ONEPAY',
 	accessCode: 'D67342C2',
@@ -102,6 +101,7 @@ routes.post('/payment/checkout', (req, res) => {
 	let checkoutMethod = '';
 	switch (params.paymentMethod) {
 		case 'onepayInternational':
+			checkoutData.againLink = 'http://localhost:8080';
 			checkoutMethod = onepayIntl;
 			break;
 		case 'onepayDomestic':
