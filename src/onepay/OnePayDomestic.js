@@ -29,51 +29,102 @@ import { urlRegExp } from '../utils';
  * ```
  */
 class OnePayDomestic extends OnePay {
-	static getReturnUrlStatus(responseCode) {
-		switch (String(responseCode)) {
-			case '0':
-				return 'Giao dịch thành công - Approved';
-			case '1':
-				return 'Ngân hàng từ chối giao dịch - Bank Declined';
-			case '3':
-				return 'Mã đơn vị không tồn tại - Merchant not exist';
-			case '4':
-				return 'Không đúng access code - Invalid access code';
-			case '5':
-				return 'Số tiền không hợp lệ - Invalid amount';
-			case '6':
-				return 'Mã tiền tệ không tồn tại - Invalid currency code';
-			case '7':
-				return 'Lỗi không xác định - Unspecified Failure ';
-			case '8':
-				return 'Số thẻ không đúng - Invalid card Number';
-			case '9':
-				return 'Tên chủ thẻ không đúng - Invalid card name';
-			case '10':
-				return 'Thẻ hết hạn/Thẻ bị khóa - Expired Card';
-			case '11':
-				return 'Thẻ chưa đăng ký sử dụng dịch vụ - Card Not Registed Service(internet banking)';
-			case '12':
-				return 'Ngày phát hành/Hết hạn không đúng - Invalid card date';
-			case '13':
-				return 'Vượt quá hạn mức thanh toán - Exist Amount';
-			case '21':
-				return 'Số tiền không đủ để thanh toán - Insufficient fund';
-			case '22':
-				return 'Thông tin tài khoản không đúng - Invalid Account';
-			case '23':
-				return 'Tài khoản bị khóa - Account Locked';
-			case '24':
-				return 'Thông tin thẻ không đúng - Invalid Card Info';
-			case '25':
-				return 'OTP không đúng - Invalid OTP';
-			case '253':
-				return 'Quá thời gian thanh toán - Transaction timeout';
-			case '99':
-				return 'Người sử dụng hủy giao dịch - User cancel';
-			default:
-				return 'Giao dịch thất bại - Failured';
-		}
+	/**
+	 *
+	 * @param {*} responseCode Responde code from gateway
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 */
+	static getReturnUrlStatus(responseCode, locale = 'vn') {
+		const responseCodeTable = {
+			0: {
+				vn: 'Giao dịch thành công',
+				en: 'Approved',
+			},
+			1: {
+				vn: 'Ngân hàng từ chối giao dịch',
+				en: 'Bank Declined',
+			},
+			3: {
+				vn: 'Mã đơn vị không tồn tại',
+				en: 'Merchant not exist',
+			},
+			4: {
+				vn: 'Không đúng access code',
+				en: 'Invalid access code',
+			},
+			5: {
+				vn: 'Số tiền không hợp lệ',
+				en: 'Invalid amount',
+			},
+			6: {
+				vn: 'Mã tiền tệ không tồn tại',
+				en: 'Invalid currency code',
+			},
+			7: {
+				vn: 'Lỗi không xác định',
+				en: 'Unspecified Failure ',
+			},
+			8: {
+				vn: 'Số thẻ không đúng',
+				en: 'Invalid card Number',
+			},
+			9: {
+				vn: 'Tên chủ thẻ không đúng',
+				en: 'Invalid card name',
+			},
+			10: {
+				vn: 'Thẻ hết hạn/Thẻ bị khóa',
+				en: 'Expired Card',
+			},
+			11: {
+				vn: 'Thẻ chưa đăng ký sử dụng dịch vụ',
+				en: 'Card Not Registed Service(internet banking)',
+			},
+			12: {
+				vn: 'Ngày phát hành/Hết hạn không đúng',
+				en: 'Invalid card date',
+			},
+			13: {
+				vn: 'Vượt quá hạn mức thanh toán',
+				en: 'Exist Amount',
+			},
+			21: {
+				vn: 'Số tiền không đủ để thanh toán',
+				en: 'Insufficient fund',
+			},
+			22: {
+				vn: 'Thông tin tài khoản không đúng',
+				en: 'Invalid Account',
+			},
+			23: {
+				vn: 'Tài khoản bị khóa',
+				en: 'Account Locked',
+			},
+			24: {
+				vn: 'Thông tin thẻ không đúng',
+				en: 'Invalid Card Info',
+			},
+			25: {
+				vn: 'OTP không đúng',
+				en: 'Invalid OTP',
+			},
+			253: {
+				vn: 'Quá thời gian thanh toán',
+				en: 'Transaction timeout',
+			},
+			99: {
+				vn: 'Người sử dụng hủy giao dịch',
+				en: 'User cancel',
+			},
+			default: {
+				vn: 'Giao dịch thất bại',
+				en: 'Unknown Failure',
+			},
+		};
+
+		const respondText = responseCodeTable[responseCode];
+
+		return respondText ? respondText[locale] : responseCodeTable.default[locale];
 	}
 
 	/**
@@ -128,15 +179,16 @@ class OnePayDomestic extends OnePay {
 /* prettier-ignore */
 OnePayDomestic.checkoutSchema = new SimpleSchema({
 	againLink            : { type: String, optional: true, max: 64, regEx: urlRegExp },
-	// NOTE: there is a ridiculus inconsistency in OnePay document,
+	// NOTE: there is an inconsistency in OnePayDom vs. Intl that we had to test to find out,
 	// while intl allows 10 digits, domestic only allows max 9 digits (999.999.999VND)
 	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
-	// NOTE: billing address is not expected in domestic
-	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
-	billingCountry       : { type: String, optional: true, max: 255 },
-	billingPostCode      : { type: String, optional: true, max: 255 },
-	billingStateProvince : { type: String, optional: true, max: 255 },
-	billingStreet        : { type: String, optional: true, max: 255 },
+	// NOTE: billing address is not expected in domestic but keep them here so that
+	// same input data can be used for both dom. and intl. gateway
+	billingCity          : { type: String, optional: true, max: 64 },
+	billingCountry       : { type: String, optional: true, max: 2 },
+	billingPostCode      : { type: String, optional: true, max: 64 },
+	billingStateProvince : { type: String, optional: true, max: 64 },
+	billingStreet        : { type: String, optional: true, max: 64 },
 	clientIp             : { type: String, max: 15 },
 	currency             : { type: String, allowedValues: ['VND'] },
 	customerEmail        : { type: String, optional: true, max: 24, regEx: SimpleSchema.RegEx.Email },
@@ -156,13 +208,5 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 	vpcMerchant          : { type: String, max: 16 },
 	vpcVersion           : { type: String, max: 2 },
 });
-
-OnePayDomestic.TEST_GATEWAY = 'https://mtf.onepay.vn/onecomm-pay/vpc.op';
-// OnePayDomestic.VPC_VERSION = '2';
-// OnePayDomestic.VPC_COMMAND = 'pay';
-// onepay only support VND
-// OnePayDomestic.CURRENCY_VND = 'VND';
-// OnePayDomestic.LOCALE_EN = 'en';
-// OnePayDomestic.LOCALE_VN = 'vn';
 
 export { OnePayDomestic };

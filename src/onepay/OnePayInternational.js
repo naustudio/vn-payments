@@ -3,6 +3,7 @@
  */
 import SimpleSchema from 'simpl-schema';
 import { OnePay } from './OnePay';
+import { urlRegExp } from '../utils';
 
 /**
  * OnePay International payment gateway helper
@@ -28,60 +29,83 @@ import { OnePay } from './OnePay';
  * ```
  */
 class OnePayInternational extends OnePay {
-	static getReturnUrlStatus(responseCode) {
-		let result;
+	/**
+	 *
+	 * @param {*} responseCode Responde code from gateway
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 */
+	static getReturnUrlStatus(responseCode, locale = 'vn') {
+		const responseCodeTable = {
+			0: {
+				vn: 'Giao dịch thành công',
+				en: 'Transaction is successful',
+			},
+			1: {
+				vn: 'Ngân hàng phát hành thẻ không cấp phép. Vui lòng liên hệ ngân hàng',
+				en: 'Issuer Bank declined the transaction. Please contact Issuer Bank',
+			},
+			2: {
+				vn:
+					'Ngân hàng phát hành từ chối cấp phép, do số dư không đủ thanh toán hoặc chưa đăng ký dịch vụ thanh toán trực tuyến',
+				en: 'Bank Declined Transaction',
+			},
+			3: {
+				vn: 'Cổng thanh toán không nhận được kết quả trả về từ ngân hàng phát hành thẻ',
+				en: 'Issuer Bank declined the transaction',
+			},
+			4: {
+				vn: 'Thẻ hết hạn sử dụng',
+				en: 'Your card is expired',
+			},
+			5: {
+				en: 'Your credit account is insufficient funds',
+				vn: 'Thẻ không đủ hạn mức hoặc tài khoản không đủ số dư thanh toán.',
+			},
+			6: {
+				en: 'Error from Issuer Bank.',
+				vn: 'Lỗi từ ngân hàng phát hành thẻ.',
+			},
+			7: {
+				en: 'Error when processing transaction',
+				vn: 'Lỗi phát sinh trong quá trình xử lý giao dịch',
+			},
+			8: {
+				en: 'Issuer Bank does not support E-commerce transaction',
+				vn: 'Ngân hàng phát hành thẻ không hỗ trợ giao dịch Internet',
+			},
+			9: {
+				en: 'Issuer Bank declined the transaction. Please contact Issuer Bank.',
+				vn: 'Ngân hàng phát hành thẻ từ chối giao dịch.',
+			},
+			99: {
+				en: 'User cancel',
+				vn: 'Người dùng hủy giao dịch',
+			},
+			B: {
+				en: 'Cannot authenticated by 3D-Secure Program. Please contact Issuer Bank.',
+				vn: 'Không xác thực được 3D- Secure. Liên hệ ngân hàng phát hành để được hỗ trợ.',
+			},
+			E: {
+				en: 'Wrong CSC entered or Issuer Bank declined the transaction. Please contact Issuer Bank.',
+				vn: 'Bạn nhập sai CSC hoặc thẻ vượt quá hạn mức lần thanh toán',
+			},
+			F: {
+				en: '3D Secure Authentication Failed',
+				vn: 'Giao dịch thất bại. Không xác thực được 3D',
+			},
+			Z: {
+				en: 'Transaction was block by OFD',
+				vn: 'Giao dịch bị chặn bởi hệ thống ODF',
+			},
+			default: {
+				vn: 'Giao dịch thất bại',
+				en: 'Unknown Failure',
+			},
+		};
 
-		switch (String(responseCode)) {
-			case '0':
-				result = 'Giao dịch thành công - Approved';
-				break;
-			case '1':
-				result = 'Ngân hàng từ chối giao dịch - Bank Declined';
-				break;
-			case '3':
-				result = 'Mã đơn vị không tồn tại - Merchant not exist';
-				break;
-			case '4':
-				result = 'Không đúng access code - Invalid access code';
-				break;
-			case '5':
-				result = 'Số tiền không hợp lệ - Invalid amount';
-				break;
-			case '6':
-				result = 'Mã tiền tệ không tồn tại - Invalid currency code';
-				break;
-			case '7':
-				result = 'Lỗi không xác định - Unspecified Failure ';
-				break;
-			case '8':
-				result = 'Số thẻ không đúng - Invalid card Number';
-				break;
-			case '9':
-				result = 'Tên chủ thẻ không đúng - Invalid card name';
-				break;
-			case '10':
-				result = 'Thẻ hết hạn/Thẻ bị khóa - Expired Card';
-				break;
-			case '11':
-				result = 'Thẻ chưa đăng ký sử dụng dịch vụ - Card Not Registed Service(internet banking)';
-				break;
-			case '12':
-				result = 'Ngày phát hành/Hết hạn không đúng - Invalid card date';
-				break;
-			case '13':
-				result = 'Vượt quá hạn mức thanh toán - Exist Amount';
-				break;
-			case '21':
-				result = 'Số tiền không đủ để thanh toán - Insufficient fund';
-				break;
-			case '99':
-				result = 'Người sủ dụng hủy giao dịch - User cancel';
-				break;
-			default:
-				result = 'Giao dịch thất bại - Failured';
-		}
+		const respondText = responseCodeTable[responseCode];
 
-		return result;
+		return respondText ? respondText[locale] : responseCodeTable.default[locale];
 	}
 
 	/**
@@ -135,41 +159,33 @@ class OnePayInternational extends OnePay {
 // The schema is based on field data requirements from OnePay's dev document
 /* prettier-ignore */
 OnePayInternational.checkoutSchema = new SimpleSchema({
-	againLink            : { type: String }, // againLink is only required by International gateway
-	// NOTE: there is a ridiculus inconsistency in OnePay document,
+	againLink            : { type: String, max: 64, regEx: urlRegExp },
+	// NOTE: there is an inconsistency in OnePayDom vs. Intl that we had to test to find out,
 	// while intl allows 10 digits, domestic only allows max 9 digits (999.999.999VND)
 	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
-	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
-	billingCountry       : { type: String, optional: true, max: 255 },
-	billingPostCode      : { type: String, optional: true, max: 255 },
-	billingStateProvince : { type: String, optional: true, max: 255 },
-	billingStreet        : { type: String, optional: true, max: 255 },
-	clientIp             : { type: String, max: 45 },
+	billingCity          : { type: String, optional: true, max: 64 },
+	billingCountry       : { type: String, optional: true, max: 2 },
+	billingPostCode      : { type: String, optional: true, max: 64 },
+	billingStateProvince : { type: String, optional: true, max: 64 },
+	billingStreet        : { type: String, optional: true, max: 64 },
+	clientIp             : { type: String, max: 15 },
 	currency             : { type: String, allowedValues: ['VND'] },
-	customerEmail        : { type: String, optional: true, max: 255, regEx: SimpleSchema.RegEx.Email },
-	customerId           : { type: String, optional: true, max: 255 },
-	customerPhone        : { type: String, optional: true, max: 255 },
-	deliveryAddress      : { type: String, optional: true, max: 255 },
-	deliveryCity         : { type: String, optional: true, max: 255 },
-	deliveryCountry      : { type: String, optional: true, max: 255 },
-	deliveryProvince     : { type: String, optional: true, max: 255 },
+	customerEmail        : { type: String, optional: true, max: 24, regEx: SimpleSchema.RegEx.Email },
+	customerId           : { type: String, optional: true, max: 64 },
+	customerPhone        : { type: String, optional: true, max: 16 },
+	deliveryAddress      : { type: String, optional: true, max: 64 },
+	deliveryCity         : { type: String, optional: true, max: 64 },
+	deliveryCountry      : { type: String, optional: true, max: 8 },
+	deliveryProvince     : { type: String, optional: true, max: 64 },
 	locale               : { type: String, allowedValues: ['vn', 'en'] },
-	orderId              : { type: String, max: 34 },
-	returnUrl            : { type: String, max: 255 },
-	title                : { type: String, optional: true, max: 255 },
-	transactionId        : { type: String, max: 40 },
+	orderId              : { type: String, max: 32 },
+	returnUrl            : { type: String, max: 64, regEx: urlRegExp },
+	title                : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for this field, this is just a safe value
+	transactionId        : { type: String, max: 34 },
 	vpcAccessCode        : { type: String, max: 8 },
 	vpcCommand           : { type: String, max: 16 },
 	vpcMerchant          : { type: String, max: 16 },
 	vpcVersion           : { type: String, max: 2 },
 });
-
-OnePayInternational.TEST_GATEWAY = 'https://mtf.onepay.vn/onecomm-pay/vpc.op';
-OnePayInternational.VPC_VERSION = '2';
-OnePayInternational.VPC_COMMAND = 'pay';
-// onepay only support VND
-OnePayInternational.CURRENCY_VND = 'VND';
-OnePayInternational.LOCALE_EN = 'en';
-OnePayInternational.LOCALE_VN = 'vn';
 
 export { OnePayInternational };

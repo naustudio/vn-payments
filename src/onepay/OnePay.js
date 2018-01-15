@@ -5,13 +5,6 @@ import { URL } from 'url';
 import SimpleSchema from 'simpl-schema';
 import { toUpperCase, pack, hashHmac } from '../utils';
 
-const configSchema = new SimpleSchema({
-	accessCode: { type: String },
-	merchant: { type: String },
-	paymentGateway: { type: String, regEx: SimpleSchema.RegEx.Url },
-	secureSecret: { type: String },
-});
-
 /**
  * This is the base class for domestic and intl payment gateways
  * which bear the common hashing algorithym
@@ -180,7 +173,12 @@ class OnePay {
 	}
 }
 
-OnePay.configSchema = configSchema;
+OnePay.configSchema = new SimpleSchema({
+	accessCode: { type: String },
+	merchant: { type: String },
+	paymentGateway: { type: String, regEx: SimpleSchema.RegEx.Url },
+	secureSecret: { type: String },
+});
 // should not be changed
 OnePay.VPC_VERSION = '2';
 OnePay.VPC_COMMAND = 'pay';
