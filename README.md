@@ -1,6 +1,7 @@
 # vn-payments
-[![Travis CI build status](https://travis-ci.org/naustudio/node-vn-payments.svg?branch=develop "Travis CI build status")](https://travis-ci.org/naustudio/node-vn-payments)
-[![codecov](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop/graph/badge.svg)](https://codecov.io/gh/naustudio/node-vn-payments)
+[![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
+[![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg)](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop)
+[![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
 
 ## Getting started

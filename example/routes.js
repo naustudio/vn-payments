@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { OnePayDomestic, OnePayInternational } from '../src/onepay';
 import { VNPay } from '../src/vnpay';
 import { SohaPay } from '../src/sohapay';
-import { createMd5Hash } from '../src/utils';
 
 const routes = Router();
 
@@ -11,8 +10,6 @@ const routes = Router();
  */
 routes.get('/', (req, res) => {
 	res.render('index', { title: 'Nau Store' });
-
-	console.log(createMd5Hash('NauStudio'));
 });
 
 /**
