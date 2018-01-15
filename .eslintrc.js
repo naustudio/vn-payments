@@ -13,6 +13,7 @@ module.exports = {
 				functions: 'never',
 			},
 		],
+		'key-spacing': 'off',
 		'import/prefer-default-export': 'off',
 		'jest/no-focused-tests': 'error',
 		'jest/no-identical-title': 'error',

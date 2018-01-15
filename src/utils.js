@@ -3,6 +3,10 @@
  */
 import crypto from 'crypto';
 
+const urlRegExp = /https?:\/\/.*/;
+
+export { urlRegExp };
+
 /**
  * Convenient function to convert String to upper case
  * @param {*} s
