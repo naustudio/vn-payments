@@ -9,7 +9,7 @@ export { VNPay } from './VNPay';
 
 /* eslint-disable no-unused-vars */
 // for reference, not used for now
-const vnpayDomReturnSchema = new SimpleSchema(
+const vnpayReturnSchema = new SimpleSchema(
 	{
 		vnp_TmnCode: String,
 		vnp_TxnRef: String,
@@ -26,9 +26,9 @@ const vnpayDomReturnSchema = new SimpleSchema(
 );
 
 const TEST_CONFIG = {
+	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
 	merchant: 'COCOSIN',
 	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
-	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
 };
 
 export { TEST_CONFIG };

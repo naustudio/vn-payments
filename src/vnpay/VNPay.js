@@ -109,7 +109,6 @@ class VNPay {
 			redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
 			redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
 		}
-		console.log(redirectUrl);
 
 		return redirectUrl;
 	}
@@ -148,6 +147,7 @@ class VNPay {
 		const data = Object.assign({}, query);
 		const config = this.config;
 		const vnpTxnSecureHash = data.vnp_SecureHash;
+		delete data.vnp_SecureHashType;
 		delete data.vnp_SecureHash;
 
 		if (config.secureSecret.length > 0) {
@@ -163,7 +163,7 @@ class VNPay {
 					}
 				});
 
-			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(config.secureSecret + createMd5Hash(secureCode.join('&')))) {
+			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
 				return true;
 			}
 		}
