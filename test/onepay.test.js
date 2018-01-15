@@ -197,7 +197,26 @@ describe('OnePayDomestic', () => {
 
 	describe('OnePayDomestic.verifyReturnUrl', () => {
 		it('should verify the return URL', () => {
-			console.log('TODO: OnePayDom.verifyReturnUrl');
+			const correctReturnUrl = {
+				vpc_AdditionData: '970436',
+				vpc_Amount: '90000000',
+				vpc_Command: 'pay',
+				vpc_CurrencyCode: 'VND',
+				vpc_Locale: 'vn',
+				vpc_MerchTxnRef: 'node-2018-01-15T10:19:55.541Z',
+				vpc_Merchant: 'ONEPAY',
+				vpc_OrderInfo: 'node-2018-01-15T10:19:55.541Z',
+				vpc_TransactionNo: '1617996',
+				vpc_TxnResponseCode: '0',
+				vpc_Version: '2',
+				vpc_SecureHash: '8B720A26C295F225FCF57F9619562341914649C07F9C9FD359A514C2905D67C2',
+			};
+
+			expect(onepayDom.verifyReturnUrl(correctReturnUrl)).toEqual(true);
+
+			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vpc_Amount: '50000000' });
+
+			expect(onepayDom.verifyReturnUrl(incorrectReturnUrl)).toEqual(false);
 		});
 	});
 });
@@ -406,8 +425,6 @@ describe('OnePayInternational', () => {
 	});
 
 	describe('OnePayIntl.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {
-			console.log('TODO: OnePayIntl.verifyReturnUrl');
-		});
+		it('should verify the return URL', () => {});
 	});
 });

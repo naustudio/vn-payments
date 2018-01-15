@@ -133,7 +133,46 @@ describe('VNPay', () => {
 
 	describe('VNPayDom.verifyReturnUrl', () => {
 		it('should verify the return URL', () => {
-			console.log('TODO: VNPayDom.verifyReturnUrl');
+			const correctReturnUrl = {
+				vnp_Amount: '90000000',
+				vnp_BankCode: 'NCB',
+				vnp_BankTranNo: '20180115170515',
+				vnp_CardType: 'ATM',
+				vnp_OrderInfo: 'Thanh toan giay adidas',
+				vnp_PayDate: '20180115170716',
+				vnp_ResponseCode: '00',
+				vnp_TmnCode: 'COCOSIN',
+				vnp_TransactionNo: '13008888',
+				vnp_TxnRef: 'node-2018-01-15T10:04:36.540Z',
+				vnp_SecureHashType: 'MD5',
+				vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
+			};
+
+			expect(vnpay.verifyReturnUrl(correctReturnUrl)).toEqual(true);
+
+			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vnp_Amount: '50000000' });
+
+			expect(vnpay.verifyReturnUrl(incorrectReturnUrl)).toEqual(false);
+
+			const userCancelReturnUrl = {
+				vnp_Amount: '90000000',
+				vnp_BankCode: 'VNPAY',
+				vnp_CardType: 'ATM',
+				vnp_OrderInfo: 'Thanh toan giay adidas',
+				vnp_PayDate: '20180115172917',
+				vnp_ResponseCode: '24',
+				vnp_TmnCode: 'COCOSIN',
+				vnp_TransactionNo: '0',
+				vnp_TxnRef: 'node-2018-01-15T10:29:07.696Z',
+				vnp_SecureHashType: 'MD5',
+				vnp_SecureHash: '305d85b6eb840c29cd5707932ab0ac8b',
+			};
+
+			expect(vnpay.verifyReturnUrl(userCancelReturnUrl)).toEqual(true);
+			expect(VNPay.getReturnUrlStatus(userCancelReturnUrl.vnp_ResponseCode)).toEqual(
+				'Giao dịch không thành công do: Khách hàng hủy giao dịch'
+			);
+			expect(VNPay.getReturnUrlStatus(userCancelReturnUrl.vnp_ResponseCode, 'en')).toEqual('Transaction canceled');
 		});
 	});
 });
