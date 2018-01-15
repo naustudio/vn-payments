@@ -31,6 +31,8 @@ export function callbackOnePayDomestic(/* req, res */) {
 
 export function checkoutOnePayInternational(req, res) {
 	const checkoutData = res.locals.checkoutData;
+
+	checkoutData.againLink = `http://${req.headers.host}/`; // back URL when user cancel payment
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/onepayintl/callback`;
 
 	const checkoutUrl = onepayIntl.buildCheckoutUrl(checkoutData);

@@ -56,7 +56,6 @@ routes.post('/payment/checkout', (req, res) => {
 	const now = new Date();
 
 	const checkoutData = {
-		againLink: `http://${req.headers.host}/`, // back URL when user cancel payment
 		amount,
 		clientIp,
 		locale: 'vn',
@@ -123,7 +122,11 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 
 	// TODO: render callback result here
 	res.render('result', {
-		title: gateway,
+		title: `Nau Store Payment via ${gateway.toUpperCase()}`,
+		isSucceed: res.locals.isSucceed,
+		email: res.locals.email,
+		orderId: res.locals.orderId,
+		price: res.locals.price,
 	});
 });
 

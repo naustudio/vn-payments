@@ -1,10 +1,10 @@
-import { VNPay } from '../../src/vnpay';
+import { VNPay, TEST_CONFIG } from '../../src/vnpay';
 /* eslint-disable no-param-reassign */
 
 const vnpay = new VNPay({
-	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
-	merchant: 'COCOSIN',
-	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
+	paymentGateway: TEST_CONFIG.paymentGateway,
+	merchant: TEST_CONFIG.merchant,
+	secureSecret: TEST_CONFIG.secureSecret,
 });
 
 export function checkoutVNPay(req, res) {
@@ -19,6 +19,22 @@ export function checkoutVNPay(req, res) {
 	return checkoutUrl;
 }
 
-export function callbackVNPay(/* req , res */) {
-	console.log('TODO: verify return params and decide status here');
+export function callbackVNPay(req, res) {
+	const query = req.query;
+
+	const isReturnQueryValid = vnpay.verifyReturnUrl(query);
+
+	if (isReturnQueryValid) {
+		res.locals.email = 'tu.nguyen@naustud.io';
+		res.locals.orderId = query.vnp_TransactionNo || '';
+		res.locals.price = query.vnp_Amount ? parseInt(query.vnp_Amount, 10) / 100 : 0;
+
+		if (query.vnp_ResponseCode === '00') {
+			res.locals.isSucceed = true;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	} else {
+		res.locals.isSucceed = false;
+	}
 }
