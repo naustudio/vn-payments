@@ -148,11 +148,39 @@ describe('VNPay', () => {
 				vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
 			};
 
-			expect(vnpay.verifyReturnUrl(correctReturnUrl)).toEqual(true);
+			expect(vnpay.verifyReturnUrl(correctReturnUrl)).toEqual({
+				merchant: 'COCOSIN',
+				transactionId: 'node-2018-01-15T10:04:36.540Z',
+				amount: 900000,
+				orderInfo: 'Thanh toan giay adidas',
+				responseCode: '00',
+				bankCode: 'NCB',
+				bankTranNo: '20180115170515',
+				cardType: 'ATM',
+				payDate: '20180115170716',
+				gatewayTransactionNo: '13008888',
+				secureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
+				message: 'Giao dịch thành công',
+				isSuccess: true,
+				vnp_Amount: '90000000',
+				vnp_BankCode: 'NCB',
+				vnp_BankTranNo: '20180115170515',
+				vnp_CardType: 'ATM',
+				vnp_OrderInfo: 'Thanh toan giay adidas',
+				vnp_PayDate: '20180115170716',
+				vnp_ResponseCode: '00',
+				vnp_TmnCode: 'COCOSIN',
+				vnp_TransactionNo: '13008888',
+				vnp_TxnRef: 'node-2018-01-15T10:04:36.540Z',
+				vnp_SecureHashType: 'MD5',
+				vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
+			});
 
 			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vnp_Amount: '50000000' });
+			let errorResults = vnpay.verifyReturnUrl(incorrectReturnUrl);
 
-			expect(vnpay.verifyReturnUrl(incorrectReturnUrl)).toEqual(false);
+			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.message).toEqual('Wrong checksum');
 
 			const userCancelReturnUrl = {
 				vnp_Amount: '90000000',
@@ -168,11 +196,10 @@ describe('VNPay', () => {
 				vnp_SecureHash: '305d85b6eb840c29cd5707932ab0ac8b',
 			};
 
-			expect(vnpay.verifyReturnUrl(userCancelReturnUrl)).toEqual(true);
-			expect(VNPay.getReturnUrlStatus(userCancelReturnUrl.vnp_ResponseCode)).toEqual(
-				'Giao dịch không thành công do: Khách hàng hủy giao dịch'
-			);
-			expect(VNPay.getReturnUrlStatus(userCancelReturnUrl.vnp_ResponseCode, 'en')).toEqual('Transaction canceled');
+			errorResults = vnpay.verifyReturnUrl(userCancelReturnUrl);
+
+			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.message).toEqual('Giao dịch không thành công do: Khách hàng hủy giao dịch');
 		});
 	});
 });
