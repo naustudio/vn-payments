@@ -136,15 +136,43 @@ class VNPay {
 	}
 
 	/**
+	 * @typedef VNPayReturnObject
+	 * @property {boolean} isSuccess whether the payment succeeded or not
+	 * @property {string} message Approve or error message based on response code
+	 * @property {string} merchant merchant ID, should be same with checkout request
+	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
+	 * @property {number} amount amount paid by customer, already divided by 100
+	 * @property {number} orderInfo order info, should be same with checkout request
+	 * @property {string} responseCode response code, payment has errors if it is non-zero
+	 * @property {string} bankCode bank code of the bank where payment was occurred
+	 * @property {string} bankTranNo bank transaction ID, used to look up at Bank's side
+	 * @property {string} cardType type of card
+	 * @property {string} payDate date when transaction occurred
+	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
+	 * @property {string} secureHash checksum of the returned data, used to verify data integrity
+	 *
+	 * @property {string} vnp_TmnCode e.g: COCOSIN
+	 * @property {string} vnp_TxnRef e.g: node-2018-01-15T10:04:36.540Z
+	 * @property {string} vnp_Amount e.g: 90000000
+	 * @property {string} vnp_OrderInfo e.g: Thanh toan giay adidas
+	 * @property {string} vnp_ResponseCode e.g: 00
+	 * @property {string} vnp_BankCode e.g: NCB
+	 * @property {string} vnp_BankTranNo e.g: 20180115170515
+	 * @property {string} vnp_CardType e.g: ATM
+	 * @property {string} vnp_PayDate e.g: 20180115170716
+	 * @property {string} vnp_TransactionNo e.g: 13008888
+	 * @property {string} vnp_SecureHash e.g: 115ad37de7ae4d28eb819ca3d3d85b20
+	 */
+	/**
 	 * Verify return query string from VNPay using enclosed vnp_SecureHash string
 	 *
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
 	 *
-	 * @param  {Object} data Query data object from GET handler (`response.query`)
-	 * @return {boolean}      Whether the return query params are genuine (hash checksum check)
+	 * @param  {Object} query Query data object from GET handler (`response.query`)
+	 * @return {VNPayReturnObject}
 	 */
 	verifyReturnUrl(query) {
-		const returnObject = this.mapQueryToObject(query);
+		const returnObject = this._mapQueryToObject(query);
 
 		const data = Object.assign({}, query);
 		const config = this.config;
@@ -174,43 +202,10 @@ class VNPay {
 			}
 		}
 
-		/**
-		 * @typedef VNPayReturnObject
-		 * @property {boolean} isSuccess whether the payment succeeded or not
-		 * @property {string} message Approve or error message based on response code
-		 * @property {string} merchant merchant ID, should be same with checkout request
-		 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
-		 * @property {number} amount amount paid by customer, already divided by 100
-		 * @property {number} orderInfo order info, should be same with checkout request
-		 * @property {string} responseCode response code, payment has errors if it is non-zero
-		 * @property {string} bankCode bank code of the bank where payment was occurred
-		 * @property {string} bankTranNo bank transaction ID, used to look up at Bank's side
-		 * @property {string} payDate date when transaction occurred
-		 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
-		 * @property {string} secureHash checksum of the returned data, used to verify data integrity
-		 * @property {string} vnp_TmnCode e.g: COCOSIN
-		 * @property {string} vnp_TxnRef e.g: node-2018-01-15T10:04:36.540Z
-		 * @property {string} vnp_Amount e.g: 90000000
-		 * @property {string} vnp_OrderInfo e.g: Thanh toan giay adidas
-		 * @property {string} vnp_ResponseCode e.g: 00
-		 * @property {string} vnp_BankCode e.g: NCB
-		 * @property {string} vnp_BankTranNo e.g: 20180115170515
-		 * @property {string} vnp_PayDate e.g: 20180115170716
-		 * @property {string} vnp_TransactionNo e.g: 13008888
-		 * @property {string} vnp_SecureHash e.g: 115ad37de7ae4d28eb819ca3d3d85b20
-		 */
-
 		return Object.assign(returnObject, query, verifyResults);
 	}
 
-	/**
-	 * Map return query string from VNPay to object
-	 *
-	 * Hàm thực hiện map lại các tham số trả về từ vnpay Payment thành object
-	 *
-	 * @param  {Object} data Query data object from GET handler (`response.query`)
-	 */
-	mapQueryToObject(query) {
+	_mapQueryToObject(query) {
 		const returnObject = {
 			merchant: query.vnp_TmnCode,
 			transactionId: query.vnp_TxnRef,
@@ -219,6 +214,7 @@ class VNPay {
 			responseCode: query.vnp_ResponseCode,
 			bankCode: query.vnp_BankCode,
 			bankTranNo: query.vnp_BankTranNo,
+			cardType: query.vnp_CardType,
 			payDate: query.vnp_PayDate,
 			gatewayTransactionNo: query.vnp_TransactionNo,
 			secureHash: query.vnp_SecureHash,
