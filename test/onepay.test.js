@@ -476,6 +476,152 @@ describe('OnePayInternational', () => {
 	});
 
 	describe('OnePayIntl.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {});
+		it('should verify the return URL', () => {
+			const correctReturnUrl = {
+				vpc_OrderInfo: 'node-2018-01-16T09:44:54.120Z',
+				vpc_3DSECI: '06',
+				vpc_ReturnACI: '8',
+				vpc_AVS_Street01: '441 Cach Mang Thang Tam',
+				vpc_Merchant: 'TESTONEPAY',
+				vpc_Card: 'VC',
+				vpc_AcqCSCRespCode: 'Unsupported',
+				vpc_AcqResponseCode: '00',
+				AgainLink: 'http://localhost:8080/',
+				vpc_AVS_Country: 'VNM',
+				vpc_AuthorizeId: '523255',
+				vpc_3DSenrolled: 'N',
+				vpc_RiskOverallResult: 'ACC',
+				vpc_ReceiptNo: '801620523255',
+				vpc_AVSRequestCode: 'Z',
+				vpc_TransactionNo: '62277',
+				vpc_MarketSpecificData: '8',
+				vpc_AVS_StateProv: 'Ho Chi Minh',
+				vpc_Locale: 'en_VN',
+				vpc_TxnResponseCode: '0',
+				vpc_Amount: '90000000',
+				vpc_BatchNo: '20180116',
+				vpc_TransactionIdentifier: '1234567890123456789',
+				vpc_CommercialCard: 'U',
+				vpc_Version: '2',
+				vpc_AVSResultCode: 'Unsupported',
+				vpc_VerStatus: 'E',
+				vpc_Command: 'pay',
+				vpc_Message: 'Approved',
+				Title: 'VPC 3-Party',
+				vpc_CardLevelIndicator: '88',
+				vpc_SecureHash: '20C0AB42A07408933D18FC9365791DA0F127E282B0FD5E4BE3D88E3DEE95D364',
+				vpc_CardNum: '400555xxxxxx0001',
+				vpc_AVS_PostCode: '700000',
+				vpc_CSCResultCode: 'Unsupported',
+				vpc_MerchTxnRef: 'node-2018-01-16T09:44:54.120Z',
+				vpc_VerType: '3DS',
+				vpc_AcqAVSRespCode: 'Unsupported',
+				vpc_VerSecurityLevel: '06',
+				vpc_3DSXID: 'jOtz0r1hlQNqrisCuJseRUCtV8Q=',
+				vpc_AVS_City: '10',
+				vpc_CommercialCardIndicator: '3',
+			};
+
+			expect(onepayIntl.verifyReturnUrl(correctReturnUrl)).toEqual({
+				isSuccess: true,
+				amount: 900000,
+				billingCity: '10',
+				billingCountry: 'VNM',
+				billingPostCode: '700000',
+				billingStateProvince: 'Ho Chi Minh',
+				billingStreet: '441 Cach Mang Thang Tam',
+				card: 'VC',
+				command: 'pay',
+				currencyCode: 'VND', // no Currency Code return from OnePay, it is hardcoded
+				gatewayTransactionNo: '62277',
+				locale: 'en_VN',
+				merchant: 'TESTONEPAY',
+				message: 'Approved',
+				orderId: 'node-2018-01-16T09:44:54.120Z',
+				responseCode: '0',
+				secureHash: '20C0AB42A07408933D18FC9365791DA0F127E282B0FD5E4BE3D88E3DEE95D364',
+				transactionId: 'node-2018-01-16T09:44:54.120Z',
+				version: '2',
+				vpc_OrderInfo: 'node-2018-01-16T09:44:54.120Z',
+				vpc_3DSECI: '06',
+				vpc_ReturnACI: '8',
+				vpc_AVS_Street01: '441 Cach Mang Thang Tam',
+				vpc_Merchant: 'TESTONEPAY',
+				vpc_Card: 'VC',
+				vpc_AcqCSCRespCode: 'Unsupported',
+				vpc_AcqResponseCode: '00',
+				AgainLink: 'http://localhost:8080/',
+				vpc_AVS_Country: 'VNM',
+				vpc_AuthorizeId: '523255',
+				vpc_3DSenrolled: 'N',
+				vpc_RiskOverallResult: 'ACC',
+				vpc_ReceiptNo: '801620523255',
+				vpc_AVSRequestCode: 'Z',
+				vpc_TransactionNo: '62277',
+				vpc_MarketSpecificData: '8',
+				vpc_AVS_StateProv: 'Ho Chi Minh',
+				vpc_Locale: 'en_VN',
+				vpc_TxnResponseCode: '0',
+				vpc_Amount: '90000000',
+				vpc_BatchNo: '20180116',
+				vpc_TransactionIdentifier: '1234567890123456789',
+				vpc_CommercialCard: 'U',
+				vpc_Version: '2',
+				vpc_AVSResultCode: 'Unsupported',
+				vpc_VerStatus: 'E',
+				vpc_Command: 'pay',
+				vpc_Message: 'Approved',
+				Title: 'VPC 3-Party',
+				vpc_CardLevelIndicator: '88',
+				vpc_SecureHash: '20C0AB42A07408933D18FC9365791DA0F127E282B0FD5E4BE3D88E3DEE95D364',
+				vpc_CardNum: '400555xxxxxx0001',
+				vpc_AVS_PostCode: '700000',
+				vpc_CSCResultCode: 'Unsupported',
+				vpc_MerchTxnRef: 'node-2018-01-16T09:44:54.120Z',
+				vpc_VerType: '3DS',
+				vpc_AcqAVSRespCode: 'Unsupported',
+				vpc_VerSecurityLevel: '06',
+				vpc_3DSXID: 'jOtz0r1hlQNqrisCuJseRUCtV8Q=',
+				vpc_AVS_City: '10',
+				vpc_CommercialCardIndicator: '3',
+			});
+
+			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vpc_Amount: '50000000' });
+			let errorResults = onepayIntl.verifyReturnUrl(incorrectReturnUrl);
+
+			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.message).toEqual('Wrong checksum');
+
+			const failAuthenticationReturnUrl = {
+				vpc_Amount: '90000000',
+				vpc_BatchNo: '0',
+				vpc_Version: '2',
+				vpc_OrderInfo: 'node-2018-01-16T10:04:25.165Z',
+				vpc_VerStatus: 'N',
+				vpc_Command: 'pay',
+				vpc_Merchant: 'TESTONEPAY',
+				vpc_Message: 'Transaction was blocked by the Payment Server because it did not pass all risk checks.',
+				Title: 'VPC 3-Party',
+				vpc_3DSstatus: 'N',
+				AgainLink: 'http://localhost:8080/',
+				vpc_SecureHash: '2F2D4CF9C23EEF1FEC01C9847E5C6FAF0263D13C329E96136A4C07B047E1E30E',
+				vpc_3DSenrolled: 'Y',
+				vpc_MerchTxnRef: 'node-2018-01-16T10:04:25.165Z',
+				vpc_TransactionNo: '0',
+				vpc_VerType: '3DS',
+				vpc_VerSecurityLevel: '07',
+				vpc_Locale: 'vn',
+				vpc_3DSXID: '6cluGg6ggbL/8H7BVcLA4FcZ4tA=',
+				vpc_TxnResponseCode: 'F',
+			};
+
+			errorResults = onepayIntl.verifyReturnUrl(failAuthenticationReturnUrl);
+
+			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.message).toEqual(
+				'Transaction was blocked by the Payment Server because it did not pass all risk checks.'
+			);
+			expect(errorResults.responseCode).toEqual('F');
+		});
 	});
 });
