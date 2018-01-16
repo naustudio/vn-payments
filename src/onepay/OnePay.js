@@ -136,7 +136,7 @@ class OnePay {
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {boolean}      Whether the return query params are genuine (hash checksum check)
+	 * @return {Object} Normalized return data object, with additional fields like isSuccess
 	 */
 	verifyReturnUrl(query) {
 		const data = Object.assign({}, query);
@@ -165,11 +165,13 @@ class OnePay {
 				toUpperCase(vpcTxnSecureHash) ===
 				toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
 			) {
-				return true;
+				// for the transaction to succeed, its checksum must be valid, then response code must be '0'
+				return { isSuccess: data.vpc_TxnResponseCode === '0' };
 			}
 		}
 
-		return false;
+		// this message prop will override whatever in Subclass
+		return { isSuccess: false, message: 'Wrong checksum' };
 	}
 }
 
@@ -180,8 +182,8 @@ OnePay.configSchema = new SimpleSchema({
 	secureSecret: { type: String },
 });
 // should not be changed
-OnePay.VPC_VERSION = '2';
-OnePay.VPC_COMMAND = 'pay';
+OnePay.VERSION = '2';
+OnePay.COMMAND = 'pay';
 // onepay only support VND
 OnePay.CURRENCY_VND = 'VND';
 OnePay.LOCALE_EN = 'en';
