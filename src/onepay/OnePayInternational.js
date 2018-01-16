@@ -149,10 +149,109 @@ class OnePayInternational extends OnePay {
 			title: 'VPC 3-Party',
 			customerId: '',
 			vpcAccessCode: '',
-			vpcCommand: OnePay.VPC_COMMAND,
+			vpcCommand: OnePay.COMMAND,
 			vpcMerchant: '',
-			vpcVersion: OnePay.VPC_VERSION,
+			vpcVersion: OnePay.VERSION,
 		};
+	}
+	/**
+	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
+	 *
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
+	 *
+	 * @param {*} query
+	 * @returns { OnePayInternationalReturnObject }
+	 */
+	verifyReturnUrl(query) {
+		const verifyResults = super.verifyReturnUrl(query);
+
+		/**
+		 * @typedef OnePayInternationalReturnObject
+		 * @property {boolean} isSuccess whether the payment succeeded or not
+		 * @property {number} amount amount paid by customer, already divided by 100
+		 * @property {string} command should be same with checkout request
+		 * @property {string} billingCity billing address' city
+		 * @property {string} billingCountry  billing address' country
+		 * @property {string} billingPostCode billing address' post code
+		 * @property {string} billingStateProvince billing address' state or province
+		 * @property {string} billingStreet billing address and street name
+		 * @property {string} card type of card used to pay, VC, MC, JC, AE
+		 * @property {string} currencyCode currency code, should be same with checkout request
+		 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
+		 * @property {string} locale locale code
+		 * @property {string} merchant merchant ID, should be same with checkout request
+		 * @property {string} message Approve or error message from gateway
+		 * @property {string} orderId merchant's order ID, should be same with checkout request
+		 * @property {string} responseCode response code, payment has errors if it is non-zero
+		 * @property {string} secureHash checksum of the returned data, used to verify data integrity
+		 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
+		 * @property {string} version should be same with checkout request
+		 *
+		 * @property {string} vpc_3DSECI e.g: 06
+		 * @property {string} vpc_3DSenrolled e.g: N
+		 * @property {string} vpc_3DSXID e.g: zklRMXTS2puX%2Btj0DwOJyq6T6s8%3D
+		 * @property {string} vpc_AcqAVSRespCode e.g: Unsupported
+		 * @property {string} vpc_AcqCSCRespCode e.g: Unsupported
+		 * @property {string} vpc_AcqResponseCode e.g: 00
+		 * @property {string} vpc_Amount e.g: 200000
+		 * @property {string} vpc_AuthorizeId e.g: 523190
+		 * @property {string} vpc_AVS_City e.g: Hanoi
+		 * @property {string} vpc_AVS_Country e.g: VNM
+		 * @property {string} vpc_AVS_PostCode e.g: 10000
+		 * @property {string} vpc_AVS_StateProv e.g: Hoan+Kiem
+		 * @property {string} vpc_AVS_Street01 e.g: 194+Tran+Quang+Khai
+		 * @property {string} vpc_AVSRequestCode e.g: Z
+		 * @property {string} vpc_AVSResultCode e.g: Unsupported
+		 * @property {string} vpc_BatchNo e.g: 20180116
+		 * @property {string} vpc_Card e.g: VC
+		 * @property {string} vpc_CardLevelIndicator e.g: 88
+		 * @property {string} vpc_CardNum e.g: 400555xxxxxx0001
+		 * @property {string} vpc_Command e.g: pay
+		 * @property {string} vpc_CommercialCard e.g: U
+		 * @property {string} vpc_CommercialCardIndicator e.g: 3
+		 * @property {string} vpc_CSCResultCode e.g: Unsupported
+		 * @property {string} vpc_Locale e.g: en_VN
+		 * @property {string} vpc_MarketSpecificData e.g: 8
+		 * @property {string} vpc_Merchant e.g: TESTONEPAY
+		 * @property {string} vpc_MerchTxnRef e.g: TEST_1516078223875-387026611
+		 * @property {string} vpc_Message e.g: Approved
+		 * @property {string} vpc_OrderInfo e.g: TEST_1516078223875-387026611
+		 * @property {string} vpc_ReceiptNo e.g: 801615523190
+		 * @property {string} vpc_ReturnACI e.g: 8
+		 * @property {string} vpc_RiskOverallResult e.g: ACC
+		 * @property {string} vpc_SecureHash e.g: 0375408701C885CA396ED9A085D0E79B7D5437CD2FC021A96E3703787CC2874C
+		 * @property {string} vpc_TransactionIdentifier e.g: 1234567890123456789
+		 * @property {string} vpc_TransactionNo e.g: 62267
+		 * @property {string} vpc_TxnResponseCode e.g: 0
+		 * @property {string} vpc_VerSecurityLevel e.g: 06
+		 * @property {string} vpc_Version e.g: 2
+		 * @property {string} vpc_VerStatus e.g: E
+		 * @property {string} vpc_VerType e.g: 3DS
+		 */
+		const returnObject = {
+			// these are common normalized properties, others are kept as is
+			amount: parseInt(query.vpc_Amount, 10) / 100,
+			billingCity: query.vpc_AVS_City,
+			billingCountry: query.vpc_AVS_Country,
+			billingPostCode: query.vpc_AVS_PostCode,
+			billingStateProvince: query.vpc_AVS_StateProv,
+			billingStreet: query.vpc_AVS_Street01,
+			card: query.vpc_Card,
+			command: query.vpc_Command,
+			currencyCode: 'VND', // no Currency Code return from OnePay, it is hardcoded
+			gatewayTransactionNo: query.vpc_TransactionNo,
+			locale: query.vpc_Locale,
+			merchant: query.vpc_Merchant,
+			message: query.vpc_Message,
+			orderId: query.vpc_OrderInfo,
+			responseCode: query.vpc_TxnResponseCode,
+			secureHash: query.vpc_SecureHash,
+			transactionId: query.vpc_MerchTxnRef,
+			version: query.vpc_Version,
+		};
+
+		// keep vpc_* fields from gateway
+		return Object.assign(returnObject, query, verifyResults);
 	}
 }
 

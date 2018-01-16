@@ -28,18 +28,16 @@ export function checkoutOnePayDomestic(req, res) {
 export function callbackOnePayDomestic(req, res) {
 	const query = req.query;
 
-	const isReturnQueryValid = onepayDom.verifyReturnUrl(query);
+	const results = onepayDom.verifyReturnUrl(query);
 
-	if (isReturnQueryValid) {
+	if (results) {
 		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = query.vpc_TransactionNo || '';
-		res.locals.price = query.vpc_Amount ? parseInt(query.vpc_Amount, 10) / 100 : 0;
+		res.locals.orderId = results.orderId || '';
+		res.locals.price = results.amount;
 
-		if (query.vpc_TxnResponseCode === '0') {
-			res.locals.isSucceed = true;
-		} else {
-			res.locals.isSucceed = false;
-		}
+		res.locals.isSucceed = results.isSuccess;
+		// TODO: render error message
+		res.locals.message = results.message;
 	} else {
 		res.locals.isSucceed = false;
 	}
@@ -60,22 +58,20 @@ export function checkoutOnePayInternational(req, res) {
 export function callbackOnePayInternational(req, res) {
 	const query = req.query;
 
-	const isReturnQueryValid = onepayIntl.verifyReturnUrl(query);
+	const results = onepayIntl.verifyReturnUrl(query);
 
-	if (isReturnQueryValid) {
+	if (results) {
 		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = query.vpc_TransactionNo || '';
-		res.locals.price = query.vpc_Amount ? parseInt(query.vpc_Amount, 10) / 100 : 0;
-		res.billingStreet = query.vpc_AVS_Street01;
-		res.billingCountry = query.vpc_AVS_StateProv;
-		res.billingDistrict = query.vpc_AVS_City;
-		res.billingPostalCode = query.vpc_AVS_PostCode;
+		res.locals.orderId = results.orderId || '';
+		res.locals.price = results.amount;
+		res.billingStreet = results.billingStreet;
+		res.billingCountry = results.billingCountry;
+		res.billingDistrict = results.billingStateProvince;
+		res.billingPostalCode = results.billingPostCode;
 
-		if (query.vpc_TxnResponseCode === '0') {
-			res.locals.isSucceed = true;
-		} else {
-			res.locals.isSucceed = false;
-		}
+		res.locals.isSucceed = results.isSuccess;
+		// TODO: render error message
+		res.locals.message = results.message;
 	} else {
 		res.locals.isSucceed = false;
 	}

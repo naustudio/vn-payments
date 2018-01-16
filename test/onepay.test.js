@@ -1,4 +1,27 @@
 import { OnePayDomestic, OnePayInternational } from '../src/onepay';
+import { OnePay } from '../src/onepay/OnePay';
+
+describe('OnePay Base', () => {
+	let onepay;
+
+	beforeEach(() => {
+		onepay = new OnePay({
+			paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
+			merchant: 'ONEPAY',
+			accessCode: 'D67342C2',
+			secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
+		});
+	});
+
+	it('should throw errors if use directly', () => {
+		expect(() => {
+			onepay.validateCheckoutPayload({});
+		}).toThrow();
+		expect(() => {
+			onepay.buildCheckoutUrl({});
+		}).toThrow();
+	});
+});
 
 describe('OnePayDomestic', () => {
 	let onepayDom;
@@ -14,8 +37,8 @@ describe('OnePayDomestic', () => {
 
 	describe('OnePayDomestic static properties', () => {
 		it('should inherit from OnePay', () => {
-			expect(OnePayDomestic.VPC_VERSION).toEqual('2');
-			expect(OnePayDomestic.VPC_COMMAND).toEqual('pay');
+			expect(OnePayDomestic.VERSION).toEqual('2');
+			expect(OnePayDomestic.COMMAND).toEqual('pay');
 			expect(OnePayDomestic.CURRENCY_VND).toEqual('VND');
 			expect(OnePayDomestic.LOCALE_EN).toEqual('en');
 			expect(OnePayDomestic.LOCALE_VN).toEqual('vn');
@@ -212,11 +235,39 @@ describe('OnePayDomestic', () => {
 				vpc_SecureHash: '8B720A26C295F225FCF57F9619562341914649C07F9C9FD359A514C2905D67C2',
 			};
 
-			expect(onepayDom.verifyReturnUrl(correctReturnUrl)).toEqual(true);
+			expect(onepayDom.verifyReturnUrl(correctReturnUrl)).toEqual({
+				isSuccess: true,
+				amount: 900000,
+				command: 'pay',
+				currencyCode: 'VND',
+				locale: 'vn',
+				merchant: 'ONEPAY',
+				message: 'Giao dịch thành công',
+				gatewayTransactionNo: '1617996',
+				orderId: 'node-2018-01-15T10:19:55.541Z',
+				responseCode: '0',
+				secureHash: '8B720A26C295F225FCF57F9619562341914649C07F9C9FD359A514C2905D67C2',
+				transactionId: 'node-2018-01-15T10:19:55.541Z',
+				version: '2',
+				vpc_AdditionData: '970436',
+				vpc_Amount: '90000000',
+				vpc_Command: 'pay',
+				vpc_CurrencyCode: 'VND',
+				vpc_Locale: 'vn',
+				vpc_MerchTxnRef: 'node-2018-01-15T10:19:55.541Z',
+				vpc_Merchant: 'ONEPAY',
+				vpc_OrderInfo: 'node-2018-01-15T10:19:55.541Z',
+				vpc_TransactionNo: '1617996',
+				vpc_TxnResponseCode: '0',
+				vpc_Version: '2',
+				vpc_SecureHash: '8B720A26C295F225FCF57F9619562341914649C07F9C9FD359A514C2905D67C2',
+			});
 
 			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vpc_Amount: '50000000' });
+			const errorResults = onepayDom.verifyReturnUrl(incorrectReturnUrl);
 
-			expect(onepayDom.verifyReturnUrl(incorrectReturnUrl)).toEqual(false);
+			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.message).toEqual('Wrong checksum');
 		});
 	});
 });
@@ -235,8 +286,8 @@ describe('OnePayInternational', () => {
 
 	describe('OnePayInternational static properties', () => {
 		it('should inherit from OnePay', () => {
-			expect(OnePayInternational.VPC_VERSION).toEqual('2');
-			expect(OnePayInternational.VPC_COMMAND).toEqual('pay');
+			expect(OnePayInternational.VERSION).toEqual('2');
+			expect(OnePayInternational.COMMAND).toEqual('pay');
 			expect(OnePayInternational.CURRENCY_VND).toEqual('VND');
 			expect(OnePayInternational.LOCALE_EN).toEqual('en');
 			expect(OnePayInternational.LOCALE_VN).toEqual('vn');
