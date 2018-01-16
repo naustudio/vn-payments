@@ -20,7 +20,8 @@
 						<div class="result__item result__billing-address">
 							<h3 class="result__content--center">Billing address</h3>
 							<p>Address: <strong>{{billingStreet}}</strong></p>
-							<p>District: <strong>{{billingDistrict}}</strong></p>
+							<p>City: <strong>{{billingCity}}</strong></p>
+							<p>State: <strong>{{billingStateProvince}}</strong></p>
 							<p>Country: <strong>{{billingCountry}}</strong></p>
 							<p>Postal: <strong>{{billingPostalCode}}</strong></p>
 						</div>
@@ -39,6 +40,11 @@
 						<img src="/img/close.svg" alt="">
 					</span>
 					<h2 class="result__title result__item">Something wrong with your order</h2>
+				</div>
+				<div class="result__error-wrapper">
+					<p>
+						<i>Error detail: </i><small>{{message}}</small>
+					</p>
 				</div>
 			{{/if}}
 		</div>
@@ -76,7 +82,11 @@
 				<div class="result__paying-info-wrapper result__content--pd">
 					<span class="result__paying-info__label">Paid</span>
 					<span class="main-color">
-						<span class="result__paying-info__value" data-allow-decimal-padding="false">{{ price }}</span> VND
+						{{#if isSucceed}}
+							<span class="result__paying-info__value" data-allow-decimal-padding="false">{{price}}</span> VND
+						{{else}}
+							0 VND
+						{{/if}}
 					</span>
 				</div>
 			</div>

@@ -64,13 +64,13 @@ export function callbackOnePayInternational(req, res) {
 		res.locals.email = 'tu.nguyen@naustud.io';
 		res.locals.orderId = results.orderId || '';
 		res.locals.price = results.amount;
-		res.billingStreet = results.billingStreet;
-		res.billingCountry = results.billingCountry;
-		res.billingDistrict = results.billingStateProvince;
-		res.billingPostalCode = results.billingPostCode;
+		res.locals.billingStreet = results.billingStreet;
+		res.locals.billingCountry = results.billingCountry;
+		res.locals.billingStateProvince = results.billingStateProvince;
+		res.locals.billingCity = results.billingCity;
+		res.locals.billingPostalCode = results.billingPostCode;
 
 		res.locals.isSucceed = results.isSuccess;
-		// TODO: render error message
 		res.locals.message = results.message;
 	} else {
 		res.locals.isSucceed = false;
