@@ -67,6 +67,7 @@ class VNPay {
 			vnp_Command        : data.vnpCommand,
 			vnp_TmnCode        : data.vnpMerchant,
 			vnp_Locale         : data.locale,
+			vnp_BankCode       : data.bankCode,
 			vnp_CurrCode       : data.currency,
 			vnp_TxnRef         : data.orderId,
 			vnp_OrderInfo      : data.orderInfo,
@@ -76,10 +77,6 @@ class VNPay {
 			vnp_IpAddr         : data.clientIp,
 			vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
 		};
-
-		if (data.bankCode) {
-			arrParam.vnp_BankCode = data.bankCode;
-		}
 
 		// Step 2. Create the target redirect URL at VNPay server
 		const redirectUrl = new URL(config.paymentGateway);
