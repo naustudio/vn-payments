@@ -27,6 +27,7 @@ describe('VNPay', () => {
 				returnUrl: 'http://localhost:8080/payment/callback',
 				transactionId: 'node-2018-01-12T10:23:09.796Z',
 				customerId: 'thanhvt',
+				bankCode: null,
 			};
 
 			const redirectUrl = vnpay.buildCheckoutUrl(checkoutPayload);

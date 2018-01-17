@@ -1,6 +1,7 @@
 # Project specific  #
 dist/
 test/coverage/
+coverage/
 
 # NodeJS #
 ####################
