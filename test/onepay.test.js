@@ -621,6 +621,12 @@ describe('OnePayInternational', () => {
 			expect(errorResults.message).toEqual(
 				'Transaction was blocked by the Payment Server because it did not pass all risk checks.'
 			);
+			expect(OnePayInternational.getReturnUrlStatus(failAuthenticationReturnUrl.vpc_TxnResponseCode)).toEqual(
+				'Giao dịch thất bại. Không xác thực được 3D'
+			);
+			expect(OnePayInternational.getReturnUrlStatus(failAuthenticationReturnUrl.vpc_TxnResponseCode, 'en')).toEqual(
+				'3D Secure Authentication Failed'
+			);
 			expect(errorResults.responseCode).toEqual('F');
 		});
 	});
