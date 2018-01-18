@@ -1,5 +1,6 @@
 import { OnePayDomestic, OnePayInternational } from '../../src/onepay';
 /* eslint-disable no-param-reassign */
+import { Countries } from '../../src/countries';
 
 const onepayIntl = new OnePayInternational({
 	paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
@@ -60,12 +61,22 @@ export function callbackOnePayInternational(req, res) {
 
 	const results = onepayIntl.verifyReturnUrl(query);
 
+	let countryName = '';
+	for (let i = 0; i < Countries.length; i++) {
+		const country = Countries[i];
+
+		if (country.code === results.billingCountry) {
+			countryName = country.name;
+			break;
+		}
+	}
+
 	if (results) {
 		res.locals.email = 'tu.nguyen@naustud.io';
 		res.locals.orderId = results.orderId || '';
 		res.locals.price = results.amount;
 		res.locals.billingStreet = results.billingStreet;
-		res.locals.billingCountry = results.billingCountry;
+		res.locals.billingCountry = countryName;
 		res.locals.billingStateProvince = results.billingStateProvince;
 		res.locals.billingCity = results.billingCity;
 		res.locals.billingPostalCode = results.billingPostCode;
