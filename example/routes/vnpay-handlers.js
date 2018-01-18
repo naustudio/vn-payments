@@ -25,6 +25,8 @@ export function callbackVNPay(req, res) {
 
 	const results = vnpay.verifyReturnUrl(query);
 
+	console.log('result vnpay', results);
+
 	if (results) {
 		res.locals.email = 'tu.nguyen@naustud.io';
 		res.locals.orderId = results.transactionId || '';
