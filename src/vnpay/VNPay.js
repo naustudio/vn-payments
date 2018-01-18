@@ -48,7 +48,7 @@ class VNPay {
 	 * @return {Promise} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			// Mảng các tham số chuyển tới VNPay Payment
 			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
 			const config = this.config;
@@ -57,7 +57,11 @@ class VNPay {
 			data.vnpMerchant = config.merchant;
 
 			// Input type checking
-			this.validateCheckoutPayload(data);
+			try {
+				this.validateCheckoutPayload(data);
+			} catch (error) {
+				reject(error.message);
+			}
 
 			// convert amount to VNPay format (100 = 1VND):
 			data.amount = Math.floor(data.amount * 100);

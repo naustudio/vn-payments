@@ -34,7 +34,7 @@ class OnePay {
 	 * @return {Promise} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			// Mảng các tham số chuyển tới Onepay Payment
 			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
 			const config = this.config;
@@ -43,7 +43,11 @@ class OnePay {
 			data.vpcAccessCode = config.accessCode;
 
 			// Input type checking, define the schema and use it in subclass
-			this.validateCheckoutPayload(data);
+			try {
+				this.validateCheckoutPayload(data);
+			} catch (error) {
+				reject(error.message);
+			}
 
 			// convert amount to OnePay format (100 = 1VND):
 			data.amount = Math.floor(data.amount * 100);
