@@ -45,69 +45,71 @@ class VNPay {
 	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
 	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
-	 * @return {URL}    The URL object used to redirect
+	 * @return {Promise} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
-		// Mảng các tham số chuyển tới VNPay Payment
-		const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
-		const config = this.config;
+		return new Promise(resolve => {
+			// Mảng các tham số chuyển tới VNPay Payment
+			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
+			const config = this.config;
 
-		data.vnpSecretKey = config.secureSecret;
-		data.vnpMerchant = config.merchant;
+			data.vnpSecretKey = config.secureSecret;
+			data.vnpMerchant = config.merchant;
 
-		// Input type checking
-		this.validateCheckoutPayload(data);
+			// Input type checking
+			this.validateCheckoutPayload(data);
 
-		// convert amount to VNPay format (100 = 1VND):
-		data.amount = Math.floor(data.amount * 100);
+			// convert amount to VNPay format (100 = 1VND):
+			data.amount = Math.floor(data.amount * 100);
 
-		/* prettier-ignore */
-		const arrParam = {
-			vnp_Version        : data.vnpVersion,
-			vnp_Command        : data.vnpCommand,
-			vnp_TmnCode        : data.vnpMerchant,
-			vnp_Locale         : data.locale,
-			vnp_BankCode       : data.bankCode,
-			vnp_CurrCode       : data.currency,
-			vnp_TxnRef         : data.orderId,
-			vnp_OrderInfo      : data.orderInfo,
-			vnp_OrderType      : data.orderType,
-			vnp_Amount         : String(data.amount),
-			vnp_ReturnUrl      : data.returnUrl,
-			vnp_IpAddr         : data.clientIp,
-			vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
-		};
+			/* prettier-ignore */
+			const arrParam = {
+				vnp_Version        : data.vnpVersion,
+				vnp_Command        : data.vnpCommand,
+				vnp_TmnCode        : data.vnpMerchant,
+				vnp_Locale         : data.locale,
+				vnp_BankCode       : data.bankCode,
+				vnp_CurrCode       : data.currency,
+				vnp_TxnRef         : data.orderId,
+				vnp_OrderInfo      : data.orderInfo,
+				vnp_OrderType      : data.orderType,
+				vnp_Amount         : String(data.amount),
+				vnp_ReturnUrl      : data.returnUrl,
+				vnp_IpAddr         : data.clientIp,
+				vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
+			};
 
-		// Step 2. Create the target redirect URL at VNPay server
-		const redirectUrl = new URL(config.paymentGateway);
-		const secureCode = [];
+			// Step 2. Create the target redirect URL at VNPay server
+			const redirectUrl = new URL(config.paymentGateway);
+			const secureCode = [];
 
-		Object.keys(arrParam)
-			.sort()
-			.forEach(key => {
-				const value = arrParam[key];
+			Object.keys(arrParam)
+				.sort()
+				.forEach(key => {
+					const value = arrParam[key];
 
-				if (value == null || value.length === 0) {
-					// skip empty params (but they must be optional)
-					return;
-				}
+					if (value == null || value.length === 0) {
+						// skip empty params (but they must be optional)
+						return;
+					}
 
-				redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
+					redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
 
-				if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-					// secureCode is digested from vnp_* params but they should not be URI encoded
-					secureCode.push(`${key}=${value}`);
-				}
-			});
+					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
+						// secureCode is digested from vnp_* params but they should not be URI encoded
+						secureCode.push(`${key}=${value}`);
+					}
+				});
 
-		/* Step 3. calculate the param checksum with md5*/
+			/* Step 3. calculate the param checksum with md5*/
 
-		if (secureCode.length > 0) {
-			redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
-			redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
-		}
+			if (secureCode.length > 0) {
+				redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
+				redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
+			}
 
-		return redirectUrl;
+			resolve(redirectUrl);
+		});
 	}
 
 	/**
