@@ -8,7 +8,7 @@ import {
 	callbackOnePayInternational,
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
-import { checkoutSohaPay } from './sohapay-handlers';
+import { checkoutSohaPay, callbackSohaPay } from './sohapay-handlers';
 
 const routes = Router();
 
@@ -117,6 +117,9 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 			break;
 		case 'vnpay':
 			callbackVNPay(req, res);
+			break;
+		case 'sohapay':
+			callbackSohaPay(req, res);
 			break;
 		default:
 			break;

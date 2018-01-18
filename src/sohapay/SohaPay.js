@@ -71,9 +71,6 @@ class SohaPay {
 			);
 		}
 
-		console.log('Secure code', secureCode);
-		console.log('redirectUrl', redirectUrl);
-
 		return redirectUrl;
 	}
 
@@ -101,10 +98,59 @@ class SohaPay {
 	 * @return {boolean}      Whether the return query params are genuine (hash checksum check)
 	 */
 	verifyReturnUrl(query) {
-		const data = Object.assign({}, query);
-		console.log('data', data);
+		const returnObject = this._mapQueryToObject(query);
 
-		return false;
+		const data = Object.assign({}, query);
+		const config = this.config;
+
+		console.log('data sohapay', data);
+
+		const secureHash = data.secure_code;
+		const verifyResults = {};
+		delete data.secure_code;
+		// delete data.vnp_SecureHash;
+
+		if (config.secureSecret.length > 0) {
+			const secureCode = [];
+
+			Object.keys(data)
+				.sort() // need to sort the key by alphabetically
+				.forEach(key => {
+					const value = data[key];
+
+					if (value.length > 0) {
+						secureCode.push(`${key}=${value}`);
+					}
+				});
+
+			if (
+				toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
+			) {
+				verifyResults.isSuccess = returnObject.responseCode === '0';
+			} else {
+				verifyResults.isSuccess = false;
+				verifyResults.message = 'Wrong checksum';
+			}
+		}
+
+		return Object.assign(returnObject, query, verifyResults);
+	}
+
+	_mapQueryToObject(query) {
+		const returnObject = {
+			message: query.error_text,
+			transactionId: query.order_code,
+			orderEmail: query.order_email,
+			orderSession: query.order_session,
+			amount: query.price,
+			responseCode: query.response_code,
+			responseMessage: query.response_message,
+			siteCode: query.site_code,
+			transactionInfo: query.transaction_info,
+			secureCode: query.secure_code,
+		};
+
+		return returnObject;
 	}
 }
 
@@ -123,7 +169,7 @@ SohaPay.checkoutSchema = new SimpleSchema({
 	customerPhone			: { type: String, max: 15 },
 	returnUrl				: { type: String, max: 255 },
 	amount					: { type: SimpleSchema.Integer, max: 9999999999 },
-	paymentType			: { type: String, max: 1 },
+	paymentType				: { type: String, max: 1 },
 	siteCode				: { type: String, max: 8 },
 	transactionInfo			: { type: String, max: 255 },
 	version					: { type: String, max: 1 },
