@@ -108,7 +108,7 @@ routes.post('/payment/checkout', (req, res) => {
 				res.end();
 			})
 			.catch(err => {
-				console.log(err);
+				res.send(err);
 			});
 	} else {
 		res.send('Payment method not found');

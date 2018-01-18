@@ -128,20 +128,24 @@ class SohaPay {
 					}
 				});
 
-			if (
-				toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
-			) {
-				if (data.error_text.length === 0) {
-					verifyResults.isSuccess = returnObject.responseCode === '0';
-				} else {
-					verifyResults.isSuccess = false;
-					verifyResults.message = data.error_text;
-				}
-			} else {
+			const isEqual =
+				toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
+
+			if (!isEqual) {
 				verifyResults.isSuccess = false;
 				verifyResults.message = 'Wrong checksum';
+				console.log('wrong checksum');
+			} else if (data.error_text) {
+				console.log('Eror');
+				verifyResults.isSuccess = false;
+				verifyResults.message = data.error_text;
+			} else {
+				verifyResults.isSuccess = returnObject.responseCode === '0';
 			}
 		}
+		console.log('data before', data);
+
+		console.log('\nData after check', Object.assign(returnObject, query, verifyResults));
 
 		return Object.assign(returnObject, query, verifyResults);
 	}
@@ -175,7 +179,7 @@ SohaPay.configSchema = new SimpleSchema({
 SohaPay.checkoutSchema = new SimpleSchema({
 	language				: { type: String, max: 16 },
 	orderId					: { type: String, max: 34 },
-	customerEmail			: { type: String, max: 254 },
+	customerEmail			: { type: String, max: 24, regEx: SimpleSchema.RegEx.Email },
 	customerPhone			: { type: String, max: 15 },
 	returnUrl				: { type: String, max: 255 },
 	amount					: { type: SimpleSchema.Integer, max: 9999999999 },
