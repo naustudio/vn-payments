@@ -57,7 +57,7 @@ routes.post('/payment/checkout', (req, res) => {
 
 	const checkoutData = {
 		amount,
-		clientIp,
+		clientIp: clientIp.length > 15 ? '127.0.0.1' : clientIp,
 		locale: 'vn',
 		// TODO: fill in billing address and ship address with address fields from form
 		billingCity: params.billingCity || '',
@@ -81,25 +81,34 @@ routes.post('/payment/checkout', (req, res) => {
 	// pass checkoutData to gateway middleware via res.locals
 	res.locals.checkoutData = checkoutData;
 
-	// Note: these handler are synchronous
+	// Note: these handler are asynchronous
+	let asyncCheckout = null;
 	switch (params.paymentMethod) {
 		case 'onepayInternational':
-			checkoutOnePayInternational(req, res);
+			asyncCheckout = checkoutOnePayInternational(req, res);
 			break;
 		case 'onepayDomestic':
-			checkoutOnePayDomestic(req, res);
+			asyncCheckout = checkoutOnePayDomestic(req, res);
 			break;
 		case 'vnPay':
-			checkoutVNPay(req, res);
+			asyncCheckout = checkoutVNPay(req, res);
 			break;
 		default:
 			break;
 	}
 
-	const checkoutUrl = res.locals.checkoutUrl;
-
-	res.writeHead(301, { Location: checkoutUrl.href });
-	res.end();
+	if (asyncCheckout) {
+		asyncCheckout
+			.then(checkoutUrl => {
+				res.writeHead(301, { Location: checkoutUrl.href });
+				res.end();
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	} else {
+		res.send('Payment method not found');
+	}
 });
 
 routes.get('/payment/:gateway/callback', (req, res) => {

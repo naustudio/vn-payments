@@ -20,10 +20,11 @@ export function checkoutOnePayDomestic(req, res) {
 	const checkoutData = res.locals.checkoutData;
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/onepaydom/callback`;
 
-	const checkoutUrl = onepayDom.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return onepayDom.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackOnePayDomestic(req, res) {
@@ -50,10 +51,11 @@ export function checkoutOnePayInternational(req, res) {
 	checkoutData.againLink = `http://${req.headers.host}/`; // back URL when user cancel payment
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/onepayintl/callback`;
 
-	const checkoutUrl = onepayIntl.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return onepayIntl.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackOnePayInternational(req, res) {

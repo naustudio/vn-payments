@@ -13,10 +13,11 @@ export function checkoutVNPay(req, res) {
 	checkoutData.orderInfo = 'Thanh toan giay adidas';
 	checkoutData.orderType = 'fashion';
 
-	const checkoutUrl = vnpay.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return vnpay.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackVNPay(req, res) {
