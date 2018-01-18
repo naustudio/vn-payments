@@ -131,7 +131,12 @@ class SohaPay {
 			if (
 				toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
 			) {
-				verifyResults.isSuccess = returnObject.responseCode === '0';
+				if (data.error_text.length === 0) {
+					verifyResults.isSuccess = returnObject.responseCode === '0';
+				} else {
+					verifyResults.isSuccess = false;
+					verifyResults.message = data.error_text;
+				}
 			} else {
 				verifyResults.isSuccess = false;
 				verifyResults.message = 'Wrong checksum';
