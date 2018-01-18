@@ -13,10 +13,11 @@ export function checkoutSohaPay(req, res) {
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/sohapay/callback`;
 	checkoutData.transactionInfo = 'Thanh toan giay adidas';
 
-	const checkoutUrl = sohapay.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return sohapay.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackSohaPay(req, res) {

@@ -9,6 +9,7 @@ const vnpay = new VNPay({
 
 export function checkoutVNPay(req, res) {
 	const checkoutData = res.locals.checkoutData;
+
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/vnpay/callback`;
 	checkoutData.orderInfo = 'Thanh toan giay adidas';
 	checkoutData.orderType = 'fashion';

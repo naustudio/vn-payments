@@ -19,59 +19,66 @@ class SohaPay {
 	 * @return {URL}    The URL object used to redirect
 	 */
 	buildCheckoutUrl(payload) {
-		// Mảng các tham số chuyển tới Onepay Payment
-		const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
-		const config = this.config;
+		return new Promise((resolve, reject) => {
+			// Mảng các tham số chuyển tới Onepay Payment
+			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
+			const config = this.config;
 
-		data.siteCode = config.merchantCode;
-		data.paymentType = '1';
+			data.siteCode = config.merchantCode;
+			data.paymentType = '';
 
-		this.validateCheckoutPayload(data);
+			// Input type checking
+			try {
+				this.validateCheckoutPayload(data);
+			} catch (error) {
+				reject(error.message);
+			}
 
-		/* prettier-ignore */
-		const arrParam = {
-			language			: data.language,
-			order_code			: data.orderId,
-			order_email			: data.customerEmail,
-			order_mobile		: data.customerPhone,
-			payment_type		: data.paymentType,
-			price				: data.amount.toString(),
-			return_url			: data.returnUrl,
-			site_code			: data.siteCode,
-			transaction_info	: data.transactionInfo,
-			version				: data.version,
-		};
+			/* prettier-ignore */
+			const arrParam = {
+				language			: data.language,
+				order_code			: data.orderId,
+				order_email			: data.customerEmail,
+				order_mobile		: data.customerPhone,
+				payment_type		: data.paymentType,
+				price				: data.amount.toString(),
+				return_url			: data.returnUrl,
+				site_code			: data.siteCode,
+				transaction_info	: data.transactionInfo,
+				version				: data.version,
+			};
 
-		// Step 2. Create the target redirect URL at SohaPay server
-		const redirectUrl = new URL(config.paymentGateway);
-		const secureCode = [];
+			// Step 2. Create the target redirect URL at SohaPay server
+			const redirectUrl = new URL(config.paymentGateway);
+			const secureCode = [];
 
-		Object.keys(arrParam)
-			.sort()
-			.forEach(key => {
-				const value = arrParam[key];
+			Object.keys(arrParam)
+				.sort()
+				.forEach(key => {
+					const value = arrParam[key];
 
-				if (value == null || value.length === 0) {
-					// skip empty params (but they must be optional)
-					return;
-				}
+					if (value == null || value.length === 0) {
+						// skip empty params (but they must be optional)
+						return;
+					}
 
-				redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
+					redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
 
-				if (value.length > 0) {
-					// secureCode is digested from vnp_* params but they should not be URI encoded
-					secureCode.push(`${key}=${value}`);
-				}
-			});
+					if (value.length > 0) {
+						// secureCode is digested from vnp_* params but they should not be URI encoded
+						secureCode.push(`${key}=${value}`);
+					}
+				});
 
-		if (secureCode.length > 0) {
-			redirectUrl.searchParams.append(
-				'secure_hash',
-				toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
-			);
-		}
+			if (secureCode.length > 0) {
+				redirectUrl.searchParams.append(
+					'secure_hash',
+					toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
+				);
+			}
 
-		return redirectUrl;
+			resolve(redirectUrl);
+		});
 	}
 
 	/**
@@ -102,8 +109,6 @@ class SohaPay {
 
 		const data = Object.assign({}, query);
 		const config = this.config;
-
-		console.log('data sohapay', data);
 
 		const secureHash = data.secure_code;
 		const verifyResults = {};
@@ -173,6 +178,8 @@ SohaPay.checkoutSchema = new SimpleSchema({
 	siteCode				: { type: String, max: 8 },
 	transactionInfo			: { type: String, max: 255 },
 	version					: { type: String, max: 1 },
+	locale					: { type: String, optional: true, max: 2 },
+	currency				: { type: String, optional: true, max: 4 },
 	billingCity				: { type: String, optional: true, max: 64 },
 	billingCountry			: { type: String, optional: true, max: 2 },
 	billingPostCode			: { type: String, optional: true, max: 64 },

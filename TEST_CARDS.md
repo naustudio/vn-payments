@@ -24,3 +24,15 @@ Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
 * Tên chủ thẻ: NGUYEN VAN A
 * Ngày phát hành: 07/15
 * Mật khẩu OTP mặc định: 123456
+
+
+## SohaPay
+* Loai the: VISA
+* So the: 4005550000000001
+* Expire date: 05 - 13
+* Security code (CSC/CVV): 234
+* Ten: Tran Quang Khai
+
+* The cao dien thoai
+* 12345671234567 (100k)
+* 123456712345678 (50k)

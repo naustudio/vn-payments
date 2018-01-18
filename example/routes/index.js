@@ -59,6 +59,7 @@ routes.post('/payment/checkout', (req, res) => {
 	const checkoutData = {
 		amount,
 		clientIp: clientIp.length > 15 ? '127.0.0.1' : clientIp,
+		locale: 'vn',
 		// TODO: fill in billing address and ship address with address fields from form
 		billingCity: params.billingCity || '',
 		billingPostCode: params.billingPostCode || '',
@@ -68,6 +69,7 @@ routes.post('/payment/checkout', (req, res) => {
 		deliveryAddress: params.billingStreet || '',
 		deliveryCity: params.billingCity || '',
 		deliveryCountry: params.billingCountry || '',
+		currency: 'VND',
 		deliveryProvince: params.billingStateProvince || '',
 		customerEmail: params.email,
 		customerPhone: params.phoneNumber,
@@ -93,7 +95,7 @@ routes.post('/payment/checkout', (req, res) => {
 			asyncCheckout = checkoutVNPay(req, res);
 			break;
 		case 'sohaPay':
-			checkoutSohaPay(req, res);
+			asyncCheckout = checkoutSohaPay(req, res);
 			break;
 		default:
 			break;
