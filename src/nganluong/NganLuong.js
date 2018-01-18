@@ -3,6 +3,7 @@
  */
 
 import SimpleSchema from 'simpl-schema';
+import fetch from 'node-fetch';
 import { URL } from 'url';
 import { createMd5Hash, toUpperCase } from '../utils';
 
@@ -65,18 +66,16 @@ class NganLuong {
 				reject(error.message);
 			}
 
-			// convert amount to NganLuong format (100 = 1VND):
-			data.amount = Math.floor(data.amount * 100);
-
+			// Step 1: Map data to ngan luong checkout params
 			/* prettier-ignore */
 			const arrParam = {
-				merchant_id            : data.merchant,
+				merchant_id            : data.nganluongMerchant,
 				merchant_password      : createMd5Hash(data.nganluongSecretKey),
 				version                : data.nganluongVersion,
 				function               : data.nganluongCommand,
 				receiver_email         : data.receiverEmail,
 				order_code             : data.orderId,
-				total_amount           : data.amount,
+				total_amount           : String(data.amount),
 				payment_method         : data.paymentMethod,
 				bank_code              : data.bankCode,
 				payment_type           : data.paymentType,
@@ -97,36 +96,37 @@ class NganLuong {
 				total_item             : data.totalItem,
 			};
 
-			// Step 2. Create the target redirect URL at NganLuong server
-			const redirectUrl = new URL(config.paymentGateway);
-			const secureCode = [];
+			// Step 2: Post checkout data to ngan luong server
+			const url = config.paymentGateway;
+			const params = [];
+			Object.keys(arrParam).forEach(key => {
+				const value = arrParam[key];
 
-			Object.keys(arrParam)
-				.sort()
-				.forEach(key => {
-					const value = arrParam[key];
+				if (value == null || value.length === 0) {
+					// skip empty params (but they must be optional)
+					return;
+				}
 
-					if (value == null || value.length === 0) {
-						// skip empty params (but they must be optional)
-						return;
-					}
+				if (value.length > 0) {
+					params.push(`${key}=${value}`);
+				}
+			});
 
-					redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
+			const options = {
+				method: 'POST',
+			};
 
-					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-						// secureCode is digested from vnp_* params but they should not be URI encoded
-						secureCode.push(`${key}=${value}`);
-					}
+			fetch(`${url}?${params.join('&')}`, options)
+				.then(rs => rs.text())
+				.then(rs => {
+					console.log(rs);
+					resolve({
+						href: 'http://localhost:8080',
+					});
+				})
+				.catch(err => {
+					reject(err);
 				});
-
-			/* Step 3. calculate the param checksum with md5*/
-
-			if (secureCode.length > 0) {
-				redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
-				redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
-			}
-
-			resolve(redirectUrl);
 		});
 	}
 
@@ -360,10 +360,11 @@ NganLuong.dataSchema = new SimpleSchema({
 	timeLimit            : { type: SimpleSchema.Integer, optional: true }, // minutes
 	affiliateCode        : { type: String, max: 255, optional: true },
 	totalItem            : { type: String, optional: true },
+	transactionId        : { type: String, max: 40 },
 	nganluongSecretKey   : { type: String, max: 32 },
 	nganluongMerchant    : { type: String, max: 16 },
-	nganluongCommand     : { type: String, max: 16 },
-	nganluongVersion     : { type: String, max: 2 },
+	nganluongCommand     : { type: String, max: 32 },
+	nganluongVersion     : { type: String, max: 3 },
 });
 
 NganLuong.configSchema = new SimpleSchema({

@@ -32,6 +32,7 @@
     "eslint"
   ],
   "dependencies": {
+    "node-fetch": "^1.7.3",
     "simpl-schema": "^1.4.1"
   },
   "@std/esm": "cjs",

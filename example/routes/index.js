@@ -8,6 +8,7 @@ import {
 	callbackOnePayInternational,
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
+import { checkoutNganLuong } from './nganluong.handlers';
 
 const routes = Router();
 
@@ -72,6 +73,7 @@ routes.post('/payment/checkout', (req, res) => {
 		deliveryProvince: params.billingStateProvince || '',
 		customerEmail: params.email,
 		customerPhone: params.phoneNumber,
+		customerName: `${params.firstname || ''} ${params.lastname || ''}`.trim(),
 		orderId: `node-${now.toISOString()}`,
 		// returnUrl: ,
 		transactionId: `node-${now.toISOString()}`, // same as orderId (we don't have retry mechanism)
@@ -92,6 +94,9 @@ routes.post('/payment/checkout', (req, res) => {
 			break;
 		case 'vnPay':
 			asyncCheckout = checkoutVNPay(req, res);
+			break;
+		case 'nganluong':
+			asyncCheckout = checkoutNganLuong(req, res);
 			break;
 		default:
 			break;
