@@ -4,57 +4,59 @@
 
 import SimpleSchema from 'simpl-schema';
 import { URL } from 'url';
-import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
+import { createMd5Hash, toUpperCase } from '../utils';
 
 /**
- * VNPay payment gateway helper
+ * NganLuong payment gateway helper
  *
  * @example:
  * ```
- * import { VNPay, TEST_CONFIG } from './imports/vnpay';
+ * import { NganLuong, TEST_CONFIG } from './imports/nganluong';
  *
- * const vnpayCheckout = new VNPay({
+ * const nganluongCheckout = new NganLuong({
  * 	paymentGateway: TEST_CONFIG.paymentGateway,
  * 	merchant: TEST_CONFIG.merchant,
+ *  receiverEmail: TEST_CONFIG.receiverEmail,
  * 	secureSecret: TEST_CONFIG.secureSecret,
  * });
  *
  * // checkoutUrl is an URL instance
- * const checkoutUrl = await vnpayCheckout.buildCheckoutUrl(params);
+ * const checkoutUrl = await nganluongCheckout.buildCheckoutUrl(params);
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();
  * ```
  */
-class VNPay {
+class NganLuong {
 	/**
-	 * Instantiate a VNPay checkout helper
+	 * Instantiate a NganLuong checkout helper
 	 *
-	 * @param  {Object} config check VNPay.configSchema for data type requirements
+	 * @param  {Object} config check NganLuong.configSchema for data type requirements
 	 * @return {void}
 	 */
 	constructor(config) {
 		this.config = Object.assign({}, config);
 		// check type validity
-		VNPay.configSchema.validate(this.config);
+		NganLuong.configSchema.validate(this.config);
 	}
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
 	 *
-	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 * Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
 	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
 	 * @return {Promise} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
-			// Mảng các tham số chuyển tới VNPay Payment
+			// Mảng các tham số chuyển tới NganLuong Payment
 			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
 			const config = this.config;
 
-			data.vnpSecretKey = config.secureSecret;
-			data.vnpMerchant = config.merchant;
+			data.nganluongSecretKey = config.secureSecret;
+			data.nganluongMerchant = config.merchant;
+			data.receiverEmail = config.receiverEmail;
 
 			// Input type checking
 			try {
@@ -63,27 +65,39 @@ class VNPay {
 				reject(error.message);
 			}
 
-			// convert amount to VNPay format (100 = 1VND):
+			// convert amount to NganLuong format (100 = 1VND):
 			data.amount = Math.floor(data.amount * 100);
 
 			/* prettier-ignore */
 			const arrParam = {
-				vnp_Version        : data.vnpVersion,
-				vnp_Command        : data.vnpCommand,
-				vnp_TmnCode        : data.vnpMerchant,
-				vnp_Locale         : data.locale,
-				vnp_BankCode       : data.bankCode,
-				vnp_CurrCode       : data.currency,
-				vnp_TxnRef         : data.orderId,
-				vnp_OrderInfo      : data.orderInfo,
-				vnp_OrderType      : data.orderType,
-				vnp_Amount         : String(data.amount),
-				vnp_ReturnUrl      : data.returnUrl,
-				vnp_IpAddr         : data.clientIp,
-				vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
+				merchant_id            : data.merchant,
+				merchant_password      : createMd5Hash(data.nganluongSecretKey),
+				version                : data.nganluongVersion,
+				function               : data.nganluongCommand,
+				receiver_email         : data.receiverEmail,
+				order_code             : data.orderId,
+				total_amount           : data.amount,
+				payment_method         : data.paymentMethod,
+				bank_code              : data.bankCode,
+				payment_type           : data.paymentType,
+				order_description      : data.orderInfo,
+				tax_amount             : data.taxAmount,
+				discount_amount        : data.discountAmount,
+				fee_shipping           : data.feeShipping,
+				return_url             : data.returnUrl,
+				cancel_url             : data.cancelUrl,
+				time_limit             : data.timeLimit,
+				buyer_fullname         : data.customerName,
+				buyer_email            : data.customerEmail,
+				buyer_mobile           : data.customerPhone,
+				buyer_address          : data.billingStreet,
+				cur_code               : data.currency ? data.currency.toLowerCase() : 'vnd',
+				lang_code              : data.locale,
+				affiliate_code         : data.affiliateCode,
+				total_item             : data.totalItem,
 			};
 
-			// Step 2. Create the target redirect URL at VNPay server
+			// Step 2. Create the target redirect URL at NganLuong server
 			const redirectUrl = new URL(config.paymentGateway);
 			const secureCode = [];
 
@@ -122,7 +136,7 @@ class VNPay {
 	 * @param {*} payload
 	 */
 	validateCheckoutPayload(payload) {
-		VNPay.dataSchema.validate(payload);
+		NganLuong.dataSchema.validate(payload);
 	}
 
 	/**
@@ -131,15 +145,15 @@ class VNPay {
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
 		return {
-			currency             : VNPay.CURRENCY_VND,
-			locale               : VNPay.LOCALE_VN,
-			vnpVersion           : VNPay.VERSION,
-			vnpCommand 			 : VNPay.COMMAND,
+			currency             : NganLuong.CURRENCY_VND,
+			locale               : NganLuong.LOCALE_VN,
+			nganluongVersion     : NganLuong.VERSION,
+			nganluongCommand	 : NganLuong.COMMAND,
 		};
 	}
 
 	/**
-	 * @typedef VNPayReturnObject
+	 * @typedef NganLuongReturnObject
 	 * @property {boolean} isSuccess whether the payment succeeded or not
 	 * @property {string} message Approve or error message based on response code
 	 * @property {string} merchant merchant ID, should be same with checkout request
@@ -167,12 +181,12 @@ class VNPay {
 	 * @property {string} vnp_SecureHash e.g: 115ad37de7ae4d28eb819ca3d3d85b20
 	 */
 	/**
-	 * Verify return query string from VNPay using enclosed vnp_SecureHash string
+	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
 	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {VNPayReturnObject}
+	 * @return {NganLuongReturnObject}
 	 */
 	verifyReturnUrl(query) {
 		const returnObject = this._mapQueryToObject(query);
@@ -221,7 +235,7 @@ class VNPay {
 			payDate: query.vnp_PayDate,
 			gatewayTransactionNo: query.vnp_TransactionNo,
 			secureHash: query.vnp_SecureHash,
-			message: VNPay.getReturnUrlStatus(query.vnp_ResponseCode), // no message from gateway, we'll look it up on our side
+			message: NganLuong.getReturnUrlStatus(query.vnp_ResponseCode), // no message from gateway, we'll look it up on our side
 		};
 
 		return returnObject;
@@ -311,11 +325,11 @@ class VNPay {
 	}
 }
 
-// The schema is based on field data requirements from VNPay's dev document
+// The schema is based on field data requirements from NganLuong's dev document
 /* prettier-ignore */
-VNPay.dataSchema = new SimpleSchema({
+NganLuong.dataSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
-	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
+	amount               : { type: SimpleSchema.Integer },
 	clientIp             : { type: String, max: 16 },
 	currency             : { type: String, allowedValues: ['VND'] },
 	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
@@ -323,37 +337,47 @@ VNPay.dataSchema = new SimpleSchema({
 	billingPostCode      : { type: String, optional: true, max: 255 },
 	billingStateProvince : { type: String, optional: true, max: 255 },
 	billingStreet        : { type: String, optional: true, max: 255 },
-	customerEmail        : { type: String, optional: true, max: 255, regEx: SimpleSchema.RegEx.Email },
 	customerId           : { type: String, optional: true, max: 255 },
-	customerPhone        : { type: String, optional: true, max: 255 },
 	deliveryAddress      : { type: String, optional: true, max: 255 },
 	deliveryCity         : { type: String, optional: true, max: 255 },
 	deliveryCountry      : { type: String, optional: true, max: 255 },
 	deliveryProvince     : { type: String, optional: true, max: 255 },
-	bankCode             : { type: String, optional: true, max: 50 },
-	locale               : { type: String, allowedValues: ['vn', 'en'] },
+	locale               : { type: String, allowedValues: ['vi', 'en'] },
 	orderId              : { type: String, max: 34 },
-	orderInfo            : { type: String, max: 255 },
-	orderType            : { type: String, max: 40 },
-	returnUrl            : { type: String, max: 255 },
-	transactionId        : { type: String, max: 40 },
-	vnpSecretKey         : { type: String, max: 32 },
-	vnpMerchant          : { type: String, max: 16 },
-	vnpCommand           : { type: String, max: 16 },
-	vnpVersion           : { type: String, max: 2 },
+	receiverEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
+	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
+	bankCode             : { type: String, max: 50 },
+	paymentType          : { type: String, optional: true, allowedValues: ['1', '2'] },
+	orderInfo            : { type: String, optional: true, max: 500 },
+	taxAmount            : { type: SimpleSchema.Integer, optional: true },
+	discountAmount       : { type: SimpleSchema.Integer, optional: true },
+	feeShipping          : { type: SimpleSchema.Integer, optional: true },
+	customerEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
+	customerPhone        : { type: String, max: 255 },
+	customerName         : { type: String, max: 255 },
+	returnUrl            : { type: String, max: 255, optional: true },
+	cancelUrl            : { type: String, max: 255, optional: true },
+	timeLimit            : { type: SimpleSchema.Integer, optional: true }, // minutes
+	affiliateCode        : { type: String, max: 255, optional: true },
+	totalItem            : { type: String, optional: true },
+	nganluongSecretKey   : { type: String, max: 32 },
+	nganluongMerchant    : { type: String, max: 16 },
+	nganluongCommand     : { type: String, max: 16 },
+	nganluongVersion     : { type: String, max: 2 },
 });
 
-VNPay.configSchema = new SimpleSchema({
+NganLuong.configSchema = new SimpleSchema({
 	paymentGateway: { type: String, regEx: SimpleSchema.RegEx.Url },
 	merchant: { type: String },
+	receiverEmail: { type: String },
 	secureSecret: { type: String },
 });
 // should not be changed
-VNPay.VERSION = '2';
-VNPay.COMMAND = 'pay';
-// vnpay only support VND
-VNPay.CURRENCY_VND = 'VND';
-VNPay.LOCALE_EN = 'en';
-VNPay.LOCALE_VN = 'vn';
+NganLuong.VERSION = '3.1';
+NganLuong.COMMAND = 'SetExpressCheckout';
+// nganluong only support VND
+NganLuong.CURRENCY_VND = 'vnd';
+NganLuong.LOCALE_EN = 'en';
+NganLuong.LOCALE_VN = 'vi';
 
-export { VNPay };
+export { NganLuong };

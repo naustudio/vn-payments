@@ -22,7 +22,7 @@ import { urlRegExp } from '../utils';
  * });
  *
  * // checkoutUrl is an URL instance
- * const checkoutUrl = onepayCheckout.buildCheckoutUrl(params);
+ * const checkoutUrl = await onepayCheckout.buildCheckoutUrl(params);
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();
