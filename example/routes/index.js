@@ -8,6 +8,7 @@ import {
 	callbackOnePayInternational,
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
+import { checkoutSohaPay } from './sohapay-handlers';
 
 const routes = Router();
 
@@ -58,14 +59,12 @@ routes.post('/payment/checkout', (req, res) => {
 	const checkoutData = {
 		amount,
 		clientIp,
-		locale: 'vn',
 		// TODO: fill in billing address and ship address with address fields from form
 		billingCity: params.billingCity || '',
 		billingPostCode: params.billingPostCode || '',
 		billingStateProvince: params.billingStateProvince || '',
 		billingStreet: params.billingStreet || '',
 		billingCountry: params.billingCountry || '',
-		currency: 'VND',
 		deliveryAddress: params.billingStreet || '',
 		deliveryCity: params.billingCity || '',
 		deliveryCountry: params.billingCountry || '',
@@ -91,6 +90,9 @@ routes.post('/payment/checkout', (req, res) => {
 			break;
 		case 'vnPay':
 			checkoutVNPay(req, res);
+			break;
+		case 'sohaPay':
+			checkoutSohaPay(req, res);
 			break;
 		default:
 			break;
