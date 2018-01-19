@@ -195,7 +195,7 @@ describe('OnePayDomestic', () => {
 	});
 
 	describe('OnePayDomestic.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {
+		it('should verify the return URL', async () => {
 			const correctReturnUrl = {
 				vpc_AdditionData: '970436',
 				vpc_Amount: '90000000',
@@ -211,7 +211,7 @@ describe('OnePayDomestic', () => {
 				vpc_SecureHash: '8B720A26C295F225FCF57F9619562341914649C07F9C9FD359A514C2905D67C2',
 			};
 
-			expect(onepayDom.verifyReturnUrl(correctReturnUrl)).toEqual({
+			await expect(onepayDom.verifyReturnUrl(correctReturnUrl)).resolves.toEqual({
 				isSuccess: true,
 				amount: 900000,
 				command: 'pay',
@@ -240,7 +240,7 @@ describe('OnePayDomestic', () => {
 			});
 
 			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vpc_Amount: '50000000' });
-			const errorResults = onepayDom.verifyReturnUrl(incorrectReturnUrl);
+			const errorResults = await onepayDom.verifyReturnUrl(incorrectReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Wrong checksum');
@@ -428,7 +428,7 @@ describe('OnePayInternational', () => {
 	});
 
 	describe('OnePayIntl.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {
+		it('should verify the return URL', async () => {
 			const correctReturnUrl = {
 				vpc_OrderInfo: 'node-2018-01-16T09:44:54.120Z',
 				vpc_3DSECI: '06',
@@ -474,7 +474,7 @@ describe('OnePayInternational', () => {
 				vpc_CommercialCardIndicator: '3',
 			};
 
-			expect(onepayIntl.verifyReturnUrl(correctReturnUrl)).toEqual({
+			await expect(onepayIntl.verifyReturnUrl(correctReturnUrl)).resolves.toEqual({
 				isSuccess: true,
 				amount: 900000,
 				billingCity: '10',
@@ -539,7 +539,7 @@ describe('OnePayInternational', () => {
 			});
 
 			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vpc_Amount: '50000000' });
-			let errorResults = onepayIntl.verifyReturnUrl(incorrectReturnUrl);
+			let errorResults = await onepayIntl.verifyReturnUrl(incorrectReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Wrong checksum');
@@ -567,7 +567,7 @@ describe('OnePayInternational', () => {
 				vpc_TxnResponseCode: 'F',
 			};
 
-			errorResults = onepayIntl.verifyReturnUrl(failAuthenticationReturnUrl);
+			errorResults = await onepayIntl.verifyReturnUrl(failAuthenticationReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual(

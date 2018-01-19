@@ -103,10 +103,9 @@ describe('SohaPay', () => {
 	});
 
 	describe('SohaPay.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {
+		it('should verify the return URL', async () => {
 			let errorResults = {};
 			//TODO Success state for sohaPay
-
 
 			const correctReturnUrl = {
 				error_text: '',
@@ -119,7 +118,7 @@ describe('SohaPay', () => {
 				secure_code: '2A27D69C9AC5E219B202E189CCFBB14BDE71A48484FBE9AAA1E2D735032626AB',
 			};
 
-			errorResults = sohaPay.verifyReturnUrl(correctReturnUrl);
+			errorResults = await sohaPay.verifyReturnUrl(correctReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Wrong checksum');
@@ -135,7 +134,7 @@ describe('SohaPay', () => {
 				secure_code: '2A27D69C9AC5E219B202E189CCFBB14BDE71A48484FBE9AAA1E2D735032626AB',
 			};
 
-			errorResults = sohaPay.verifyReturnUrl(userCancelReturnUrl);
+			errorResults = await sohaPay.verifyReturnUrl(userCancelReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Giao dịch thanh toán bị huỷ bỏ');

@@ -45,7 +45,7 @@ class VNPay {
 	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
 	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
-	 * @return {Promise} buildCheckoutUrl promise
+	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -172,40 +172,42 @@ class VNPay {
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {VNPayReturnObject}
+	 * @return {Promise<VNPayReturnObject>}
 	 */
 	verifyReturnUrl(query) {
-		const returnObject = this._mapQueryToObject(query);
+		return new Promise(resolve => {
+			const returnObject = this._mapQueryToObject(query);
 
-		const data = Object.assign({}, query);
-		const config = this.config;
-		const vnpTxnSecureHash = data.vnp_SecureHash;
-		const verifyResults = {};
-		delete data.vnp_SecureHashType;
-		delete data.vnp_SecureHash;
+			const data = Object.assign({}, query);
+			const config = this.config;
+			const vnpTxnSecureHash = data.vnp_SecureHash;
+			const verifyResults = {};
+			delete data.vnp_SecureHashType;
+			delete data.vnp_SecureHash;
 
-		if (config.secureSecret.length > 0) {
-			const secureCode = [];
+			if (config.secureSecret.length > 0) {
+				const secureCode = [];
 
-			Object.keys(data)
-				.sort() // need to sort the key by alphabetically
-				.forEach(key => {
-					const value = data[key];
+				Object.keys(data)
+					.sort() // need to sort the key by alphabetically
+					.forEach(key => {
+						const value = data[key];
 
-					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-						secureCode.push(`${key}=${value}`);
-					}
-				});
+						if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
+							secureCode.push(`${key}=${value}`);
+						}
+					});
 
-			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
-				verifyResults.isSuccess = returnObject.responseCode === '00';
-			} else {
-				verifyResults.isSuccess = false;
-				verifyResults.message = 'Wrong checksum';
+				if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
+					verifyResults.isSuccess = returnObject.responseCode === '00';
+				} else {
+					verifyResults.isSuccess = false;
+					verifyResults.message = 'Wrong checksum';
+				}
 			}
-		}
 
-		return Object.assign(returnObject, query, verifyResults);
+			resolve(Object.assign(returnObject, query, verifyResults));
+		});
 	}
 
 	_mapQueryToObject(query) {

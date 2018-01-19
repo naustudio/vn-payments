@@ -142,42 +142,44 @@ class OnePay {
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {Object} Normalized return data object, with additional fields like isSuccess
+	 * @return {Promise<Object>} Normalized return data object, with additional fields like isSuccess
 	 */
 	verifyReturnUrl(query) {
-		const data = Object.assign({}, query);
-		const config = this.config;
-		const vpcTxnSecureHash = data.vpc_SecureHash;
-		delete data.vpc_SecureHash;
-
-		if (
-			config.secureSecret.length > 0 &&
-			data.vpc_TxnResponseCode !== '7' &&
-			data.vpc_TxnResponseCode !== 'No Value Returned'
-		) {
-			const secureCode = [];
-
-			Object.keys(data)
-				.sort() // need to sort the key by alphabetically
-				.forEach(key => {
-					const value = data[key];
-
-					if (value.length > 0 && (key.substr(0, 4) === 'vpc_' || key.substr(0, 5) === 'user_')) {
-						secureCode.push(`${key}=${value}`);
-					}
-				});
+		return new Promise(resolve => {
+			const data = Object.assign({}, query);
+			const config = this.config;
+			const vpcTxnSecureHash = data.vpc_SecureHash;
+			delete data.vpc_SecureHash;
 
 			if (
-				toUpperCase(vpcTxnSecureHash) ===
-				toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
+				config.secureSecret.length > 0 &&
+				data.vpc_TxnResponseCode !== '7' &&
+				data.vpc_TxnResponseCode !== 'No Value Returned'
 			) {
-				// for the transaction to succeed, its checksum must be valid, then response code must be '0'
-				return { isSuccess: data.vpc_TxnResponseCode === '0' };
-			}
-		}
+				const secureCode = [];
 
-		// this message prop will override whatever in Subclass
-		return { isSuccess: false, message: 'Wrong checksum' };
+				Object.keys(data)
+					.sort() // need to sort the key by alphabetically
+					.forEach(key => {
+						const value = data[key];
+
+						if (value.length > 0 && (key.substr(0, 4) === 'vpc_' || key.substr(0, 5) === 'user_')) {
+							secureCode.push(`${key}=${value}`);
+						}
+					});
+
+				if (
+					toUpperCase(vpcTxnSecureHash) ===
+					toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)))
+				) {
+					// for the transaction to succeed, its checksum must be valid, then response code must be '0'
+					resolve({ isSuccess: data.vpc_TxnResponseCode === '0' });
+				}
+			}
+
+			// this message prop will override whatever in Subclass
+			resolve({ isSuccess: false, message: 'Wrong checksum' });
+		});
 	}
 }
 

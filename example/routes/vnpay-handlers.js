@@ -24,17 +24,15 @@ export function checkoutVNPay(req, res) {
 export function callbackVNPay(req, res) {
 	const query = req.query;
 
-	const results = vnpay.verifyReturnUrl(query);
-
-	console.log('result vnpay', results);
-
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.transactionId || '';
-		res.locals.price = results.amount;
-		res.locals.isSucceed = results.isSuccess;
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+	return vnpay.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.transactionId || '';
+			res.locals.price = results.amount;
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }
