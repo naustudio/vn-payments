@@ -121,10 +121,10 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 
 	switch (gateway) {
 		case 'onepaydom':
-			callbackOnePayDomestic(req, res);
+			asyncFunc = callbackOnePayDomestic(req, res);
 			break;
 		case 'onepayintl':
-			callbackOnePayInternational(req, res);
+			asyncFunc = callbackOnePayInternational(req, res);
 			break;
 		case 'vnpay':
 			asyncFunc = callbackVNPay(req, res);
