@@ -4,6 +4,7 @@
 
 import SimpleSchema from 'simpl-schema';
 import fetch from 'node-fetch';
+import { parseString } from 'xml2js';
 import { URL } from 'url';
 import { createMd5Hash, toUpperCase } from '../utils';
 
@@ -108,7 +109,7 @@ class NganLuong {
 				}
 
 				if (value.length > 0) {
-					params.push(`${key}=${value}`);
+					params.push(`${key}=${encodeURIComponent(value)}`);
 				}
 			});
 
@@ -119,10 +120,20 @@ class NganLuong {
 			fetch(`${url}?${params.join('&')}`, options)
 				.then(rs => rs.text())
 				.then(rs => {
-					console.log(rs);
-					resolve({
-						href: 'http://localhost:8080',
-					});
+					if (rs) {
+						parseString(rs, (err, result) => {
+							const objectResponse = result.result || {};
+							if (objectResponse.error_code[0] === '00') {
+								resolve({
+									href: objectResponse.checkout_url[0],
+								});
+							} else {
+								reject(new Error(objectResponse.description[0]));
+							}
+						});
+					} else {
+						reject(new Error('No response from nganluong server'));
+					}
 				})
 				.catch(err => {
 					reject(err);
