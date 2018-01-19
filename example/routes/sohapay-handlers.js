@@ -23,17 +23,15 @@ export function checkoutSohaPay(req, res) {
 export function callbackSohaPay(req, res) {
 	const query = req.query;
 
-	const results = sohapay.verifyReturnUrl(query);
-
-	console.log('result after check', results);
-
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.transactionId || '';
-		res.locals.price = results.amount;
-		res.locals.isSucceed = results.isSuccess;
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+	return sohapay.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.transactionId || '';
+			res.locals.price = results.amount;
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }

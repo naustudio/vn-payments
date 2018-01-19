@@ -109,7 +109,7 @@ describe('VNPay', () => {
 	});
 
 	describe('VNPayDom.verifyReturnUrl', () => {
-		it('should verify the return URL', () => {
+		it('should verify the return URL', async () => {
 			const correctReturnUrl = {
 				vnp_Amount: '90000000',
 				vnp_BankCode: 'NCB',
@@ -125,7 +125,7 @@ describe('VNPay', () => {
 				vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
 			};
 
-			expect(vnpay.verifyReturnUrl(correctReturnUrl)).toEqual({
+			await expect(vnpay.verifyReturnUrl(correctReturnUrl)).resolves.toEqual({
 				merchant: 'COCOSIN',
 				transactionId: 'node-2018-01-15T10:04:36.540Z',
 				amount: 900000,
@@ -154,7 +154,7 @@ describe('VNPay', () => {
 			});
 
 			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vnp_Amount: '50000000' });
-			let errorResults = vnpay.verifyReturnUrl(incorrectReturnUrl);
+			let errorResults = await vnpay.verifyReturnUrl(incorrectReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Wrong checksum');
@@ -173,7 +173,7 @@ describe('VNPay', () => {
 				vnp_SecureHash: '305d85b6eb840c29cd5707932ab0ac8b',
 			};
 
-			errorResults = vnpay.verifyReturnUrl(userCancelReturnUrl);
+			errorResults = await vnpay.verifyReturnUrl(userCancelReturnUrl);
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Giao dịch không thành công do: Khách hàng hủy giao dịch');

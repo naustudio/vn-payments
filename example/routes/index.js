@@ -130,7 +130,7 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 			asyncFunc = callbackVNPay(req, res);
 			break;
 		case 'sohapay':
-			callbackSohaPay(req, res);
+			asyncFunc = callbackSohaPay(req, res);
 			break;
 		default:
 			break;
@@ -153,19 +153,7 @@ routes.get('/payment/:gateway/callback', (req, res) => {
 			});
 		});
 	} else {
-		res.render('result', {
-			title: `Nau Store Payment via ${gateway.toUpperCase()}`,
-			isSucceed: res.locals.isSucceed,
-			email: res.locals.email,
-			orderId: res.locals.orderId,
-			price: res.locals.price,
-			message: res.locals.message,
-			billingStreet: res.locals.billingStreet,
-			billingCountry: res.locals.billingCountry,
-			billingCity: res.locals.billingCity,
-			billingStateProvince: res.locals.billingStateProvince,
-			billingPostalCode: res.locals.billingPostalCode,
-		});
+		res.send('No callback found');
 	}
 });
 
