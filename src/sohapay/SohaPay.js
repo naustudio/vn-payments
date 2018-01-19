@@ -16,7 +16,7 @@ class SohaPay {
 	 * Build checkout URL to redirect to the payment gateway
 	 *
 	 * @param  {Object} payload Object that contains needed data for the URL builder
-	 * @return {URL}    The URL object used to redirect
+	 * @return {Promise<URL>}    The URL object used to redirect
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -131,46 +131,49 @@ class SohaPay {
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
 	 * @return {SohaPayReturnObject}
+	 * @return {Promise<Object>}
 	 */
 	verifyReturnUrl(query) {
-		const returnObject = this._mapQueryToObject(query);
+		return new Promise(resolve => {
+			const returnObject = this._mapQueryToObject(query);
 
-		const data = Object.assign({}, query);
-		const config = this.config;
+			const data = Object.assign({}, query);
+			const config = this.config;
 
-		const secureHash = data.secure_code;
-		const verifyResults = {};
-		delete data.secure_code;
-		// delete data.vnp_SecureHash;
+			const secureHash = data.secure_code;
+			const verifyResults = {};
+			delete data.secure_code;
+			// delete data.vnp_SecureHash;
 
-		if (config.secureSecret.length > 0) {
-			const secureCode = [];
+			if (config.secureSecret.length > 0) {
+				const secureCode = [];
 
-			Object.keys(data)
-				.sort() // need to sort the key by alphabetically
-				.forEach(key => {
-					const value = data[key];
+				Object.keys(data)
+					.sort() // need to sort the key by alphabetically
+					.forEach(key => {
+						const value = data[key];
 
-					if (value.length > 0) {
-						secureCode.push(`${key}=${value}`);
-					}
-				});
+						if (value.length > 0) {
+							secureCode.push(`${key}=${value}`);
+						}
+					});
 
-			const isEqual =
-				toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
+				const isEqual =
+					toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
 
-			if (!isEqual) {
-				verifyResults.isSuccess = false;
-				verifyResults.message = 'Wrong checksum';
-			} else if (data.error_text) {
-				verifyResults.isSuccess = false;
-				verifyResults.message = data.error_text;
-			} else {
-				verifyResults.isSuccess = returnObject.responseCode === '0';
+				if (!isEqual) {
+					verifyResults.isSuccess = false;
+					verifyResults.message = 'Wrong checksum';
+				} else if (data.error_text) {
+					verifyResults.isSuccess = false;
+					verifyResults.message = data.error_text;
+				} else {
+					verifyResults.isSuccess = returnObject.responseCode === '0';
+				}
 			}
-		}
 
-		return Object.assign(returnObject, query, verifyResults);
+			resolve(Object.assign(returnObject, query, verifyResults));
+		});
 	}
 
 	_mapQueryToObject(query) {

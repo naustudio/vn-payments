@@ -30,19 +30,18 @@ export function checkoutOnePayDomestic(req, res) {
 export function callbackOnePayDomestic(req, res) {
 	const query = req.query;
 
-	const results = onepayDom.verifyReturnUrl(query);
+	return onepayDom.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.orderId || '';
+			res.locals.price = results.amount;
 
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.orderId || '';
-		res.locals.price = results.amount;
-
-		res.locals.isSucceed = results.isSuccess;
-		// TODO: render error message
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }
 
 export function checkoutOnePayInternational(req, res) {
@@ -61,21 +60,21 @@ export function checkoutOnePayInternational(req, res) {
 export function callbackOnePayInternational(req, res) {
 	const query = req.query;
 
-	const results = onepayIntl.verifyReturnUrl(query);
+	return onepayIntl.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.orderId || '';
+			res.locals.price = results.amount;
+			res.locals.billingStreet = results.billingStreet;
+			res.locals.billingCountry = Countries[results.billingCountry];
+			res.locals.billingStateProvince = results.billingStateProvince;
+			res.locals.billingCity = results.billingCity;
+			res.locals.billingPostalCode = results.billingPostCode;
 
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.orderId || '';
-		res.locals.price = results.amount;
-		res.locals.billingStreet = results.billingStreet;
-		res.locals.billingCountry = Countries[results.billingCountry];
-		res.locals.billingStateProvince = results.billingStateProvince;
-		res.locals.billingCity = results.billingCity;
-		res.locals.billingPostalCode = results.billingPostCode;
-
-		res.locals.isSucceed = results.isSuccess;
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }
