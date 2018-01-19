@@ -99,10 +99,38 @@ class SohaPay {
 	}
 
 	/**
-	 * Verify return query string from payment gateway
+	 * @typedef SohaPayReturnObject
+	 * @property {boolean} isSuccess whether the payment succeeded or not
+	 * @property {string} message returned from SohaPay
+	 * @property {string} transactionId transaction id
+	 * @property {string} orderEmail customer email
+	 * @property {string} orderSession session token came from SohaPay
+	 * @property {string} amount amount paid by customer
+	 * @property {string} siteCode unique code assigned by SohaPay for merchant
+	 * @property {string} responseCode response status code of SohaPay
+	 * @property {string} transactionInfo description of the payment
+	 * @property {string} responseMessage response message from SohaPay
+	 * @property {string} secureCode checksum of the returned data, used to verify data integrity
+	 *
+	 *
+	 * @property {string} error_text e.g: 'Giao dịch thanh toán bị huỷ bỏ'
+	 * @property {string} order_code e.g: 'node-2018-01-19T131933.811Z'
+	 * @property {string} order_email e.g: 'tu.nguyen@naustud.io'
+	 * @property {string} order_session e.g: 'd3bdef93fa01cd37f7e426fa25f5d1a0'
+	 * @property {string} price e.g: '90000'
+	 * @property {string} site_code e.g: 'test'
+	 * @property {string} transaction_info e.g: 'Thanh toan giay adidas'
+	 * @property {string} secure_code e.g: FC5283C6B93C1D8F9A9329293DA38FFC3204FA6CE75661972419DAA6E5A1B7B5
+	 *
+	 */
+	/**
+	 *
+	 * Verify return query string from SohaPay using enclosed secureCode string
+	 *
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {boolean}      Whether the return query params are genuine (hash checksum check)
+	 * @return {SohaPayReturnObject}
 	 */
 	verifyReturnUrl(query) {
 		const returnObject = this._mapQueryToObject(query);
@@ -134,18 +162,13 @@ class SohaPay {
 			if (!isEqual) {
 				verifyResults.isSuccess = false;
 				verifyResults.message = 'Wrong checksum';
-				console.log('wrong checksum');
 			} else if (data.error_text) {
-				console.log('Eror');
 				verifyResults.isSuccess = false;
 				verifyResults.message = data.error_text;
 			} else {
 				verifyResults.isSuccess = returnObject.responseCode === '0';
 			}
 		}
-		console.log('data before', data);
-
-		console.log('\nData after check', Object.assign(returnObject, query, verifyResults));
 
 		return Object.assign(returnObject, query, verifyResults);
 	}

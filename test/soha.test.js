@@ -107,7 +107,6 @@ describe('SohaPay', () => {
 			let errorResults = {};
 			//TODO Success state for sohaPay
 
-
 			const correctReturnUrl = {
 				error_text: '',
 				order_code: 'node-2018-01-18T162833.777Z',
