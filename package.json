@@ -18,7 +18,7 @@
     "start": "nodemon example/index.js --exec \"node -r dotenv/config\"",
     "clean": "rimraf dist",
     "build": "npm run lint && jest --config test/jest.config.js --coverage && npm run clean && mkdir -p dist && babel src -s -D -d dist && codecov",
-    "test": "jest --watch",
+    "test": "jest --watch --coverage",
     "lint": "esw src test example"
   },
   "keywords": [

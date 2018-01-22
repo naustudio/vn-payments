@@ -69,11 +69,12 @@ class NganLuong {
 			// Step 1: Map data to ngan luong checkout params
 			/* prettier-ignore */
 			const arrParam = {
-				merchant_id            : data.nganluongMerchant,
-				merchant_password      : createMd5Hash(data.nganluongSecretKey),
-				version                : data.nganluongVersion,
 				function               : data.nganluongCommand,
+				cur_code               : data.currency ? data.currency.toLowerCase() : 'vnd',
+				version                : data.nganluongVersion,
+				merchant_id            : data.nganluongMerchant,
 				receiver_email         : data.receiverEmail,
+				merchant_password      : createMd5Hash(data.nganluongSecretKey),
 				order_code             : data.orderId,
 				total_amount           : String(data.amount),
 				payment_method         : data.paymentMethod,
@@ -81,16 +82,15 @@ class NganLuong {
 				payment_type           : data.paymentType,
 				order_description      : data.orderInfo,
 				tax_amount             : data.taxAmount,
-				discount_amount        : data.discountAmount,
-				fee_shipping           : data.feeShipping,
+				fee_shipping           : data.feeShipping || '0',
+				discount_amount        : data.discountAmount || '0',
 				return_url             : data.returnUrl,
 				cancel_url             : data.cancelUrl,
-				time_limit             : data.timeLimit,
 				buyer_fullname         : data.customerName,
 				buyer_email            : data.customerEmail,
 				buyer_mobile           : data.customerPhone,
 				buyer_address          : data.billingStreet,
-				cur_code               : data.currency ? data.currency.toLowerCase() : 'vnd',
+				time_limit             : data.timeLimit,
 				lang_code              : data.locale,
 				affiliate_code         : data.affiliateCode,
 				total_item             : data.totalItem,
@@ -119,23 +119,16 @@ class NganLuong {
 			fetch(`${url}?${params.join('&')}`, options)
 				.then(rs => rs.text())
 				.then(rs => {
-					if (rs) {
-						parseString(rs, (err, result) => {
-							const objectResponse = result.result || {};
-							if (objectResponse.error_code[0] === '00') {
-								resolve({
-									href: objectResponse.checkout_url[0],
-								});
-							} else {
-								reject(new Error(objectResponse.description[0]));
-							}
-						});
-					} else {
-						reject(new Error('No response from nganluong server'));
-					}
-				})
-				.catch(err => {
-					reject(err);
+					parseString(rs, (err, result) => {
+						const objectResponse = result.result || {};
+						if (objectResponse.error_code[0] === '00') {
+							resolve({
+								href: objectResponse.checkout_url[0],
+							});
+						} else {
+							reject(new Error(objectResponse.description[0]));
+						}
+					});
 				});
 		});
 	}
@@ -168,27 +161,34 @@ class NganLuong {
 	 * @property {string} message Approve or error message based on response code
 	 * @property {string} merchant merchant ID, should be same with checkout request
 	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
-	 * @property {number} amount amount paid by customer, already divided by 100
+	 * @property {number} amount amount paid by customer
 	 * @property {number} orderInfo order info, should be same with checkout request
 	 * @property {string} responseCode response code, payment has errors if it is non-zero
 	 * @property {string} bankCode bank code of the bank where payment was occurred
-	 * @property {string} bankTranNo bank transaction ID, used to look up at Bank's side
-	 * @property {string} cardType type of card
-	 * @property {string} payDate date when transaction occurred
 	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
-	 * @property {string} secureHash checksum of the returned data, used to verify data integrity
 	 *
-	 * @property {string} vnp_TmnCode e.g: COCOSIN
-	 * @property {string} vnp_TxnRef e.g: node-2018-01-15T10:04:36.540Z
-	 * @property {string} vnp_Amount e.g: 90000000
-	 * @property {string} vnp_OrderInfo e.g: Thanh toan giay adidas
-	 * @property {string} vnp_ResponseCode e.g: 00
-	 * @property {string} vnp_BankCode e.g: NCB
-	 * @property {string} vnp_BankTranNo e.g: 20180115170515
-	 * @property {string} vnp_CardType e.g: ATM
-	 * @property {string} vnp_PayDate e.g: 20180115170716
-	 * @property {string} vnp_TransactionNo e.g: 13008888
-	 * @property {string} vnp_SecureHash e.g: 115ad37de7ae4d28eb819ca3d3d85b20
+	 * @property {string} error_code e.g: '00'
+	 * @property {string} token e.g: '43614-fc2a3698ee92604d5000434ed129d6a8'
+	 * @property {string} description e.g: ''
+	 * @property {string} transaction_status e.g: '00'
+	 * @property {string} receiver_email e.g: 'tung.tran@naustud.io'
+	 * @property {string} order_code e.g: 'adidas'
+	 * @property {string} total_amount e.g: '90000'
+	 * @property {string} payment_method e.g: 'ATM_ONLINE'
+	 * @property {string} bank_code e.g: 'BAB'
+	 * @property {string} payment_type e.g: '2'
+	 * @property {string} order_description e.g: 'Test'
+	 * @property {string} tax_amount e.g: '0'
+	 * @property {string} discount_amount e.g: '0'
+	 * @property {string} fee_shipping e.g: '0'
+	 * @property {string} return_url e.g: 'http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fnganluong%2Fcallback'
+	 * @property {string} cancel_url e.g: 'http%3A%2F%2Flocalhost%3A8080%2F'
+	 * @property {string} buyer_fullname e.g: 'Nguyen Hue'
+	 * @property {string} buyer_email e.g: 'tu.nguyen@naustud.io'
+	 * @property {string} buyer_mobile e.g: '0948231723'
+	 * @property {string} buyer_address e.g: 'TEst'
+	 * @property {string} affiliate_code e.g: ''
+	 * @property {string} transaction_id e.g: '19563733'
 	 */
 	/**
 	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
@@ -199,10 +199,10 @@ class NganLuong {
 	 * @return {NganLuongReturnObject}
 	 */
 	verifyReturnUrl(query) {
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			const data = {};
 			const config = this.config;
-			const token = query.token;
+			const token = query.token || query.token_nl;
 			if (!token) {
 				resolve({
 					isSuccess: false,
@@ -220,6 +220,7 @@ class NganLuong {
 				merchant_password      : createMd5Hash(data.nganluongSecretKey),
 				version                : data.nganluongVersion,
 				function               : 'GetTransactionDetail',
+				token,
 			};
 
 			// Step 2: Post checkout data to ngan luong server
@@ -245,37 +246,42 @@ class NganLuong {
 			fetch(`${url}?${params.join('&')}`, options)
 				.then(rs => rs.text())
 				.then(rs => {
-					if (rs) {
-						parseString(rs, (err, result) => {
-							const objectResponse = result.result || {};
-							if (objectResponse.error_code[0] === '00') {
-								const returnObject = this._mapQueryToObject(objectResponse);
-								resolve(Object.assign({}, returnObject, { isSuccess: true }));
-							} else {
-								resolve({
-									isSuccess: false,
-									message: NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
-								});
-							}
-						});
-					} else {
-						resolve({
-							isSuccess: false,
-							message: 'No response from nganluong server',
-						});
-					}
-				})
-				.catch(err => {
-					reject(err);
+					parseString(rs, (err, result) => {
+						const objectResponse = result.result || {};
+						if (objectResponse.error_code[0] === '00') {
+							objectResponse.merchant = data.nganluongMerchant;
+							const returnObject = this._mapQueryToObject(objectResponse);
+							resolve(Object.assign({}, returnObject, { isSuccess: true }));
+						} else {
+							resolve({
+								isSuccess: false,
+								message: objectResponse.description || NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
+							});
+						}
+					});
 				});
 		});
 	}
 
 	_mapQueryToObject(query) {
-		const returnObject = query;
-		console.log(query);
+		const returnObject = {};
+		Object.keys(query).forEach(key => {
+			returnObject[key] = query[key][0];
+		});
 
-		return returnObject;
+		return Object.assign({}, returnObject, {
+			merchant: returnObject.merchant,
+			transactionId: returnObject.order_code,
+			amount: returnObject.total_amount,
+			orderInfo: returnObject.order_description,
+			responseCode: returnObject.transaction_status,
+			bankCode: returnObject.bank_code,
+			gatewayTransactionNo: returnObject.transaction_id,
+			message: returnObject.description || NganLuong.getReturnUrlStatus(returnObject.error_code),
+			customerEmail: returnObject.buyer_email,
+			customerPhone: returnObject.buyer_mobile,
+			customerName: returnObject.buyer_fullname,
+		});
 	}
 
 	static getReturnUrlStatus(responseCode, locale = 'vn') {

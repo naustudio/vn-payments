@@ -16,6 +16,8 @@ export function checkoutNganLuong(req, res) {
 	checkoutData.paymentMethod = 'ATM_ONLINE';
 	checkoutData.bankCode = 'BAB';
 	checkoutData.locale = checkoutData.locale === 'en' ? 'en' : 'vi';
+	checkoutData.paymentType = '1';
+	checkoutData.totalItem = '1';
 
 	return nganluong.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
 		res.locals.checkoutUrl = checkoutUrl;
@@ -29,7 +31,7 @@ export function callbackNganLuong(req, res) {
 
 	return nganluong.verifyReturnUrl(query).then(results => {
 		if (results) {
-			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.email = results.customerEmail;
 			res.locals.orderId = results.transactionId || '';
 			res.locals.price = results.amount;
 			res.locals.isSucceed = results.isSuccess;

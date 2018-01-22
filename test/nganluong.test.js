@@ -120,75 +120,70 @@ describe('NganLuong', () => {
 		});
 	});
 
-	// describe('NganLuongDom.verifyReturnUrl', () => {
-	// 	it('should verify the return URL', async () => {
-	// 		const correctReturnUrl = {
-	// 			vnp_Amount: '90000000',
-	// 			vnp_BankCode: 'NCB',
-	// 			vnp_BankTranNo: '20180115170515',
-	// 			vnp_CardType: 'ATM',
-	// 			vnp_OrderInfo: 'Thanh toan giay adidas',
-	// 			vnp_PayDate: '20180115170716',
-	// 			vnp_ResponseCode: '00',
-	// 			vnp_TmnCode: 'COCOSIN',
-	// 			vnp_TransactionNo: '13008888',
-	// 			vnp_TxnRef: 'node-2018-01-15T10:04:36.540Z',
-	// 			vnp_SecureHashType: 'MD5',
-	// 			vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
-	// 		};
+	describe('NganLuongDom.verifyReturnUrl', () => {
+		it('should verify the return URL', async () => {
+			const correctReturnUrl = {
+				error_code: '00',
+				token: '43622-60372d15292ee552c8a17d773990f9c1',
+			};
 
-	// 		await expect(nganluong.verifyReturnUrl(correctReturnUrl)).resolves.toEqual({
-	// 			merchant: 'COCOSIN',
-	// 			transactionId: 'node-2018-01-15T10:04:36.540Z',
-	// 			amount: 900000,
-	// 			orderInfo: 'Thanh toan giay adidas',
-	// 			responseCode: '00',
-	// 			bankCode: 'NCB',
-	// 			bankTranNo: '20180115170515',
-	// 			cardType: 'ATM',
-	// 			payDate: '20180115170716',
-	// 			gatewayTransactionNo: '13008888',
-	// 			secureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
-	// 			message: 'Giao dịch thành công',
-	// 			isSuccess: true,
-	// 			vnp_Amount: '90000000',
-	// 			vnp_BankCode: 'NCB',
-	// 			vnp_BankTranNo: '20180115170515',
-	// 			vnp_CardType: 'ATM',
-	// 			vnp_OrderInfo: 'Thanh toan giay adidas',
-	// 			vnp_PayDate: '20180115170716',
-	// 			vnp_ResponseCode: '00',
-	// 			vnp_TmnCode: 'COCOSIN',
-	// 			vnp_TransactionNo: '13008888',
-	// 			vnp_TxnRef: 'node-2018-01-15T10:04:36.540Z',
-	// 			vnp_SecureHashType: 'MD5',
-	// 			vnp_SecureHash: '115ad37de7ae4d28eb819ca3d3d85b20',
-	// 		});
+			await expect(nganluong.verifyReturnUrl(correctReturnUrl)).resolves.toEqual({
+				isSuccess: true,
+				error_code: '00',
+				token: '43622-60372d15292ee552c8a17d773990f9c1',
+				description: '',
+				transaction_status: '00',
+				receiver_email: 'tung.tran@naustud.io',
+				order_code: 'node-2018-01-22T09:30:58.856Z',
+				total_amount: '90000',
+				payment_method: 'ATM_ONLINE',
+				bank_code: 'BAB',
+				payment_type: '2',
+				order_description: 'Thanh toan giay adidas',
+				tax_amount: '0',
+				discount_amount: '0',
+				fee_shipping: '0',
+				return_url: 'http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fnganluong%2Fcallback',
+				cancel_url: 'http%3A%2F%2Flocalhost%3A8080%2F',
+				buyer_fullname: 'Tú Địch',
+				buyer_email: 'tu.nguyen@naustud.io',
+				buyer_mobile: '0999999999',
+				buyer_address: '441 Cách Mạng Tháng Tám',
+				affiliate_code: '',
+				transaction_id: '19563755',
+				merchant: '4',
+				transactionId: 'node-2018-01-22T09:30:58.856Z',
+				amount: '90000',
+				orderInfo: 'Thanh toan giay adidas',
+				responseCode: '00',
+				bankCode: 'BAB',
+				gatewayTransactionNo: '19563755',
+				message: 'Giao dịch thành công',
+				customerEmail: 'tu.nguyen@naustud.io',
+				customerPhone: '0999999999',
+				customerName: 'Tú Địch',
+			});
 
-	// 		const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { vnp_Amount: '50000000' });
-	// 		let errorResults = await nganluong.verifyReturnUrl(incorrectReturnUrl);
+			const incorrectReturnUrl = Object.assign({}, correctReturnUrl, { token: 'wrongtoken' });
+			let errorResults = await nganluong.verifyReturnUrl(incorrectReturnUrl);
 
-	// 		expect(errorResults.isSuccess).toEqual(false);
-	// 		expect(errorResults.message).toEqual('Wrong checksum');
+			expect(errorResults.isSuccess).toEqual(false);
 
-	// 		const userCancelReturnUrl = {
-	// 			vnp_Amount: '90000000',
-	// 			vnp_BankCode: 'VNPAY',
-	// 			vnp_CardType: 'ATM',
-	// 			vnp_OrderInfo: 'Thanh toan giay adidas',
-	// 			vnp_PayDate: '20180115172917',
-	// 			vnp_ResponseCode: '24',
-	// 			vnp_TmnCode: 'COCOSIN',
-	// 			vnp_TransactionNo: '0',
-	// 			vnp_TxnRef: 'node-2018-01-15T10:29:07.696Z',
-	// 			vnp_SecureHashType: 'MD5',
-	// 			vnp_SecureHash: '305d85b6eb840c29cd5707932ab0ac8b',
-	// 		};
+			const noTokenReturnUrl = Object.assign({}, correctReturnUrl, { token: '' });
+			errorResults = await nganluong.verifyReturnUrl(noTokenReturnUrl);
 
-	// 		errorResults = await nganluong.verifyReturnUrl(userCancelReturnUrl);
+			expect(errorResults.isSuccess).toEqual(false);
 
-	// 		expect(errorResults.isSuccess).toEqual(false);
-	// 		expect(errorResults.message).toEqual('Giao dịch không thành công do: Khách hàng hủy giao dịch');
-	// 	});
-	// });
+			nganluong = new NganLuong({
+				paymentGateway: TEST_CONFIG.paymentGateway,
+				merchant: `${TEST_CONFIG.merchant}test`,
+				receiverEmail: TEST_CONFIG.receiverEmail,
+				secureSecret: TEST_CONFIG.secureSecret,
+			});
+
+			errorResults = await nganluong.verifyReturnUrl(correctReturnUrl);
+
+			expect(errorResults.isSuccess).toEqual(false);
+		});
+	});
 });
