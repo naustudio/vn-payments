@@ -258,71 +258,161 @@ class NganLuong {
 				vn: 'Giao dịch thành công',
 				en: 'Approved',
 			},
-			'01': {
-				vn: 'Giao dịch đã tồn tại',
-				en: 'Transaction is already exist',
-			},
 			'02': {
-				vn: 'Merchant không hợp lệ (kiểm tra lại vnp_TmnCode)',
-				en: 'Invalid merchant (check vnp_TmnCode value)',
+				vn: 'Địa chỉ IP của merchant gọi tới NganLuong.vn không được chấp nhận',
+				en: 'Invalid IP Address',
 			},
 			'03': {
-				vn: 'Dữ liệu gửi sang không đúng định dạng',
+				vn: 'Sai tham số gửi tới NganLuong.vn (có tham số sai tên hoặc kiểu dữ liệu)',
 				en: 'Sent data is not in the right format',
 			},
 			'04': {
-				vn: 'Khởi tạo GD không thành công do Website đang bị tạm khóa',
-				en: 'Payment website is not available',
+				vn: 'Tên hàm API do merchant gọi tới không hợp lệ (không tồn tại)',
+				en: 'API function name not found',
 			},
 			'05': {
-				vn:
-					'Giao dịch không thành công do: Quý khách nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch',
-				en: 'Transaction failed: Too many wrong password input',
+				vn: 'Sai version của API',
+				en: 'Wrong API version',
 			},
 			'06': {
-				vn:
-					'Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.',
-				en: 'Transaction failed: Wrong OTP input',
+				vn: 'Mã merchant không tồn tại hoặc chưa được kích hoạt',
+				en: 'Merchant code not found or not activated yet',
 			},
 			'07': {
-				vn:
-					'Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường). Đối với giao dịch này cần merchant xác nhận thông qua merchant admin: Từ chối/Đồng ý giao dịch',
-				en: 'This transaction is suspicious',
+				vn: 'Sai mật khẩu của merchant',
+				en: 'Wrong merchant password',
 			},
 			'08': {
-				vn:
-					'Giao dịch không thành công do: Hệ thống Ngân hàng đang bảo trì. Xin quý khách tạm thời không thực hiện giao dịch bằng thẻ/tài khoản của Ngân hàng này.',
-				en:
-					'Transaction failed: The banking system is under maintenance. Please do not temporarily make transactions by card / account of this Bank.',
+				vn: 'Tài khoản người bán hàng không tồn tại',
+				en: 'Seller account not found',
 			},
 			'09': {
-				vn:
-					'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.',
-				en: 'Transaction failed: Cards / accounts of customer who has not yet registered for Internet Banking service.',
+				vn: 'Tài khoản người nhận tiền đang bị phong tỏa',
+				en: 'Receiver account is frozen',
 			},
 			10: {
-				vn: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
-				en: 'Transaction failed: Customer incorrectly validate the card / account information more than 3 times',
+				vn: 'Hóa đơn thanh toán không hợp lệ',
+				en: 'Invalid payment bill',
 			},
 			11: {
-				vn: 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.',
-				en: 'Transaction failed: Pending payment is expired. Please try again.',
+				vn: 'Số tiền thanh toán không hợp lệ',
+				en: 'Invalid amount',
 			},
-			24: {
-				vn: 'Giao dịch không thành công do: Khách hàng hủy giao dịch',
-				en: 'Transaction canceled',
+			12: {
+				vn: 'Đơn vị tiền tệ không hợp lệ',
+				en: 'Invalid money currency',
 			},
-			51: {
-				vn: 'Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.',
-				en: 'Transaction failed: Your account is not enough balance to make the transaction.',
+			29: {
+				vn: 'Token không tồn tại',
+				en: 'Token not found',
 			},
-			65: {
-				vn: 'Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.',
-				en: 'Transaction failed: Your account has exceeded the daily limit.',
+			80: {
+				vn: 'Không thêm được đơn hàng',
+				en: "Can't add more order",
 			},
-			75: {
-				vn: 'Ngân hàng thanh toán đang bảo trì',
-				en: 'Banking system is under maintenance',
+			81: {
+				vn: 'Đơn hàng chưa được thanh toán',
+				en: 'The order has not yet been paid',
+			},
+			110: {
+				vn: 'Địa chỉ email tài khoản nhận tiền không phải email chính',
+				en: 'The email address is not the primary email',
+			},
+			111: {
+				vn: 'Tài khoản nhận tiền đang bị khóa',
+				en: 'Receiver account is locked',
+			},
+			113: {
+				vn: 'Tài khoản nhận tiền chưa cấu hình là người bán nội dung số',
+				en: 'Receiver account is not configured as digital content sellers',
+			},
+			114: {
+				vn: 'Giao dịch đang thực hiện, chưa kết thúc',
+				en: 'Pending transaction',
+			},
+			115: {
+				vn: 'Giao dịch bị hủy',
+				en: 'Cancelled transaction',
+			},
+			118: {
+				vn: 'tax_amount không hợp lệ',
+				en: 'Invalid tax_amount',
+			},
+			119: {
+				vn: 'discount_amount không hợp lệ',
+				en: 'Invalid discount_amount',
+			},
+			120: {
+				vn: 'fee_shipping không hợp lệ',
+				en: 'Invalid fee_shipping',
+			},
+			121: {
+				vn: 'return_url không hợp lệ',
+				en: 'Invalid return_url',
+			},
+			122: {
+				vn: 'cancel_url không hợp lệ',
+				en: 'Invalid cancel_url',
+			},
+			123: {
+				vn: 'items không hợp lệ',
+				en: 'Invalid items',
+			},
+			124: {
+				vn: 'transaction_info không hợp lệ',
+				en: 'Invalid transaction_info',
+			},
+			125: {
+				vn: 'quantity không hợp lệ',
+				en: 'Invalid quantity',
+			},
+			126: {
+				vn: 'order_description không hợp lệ',
+				en: 'Invalid order_description',
+			},
+			127: {
+				vn: 'affiliate_code không hợp lệ',
+				en: 'Invalid affiliate_code',
+			},
+			128: {
+				vn: 'time_limit không hợp lệ',
+				en: 'Invalid time_limit',
+			},
+			129: {
+				vn: 'buyer_fullname không hợp lệ',
+				en: 'Invalid buyer_fullname',
+			},
+			130: {
+				vn: 'buyer_email không hợp lệ',
+				en: 'Invalid buyer_email',
+			},
+			131: {
+				vn: 'buyer_mobile không hợp lệ',
+				en: 'Invalid buyer_mobile',
+			},
+			132: {
+				vn: 'buyer_address không hợp lệ',
+				en: 'Invalid buyer_address',
+			},
+			133: {
+				vn: 'total_item không hợp lệ',
+				en: 'Invalid total_item',
+			},
+			134: {
+				vn: 'payment_method, bank_code không hợp lệ',
+				en: 'Invalid payment_method, bank_code',
+			},
+			135: {
+				vn: 'Lỗi kết nối tới hệ thống ngân hàng',
+				en: 'Error connecting to banking system',
+			},
+			140: {
+				vn: 'Đơn hàng không hỗ trợ thanh toán trả góp',
+				en: 'The order does not support installment payments',
+			},
+			99: {
+				vn: 'Lỗi không được định nghĩa hoặc không rõ nguyên nhân',
+				en: 'Unknown error',
 			},
 			default: {
 				vn: 'Giao dịch thất bại',
