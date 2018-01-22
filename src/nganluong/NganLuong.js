@@ -5,8 +5,7 @@
 import SimpleSchema from 'simpl-schema';
 import fetch from 'node-fetch';
 import { parseString } from 'xml2js';
-import { URL } from 'url';
-import { createMd5Hash, toUpperCase } from '../utils';
+import { createMd5Hash } from '../utils';
 
 /**
  * NganLuong payment gateway helper
@@ -200,54 +199,81 @@ class NganLuong {
 	 * @return {NganLuongReturnObject}
 	 */
 	verifyReturnUrl(query) {
-		const returnObject = this._mapQueryToObject(query);
-
-		const data = Object.assign({}, query);
-		const config = this.config;
-		const vnpTxnSecureHash = data.vnp_SecureHash;
-		const verifyResults = {};
-		delete data.vnp_SecureHashType;
-		delete data.vnp_SecureHash;
-
-		if (config.secureSecret.length > 0) {
-			const secureCode = [];
-
-			Object.keys(data)
-				.sort() // need to sort the key by alphabetically
-				.forEach(key => {
-					const value = data[key];
-
-					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-						secureCode.push(`${key}=${value}`);
-					}
+		return new Promise((resolve, reject) => {
+			const data = {};
+			const config = this.config;
+			const token = query.token;
+			if (!token) {
+				resolve({
+					isSuccess: false,
+					message: 'No token found',
 				});
-
-			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
-				verifyResults.isSuccess = returnObject.responseCode === '00';
-			} else {
-				verifyResults.isSuccess = false;
-				verifyResults.message = 'Wrong checksum';
 			}
-		}
+			data.nganluongSecretKey = config.secureSecret;
+			data.nganluongMerchant = config.merchant;
+			data.receiverEmail = config.receiverEmail;
 
-		return Object.assign(returnObject, query, verifyResults);
+			// Step 1: Map data to ngan luong get detail params
+			/* prettier-ignore */
+			const arrParam = {
+				merchant_id            : data.nganluongMerchant,
+				merchant_password      : createMd5Hash(data.nganluongSecretKey),
+				version                : data.nganluongVersion,
+				function               : 'GetTransactionDetail',
+			};
+
+			// Step 2: Post checkout data to ngan luong server
+			const url = config.paymentGateway;
+			const params = [];
+			Object.keys(arrParam).forEach(key => {
+				const value = arrParam[key];
+
+				if (value == null || value.length === 0) {
+					// skip empty params (but they must be optional)
+					return;
+				}
+
+				if (value.length > 0) {
+					params.push(`${key}=${encodeURIComponent(value)}`);
+				}
+			});
+
+			const options = {
+				method: 'POST',
+			};
+
+			fetch(`${url}?${params.join('&')}`, options)
+				.then(rs => rs.text())
+				.then(rs => {
+					if (rs) {
+						parseString(rs, (err, result) => {
+							const objectResponse = result.result || {};
+							if (objectResponse.error_code[0] === '00') {
+								const returnObject = this._mapQueryToObject(objectResponse);
+								resolve(Object.assign({}, returnObject, { isSuccess: true }));
+							} else {
+								resolve({
+									isSuccess: false,
+									message: NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
+								});
+							}
+						});
+					} else {
+						resolve({
+							isSuccess: false,
+							message: 'No response from nganluong server',
+						});
+					}
+				})
+				.catch(err => {
+					reject(err);
+				});
+		});
 	}
 
 	_mapQueryToObject(query) {
-		const returnObject = {
-			merchant: query.vnp_TmnCode,
-			transactionId: query.vnp_TxnRef,
-			amount: parseInt(query.vnp_Amount, 10) / 100,
-			orderInfo: query.vnp_OrderInfo,
-			responseCode: query.vnp_ResponseCode,
-			bankCode: query.vnp_BankCode,
-			bankTranNo: query.vnp_BankTranNo,
-			cardType: query.vnp_CardType,
-			payDate: query.vnp_PayDate,
-			gatewayTransactionNo: query.vnp_TransactionNo,
-			secureHash: query.vnp_SecureHash,
-			message: NganLuong.getReturnUrlStatus(query.vnp_ResponseCode), // no message from gateway, we'll look it up on our side
-		};
+		const returnObject = query;
+		console.log(query);
 
 		return returnObject;
 	}

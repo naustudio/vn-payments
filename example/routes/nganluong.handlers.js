@@ -13,8 +13,8 @@ export function checkoutNganLuong(req, res) {
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/nganluong/callback`;
 	checkoutData.cancelUrl = `http://${req.headers.host}/`;
 	checkoutData.orderInfo = 'Thanh toan giay adidas';
-	checkoutData.paymentMethod = 'ATM_ONLINE';
-	checkoutData.bankCode = 'BAB';
+	checkoutData.paymentMethod = 'IB_ONLINE';
+	checkoutData.bankCode = 'BIDV';
 	checkoutData.locale = checkoutData.locale === 'en' ? 'en' : 'vi';
 
 	return nganluong.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
@@ -27,15 +27,15 @@ export function checkoutNganLuong(req, res) {
 export function callbackNganLuong(req, res) {
 	const query = req.query;
 
-	const results = nganluong.verifyReturnUrl(query);
-
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.transactionId || '';
-		res.locals.price = results.amount;
-		res.locals.isSucceed = results.isSuccess;
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+	return nganluong.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.transactionId || '';
+			res.locals.price = results.amount;
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }
