@@ -13,8 +13,8 @@ export function checkoutNganLuong(req, res) {
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/nganluong/callback`;
 	checkoutData.cancelUrl = `http://${req.headers.host}/`;
 	checkoutData.orderInfo = 'Thanh toan giay adidas';
-	checkoutData.paymentMethod = 'IB_ONLINE';
-	checkoutData.bankCode = 'BIDV';
+	checkoutData.paymentMethod = 'ATM_ONLINE';
+	checkoutData.bankCode = 'BAB';
 	checkoutData.locale = checkoutData.locale === 'en' ? 'en' : 'vi';
 
 	return nganluong.buildCheckoutUrl(checkoutData).then(checkoutUrl => {

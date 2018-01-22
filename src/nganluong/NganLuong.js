@@ -108,7 +108,7 @@ class NganLuong {
 				}
 
 				if (value.length > 0) {
-					params.push(`${key}=${encodeURIComponent(value)}`);
+					params.push(`${key}=${encodeURI(value)}`);
 				}
 			});
 
@@ -457,8 +457,8 @@ class NganLuong {
 NganLuong.dataSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
 	amount               : { type: SimpleSchema.Integer },
-	clientIp             : { type: String, max: 16 },
-	currency             : { type: String, allowedValues: ['VND'] },
+	clientIp             : { type: String, optional: true, max: 16 },
+	currency             : { type: String, allowedValues: ['vnd', 'VND', 'USD', 'usd'] },
 	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
 	billingCountry       : { type: String, optional: true, max: 255 },
 	billingPostCode      : { type: String, optional: true, max: 255 },
@@ -482,7 +482,7 @@ NganLuong.dataSchema = new SimpleSchema({
 	customerEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
 	customerPhone        : { type: String, max: 255 },
 	customerName         : { type: String, max: 255 },
-	returnUrl            : { type: String, max: 255, optional: true },
+	returnUrl            : { type: String, max: 255 },
 	cancelUrl            : { type: String, max: 255, optional: true },
 	timeLimit            : { type: SimpleSchema.Integer, optional: true }, // minutes
 	affiliateCode        : { type: String, max: 255, optional: true },
