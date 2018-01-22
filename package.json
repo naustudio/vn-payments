@@ -32,7 +32,9 @@
     "eslint"
   ],
   "dependencies": {
-    "simpl-schema": "^1.4.1"
+    "node-fetch": "^1.7.3",
+    "simpl-schema": "^1.4.1",
+    "xml2js": "^0.4.19"
   },
   "@std/esm": "cjs",
   "devDependencies": {

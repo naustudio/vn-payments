@@ -20,7 +20,7 @@ import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
  * });
  *
  * // checkoutUrl is an URL instance
- * const checkoutUrl = vnpayCheckout.buildCheckoutUrl(params);
+ * const checkoutUrl = await vnpayCheckout.buildCheckoutUrl(params);
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();

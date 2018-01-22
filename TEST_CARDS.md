@@ -25,7 +25,27 @@ Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
 * Ngày phát hành: 07/15
 * Mật khẩu OTP mặc định: 123456
 
+## NganLuong Test cards
 
++ Thanh toán bằng ATM Online: chọn ngân hàng Bắc Á bank với thông tin thẻ:
+* Số thẻ: 9874563254178962
+* Họ tên chủ thẻ: Nguyen Hue
+* Ngày phát hành: 10/2016
+* Mã OTP: 123456
+
++ Thanh toán bằng Internet banking: chọn ngân hàng BIDV với thông tin thẻ:
+* Số tài khoản: 9874563254178962
+* Họ tên chủ thẻ: Nguyen Hue
+* Mật khẩu giao dịch tại ngân hàng: 123456
+* Ngày phát hành: 10/2016
+* Mã OTP: 123456
+
++ Thanh toán bằng thẻ visa, với thông tin thẻ:
+* Số thẻ: 4444003254178962
+* Họ tên chủ thẻ: Nguyen Hue
+* Ngày hết hạn: 10/2023
+* Mã CVV: 123
+* Mã OTP: 123456
 ## SohaPay
 * Loai the: VISA
 * So the: 4005550000000001
