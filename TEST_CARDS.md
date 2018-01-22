@@ -46,3 +46,13 @@ Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
 * Ngày hết hạn: 10/2023
 * Mã CVV: 123
 * Mã OTP: 123456
+## SohaPay
+* Loai the: VISA
+* So the: 4005550000000001
+* Expire date: 05 - 13
+* Security code (CSC/CVV): 234
+* Ten: Tran Quang Khai
+
+* The cao dien thoai
+* 12345671234567 (100k)
+* 123456712345678 (50k)

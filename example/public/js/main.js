@@ -19,6 +19,7 @@ $(function() {
 			form.billingPostCode.value = '700000';
 			form.billingStateProvince.value = 'Hồ Chí Minh';
 			form.email.value = 'tu.nguyen@naustud.io';
+			form.amount.value = '90000';
 			form.phoneNumber.value = '0999999999';
 		} else {
 			form.firstname.value = '';
@@ -28,6 +29,7 @@ $(function() {
 			form.billingCity.value = '';
 			form.billingPostCode.value = '';
 			form.billingStateProvince.value = '';
+			form.amount.value = '';
 			form.email.value = '';
 			form.phoneNumber.value = '';
 		}

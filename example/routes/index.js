@@ -9,6 +9,7 @@ import {
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
 import { checkoutNganLuong } from './nganluong.handlers';
+import { checkoutSohaPay, callbackSohaPay } from './sohapay-handlers';
 
 const routes = Router();
 
@@ -60,16 +61,15 @@ routes.post('/payment/checkout', (req, res) => {
 		amount,
 		clientIp: clientIp.length > 15 ? '127.0.0.1' : clientIp,
 		locale: 'vn',
-		// TODO: fill in billing address and ship address with address fields from form
 		billingCity: params.billingCity || '',
 		billingPostCode: params.billingPostCode || '',
 		billingStateProvince: params.billingStateProvince || '',
 		billingStreet: params.billingStreet || '',
 		billingCountry: params.billingCountry || '',
-		currency: 'VND',
 		deliveryAddress: params.billingStreet || '',
 		deliveryCity: params.billingCity || '',
 		deliveryCountry: params.billingCountry || '',
+		currency: 'VND',
 		deliveryProvince: params.billingStateProvince || '',
 		customerEmail: params.email,
 		customerPhone: params.phoneNumber,
@@ -98,6 +98,9 @@ routes.post('/payment/checkout', (req, res) => {
 		case 'nganluong':
 			asyncCheckout = checkoutNganLuong(req, res);
 			break;
+		case 'sohaPay':
+			asyncCheckout = checkoutSohaPay(req, res);
+			break;
 		default:
 			break;
 	}
@@ -109,7 +112,7 @@ routes.post('/payment/checkout', (req, res) => {
 				res.end();
 			})
 			.catch(err => {
-				console.log(err);
+				res.send(err);
 			});
 	} else {
 		res.send('Payment method not found');
@@ -119,35 +122,44 @@ routes.post('/payment/checkout', (req, res) => {
 routes.get('/payment/:gateway/callback', (req, res) => {
 	const gateway = req.params.gateway;
 	console.log('gateway', req.params.gateway);
+	let asyncFunc = null;
 
 	switch (gateway) {
 		case 'onepaydom':
-			callbackOnePayDomestic(req, res);
+			asyncFunc = callbackOnePayDomestic(req, res);
 			break;
 		case 'onepayintl':
-			callbackOnePayInternational(req, res);
+			asyncFunc = callbackOnePayInternational(req, res);
 			break;
 		case 'vnpay':
-			callbackVNPay(req, res);
+			asyncFunc = callbackVNPay(req, res);
+			break;
+		case 'sohapay':
+			asyncFunc = callbackSohaPay(req, res);
 			break;
 		default:
 			break;
 	}
 
-	// TODO: render callback result here
-	res.render('result', {
-		title: `Nau Store Payment via ${gateway.toUpperCase()}`,
-		isSucceed: res.locals.isSucceed,
-		email: res.locals.email,
-		orderId: res.locals.orderId,
-		price: res.locals.price,
-		message: res.locals.message,
-		billingStreet: res.locals.billingStreet,
-		billingCountry: res.locals.billingCountry,
-		billingCity: res.locals.billingCity,
-		billingStateProvince: res.locals.billingStateProvince,
-		billingPostalCode: res.locals.billingPostalCode,
-	});
+	if (asyncFunc) {
+		asyncFunc.then(() => {
+			res.render('result', {
+				title: `Nau Store Payment via ${gateway.toUpperCase()}`,
+				isSucceed: res.locals.isSucceed,
+				email: res.locals.email,
+				orderId: res.locals.orderId,
+				price: res.locals.price,
+				message: res.locals.message,
+				billingStreet: res.locals.billingStreet,
+				billingCountry: res.locals.billingCountry,
+				billingCity: res.locals.billingCity,
+				billingStateProvince: res.locals.billingStateProvince,
+				billingPostalCode: res.locals.billingPostalCode,
+			});
+		});
+	} else {
+		res.send('No callback found');
+	}
 });
 
 export default routes;

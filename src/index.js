@@ -5,3 +5,5 @@
 export * from './onepay';
 
 export * from './vnpay';
+
+export * from './sohapay';
