@@ -5,7 +5,7 @@
   "author": "Nau Studio <contact@naustud.io>",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "nodemon ./index.js"
+    "start": "nodemon index.js --exec \"node -r babel-register\""
   },
   "main": "index.js",
   "engines": {
@@ -19,8 +19,7 @@
     "morgan": "^1.9.0",
     "vn-payments": "^1.0.0"
   },
-  "@std/esm": "cjs",
   "devDependencies": {
-    "@std/esm": "^0.19.1"
+
   }
 }

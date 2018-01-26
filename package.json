@@ -1,6 +1,6 @@
 {
   "name": "vn-payments",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Helpers for various Payment Gateway in Vietnam",
   "repository": "https://github.com/naustudio/vn-payments",
   "author": "Nau Studio <contact@naustud.io>",
@@ -14,7 +14,7 @@
     "npm": ">=3.10.0"
   },
   "scripts": {
-    "start": "nodemon example/index.js",
+    "start": "nodemon example/index.js --exec \"node -r babel-register\"",
     "clean": "rimraf dist",
     "build": "eslint src test example && jest --config test/jest.config.js --coverage && npm run clean && mkdir -p dist && babel src -s -D -d dist && codecov",
     "test": "jest --watch --coverage",
