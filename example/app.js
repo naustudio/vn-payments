@@ -9,12 +9,12 @@ const app = express();
 app.disable('x-powered-by');
 
 // fix views folder location
-app.set('views', './example/views');
+app.set('views', path.join(__dirname, './views'));
 // View engine setup
 const hbs = exphbs.create({
 	extname: '.hbs',
 	defaultLayout: 'default',
-	layoutsDir: './example/views/layouts',
+	layoutsDir: path.join(__dirname, './views/layouts'),
 	// Specify helpers which are only registered on this instance.
 	// helpers: {
 	// 		foo: function () { return 'FOO!'; },

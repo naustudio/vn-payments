@@ -9,10 +9,4 @@ const TEST_SOHA_CONFIG = {
 	secureSecret: '1234567890',
 };
 
-// const TEST_SOHA_CONFIG = {
-// 	merchantCode: 'u1053910',
-// 	secureSecret: '028251c2521731616e64',
-// 	paymentGateway: 'https://sohapay.vn/payment.php',
-// };
-
 export { TEST_SOHA_CONFIG };

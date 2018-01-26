@@ -57,6 +57,7 @@ routes.post('/payment/checkout', (req, res) => {
 	const amount = parseInt(params.amount.replace(/,/g, ''), 10);
 	const now = new Date();
 
+	// NOTE: only set the common required fields and optional fields from all gateways here, redundant fields will invalidate the payload schema checker
 	const checkoutData = {
 		amount,
 		clientIp: clientIp.length > 15 ? '127.0.0.1' : clientIp,
@@ -73,7 +74,6 @@ routes.post('/payment/checkout', (req, res) => {
 		deliveryProvince: params.billingStateProvince || '',
 		customerEmail: params.email,
 		customerPhone: params.phoneNumber,
-		customerName: `${params.firstname || ''} ${params.lastname || ''}`.trim(),
 		orderId: `node-${now.toISOString()}`,
 		// returnUrl: ,
 		transactionId: `node-${now.toISOString()}`, // same as orderId (we don't have retry mechanism)
@@ -96,6 +96,8 @@ routes.post('/payment/checkout', (req, res) => {
 			asyncCheckout = checkoutVNPay(req, res);
 			break;
 		case 'nganluong':
+			// this param is not expected in other gateway
+			checkoutData.customerName = `${params.firstname || ''} ${params.lastname || ''}`.trim();
 			asyncCheckout = checkoutNganLuong(req, res);
 			break;
 		case 'sohaPay':

@@ -19,10 +19,7 @@ module.exports = {
 		'jest/no-identical-title': 'error',
 		'import/no-extraneous-dependencies': 'off',
 	},
-	globals: {
-		Modernizr: true,
-		hyperform: true,
-	},
+	globals: {},
 	env: {
 		browser: true,
 		es6: true,

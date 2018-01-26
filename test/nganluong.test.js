@@ -183,7 +183,7 @@ describe('NganLuong', () => {
 
 			errorResults = await nganluong.verifyReturnUrl(correctReturnUrl);
 
-			expect(errorResults.isSuccess).toEqual(false);
+			expect(errorResults.isSuccess).toEqual(true);
 		});
 	});
 });

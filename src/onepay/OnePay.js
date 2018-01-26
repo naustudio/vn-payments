@@ -128,6 +128,7 @@ class OnePay {
 	 * @param {*} payload
 	 */
 	validateCheckoutPayload(payload) {
+		console.log(payload);
 		throw new Error('validateCheckoutPayload() requires overloading');
 	}
 

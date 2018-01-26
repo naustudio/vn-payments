@@ -1,3 +1,4 @@
+example/node_modules/
 example/public/js/semantic.js
 example/public/**/*.min.js
 test/coverage/

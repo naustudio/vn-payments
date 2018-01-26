@@ -1,28 +1,19 @@
-# vn-payments
+# Vietnam Payment Gateway helpers for NodeJS
+
 [![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
 [![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg)](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop)
 [![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
-
 ## Getting started
 
 ```sh
-# Clone the project
-git clone git@github.com:vmasto/express-babel.git
-cd express-babel
-
-# Make it your own
-rm -rf .git && git init && npm init
-
-# Install dependencies
-npm install
-
-# or if you're using Yarn
-yarn
+# Add this package to your project
+npm install vn-payments --save
 ```
+
 Then you can begin development:
 
-```sh
+```javascript
 # yarn
 yarn run dev
 
@@ -114,7 +105,7 @@ You can find small guides for Heroku, App Engine and AWS in [the deployment](DEP
 
 ## Thanks
 
-- The Express app was based on [Express Babel Starter Kit](https://github.com/vmasto/express-babel) by [@vmasto](https://github.com/vmasto)
+* The Express app was based on [Express Babel Starter Kit](https://github.com/vmasto/express-babel) by [@vmasto](https://github.com/vmasto)
 
 ## License
 
@@ -135,7 +126,8 @@ limitations under the License.
 VNPay Test account
 
 Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
--           Số thẻ: 9704198526191432198
--           Tên chủ thẻ: NGUYEN VAN A
--           Ngày phát hành: 07/15
--           Mật khẩu OTP mặc định: 123456
+
+*           Số thẻ: 9704198526191432198
+*           Tên chủ thẻ: NGUYEN VAN A
+*           Ngày phát hành: 07/15
+*           Mật khẩu OTP mặc định: 123456
