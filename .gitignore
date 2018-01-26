@@ -5,6 +5,7 @@ coverage/
 
 # NodeJS #
 ####################
+yarn.lock
 npm-debug.log.*
 .grunt
 node_modules
