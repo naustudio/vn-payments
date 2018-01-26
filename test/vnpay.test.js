@@ -1,4 +1,6 @@
-import { VNPay, TEST_CONFIG } from '../src/vnpay';
+import { VNPay } from '../src/vnpay';
+
+const TEST_CONFIG = VNPay.TEST_CONFIG;
 
 describe('VNPay', () => {
 	let vnpay;

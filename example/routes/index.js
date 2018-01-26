@@ -8,7 +8,7 @@ import {
 	callbackOnePayInternational,
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
-import { checkoutNganLuong, callbackNganLuong } from './nganluong.handlers';
+import { checkoutNganLuong, callbackNganLuong } from './nganluong-handlers';
 import { checkoutSohaPay, callbackSohaPay } from './sohapay-handlers';
 
 const routes = Router();

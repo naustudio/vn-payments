@@ -267,4 +267,14 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 	vpcVersion           : { type: String, max: 2 },
 });
 
+/**
+ * OnePayDomestic test configs
+ */
+OnePayDomestic.TEST_CONFIG = {
+	accessCode: 'D67342C2',
+	merchant: 'ONEPAY',
+	paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
+	secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
+};
+
 export { OnePayDomestic };

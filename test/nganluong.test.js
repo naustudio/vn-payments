@@ -1,4 +1,6 @@
-import { NganLuong, TEST_CONFIG } from '../src/nganluong';
+import { NganLuong } from '../src/nganluong';
+
+const TEST_CONFIG = NganLuong.TEST_CONFIG;
 
 describe('NganLuong', () => {
 	let nganluong;

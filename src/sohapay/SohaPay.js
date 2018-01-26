@@ -233,4 +233,13 @@ SohaPay.LANGUAGE_VN = 'vi';
 SohaPay.LANGUAGE_EN = 'en';
 SohaPay.VERSION = '2';
 
+/**
+ * SohaPay test configs
+ */
+SohaPay.TEST_CONFIG = {
+	merchantCode: 'test',
+	paymentGateway: 'https://sohapay.vn/payment.php',
+	secureSecret: '1234567890',
+};
+
 export { SohaPay };

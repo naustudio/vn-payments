@@ -1,6 +1,7 @@
-import { NganLuong, TEST_CONFIG } from '../../src/nganluong';
-/* eslint-disable no-param-reassign */
+import { NganLuong } from 'vn-payments';
 
+/* eslint-disable no-param-reassign */
+const TEST_CONFIG = NganLuong.TEST_CONFIG;
 const nganluong = new NganLuong({
 	paymentGateway: TEST_CONFIG.paymentGateway,
 	merchant: TEST_CONFIG.merchant,

@@ -127,8 +127,8 @@ class OnePay {
 	 * Build the schema in subclass
 	 * @param {*} payload
 	 */
+	// eslint-disable-next-line no-unused-vars
 	validateCheckoutPayload(payload) {
-		console.log(payload);
 		throw new Error('validateCheckoutPayload() requires overloading');
 	}
 

@@ -1,13 +1,15 @@
-import { SohaPay, TEST_SOHA_CONFIG } from '../src/sohapay';
+import { SohaPay } from '../src/sohapay';
+
+const TEST_CONFIG = SohaPay.TEST_CONFIG;
 
 describe('SohaPay', () => {
 	let sohaPay;
 
 	beforeEach(() => {
 		sohaPay = new SohaPay({
-			merchantCode: TEST_SOHA_CONFIG.merchantCode,
-			paymentGateway: TEST_SOHA_CONFIG.paymentGateway,
-			secureSecret: TEST_SOHA_CONFIG.secureSecret,
+			merchantCode: TEST_CONFIG.merchantCode,
+			paymentGateway: TEST_CONFIG.paymentGateway,
+			secureSecret: TEST_CONFIG.secureSecret,
 		});
 	});
 

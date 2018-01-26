@@ -358,4 +358,10 @@ VNPay.CURRENCY_VND = 'VND';
 VNPay.LOCALE_EN = 'en';
 VNPay.LOCALE_VN = 'vn';
 
+VNPay.TEST_CONFIG = {
+	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+	merchant: 'COCOSIN',
+	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
+};
+
 export { VNPay };

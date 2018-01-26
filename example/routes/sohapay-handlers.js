@@ -1,10 +1,11 @@
-import { SohaPay, TEST_SOHA_CONFIG } from '../../src/sohapay';
-/* eslint-disable no-param-reassign */
+import { SohaPay } from 'vn-payments';
 
+/* eslint-disable no-param-reassign */
+const TEST_CONFIG = SohaPay.TEST_CONFIG;
 const sohapay = new SohaPay({
-	merchantCode: TEST_SOHA_CONFIG.merchantCode,
-	paymentGateway: TEST_SOHA_CONFIG.paymentGateway,
-	secureSecret: TEST_SOHA_CONFIG.secureSecret,
+	merchantCode: TEST_CONFIG.merchantCode,
+	paymentGateway: TEST_CONFIG.paymentGateway,
+	secureSecret: TEST_CONFIG.secureSecret,
 });
 
 export function checkoutSohaPay(req, res) {

@@ -1,4 +1,4 @@
-import { OnePayDomestic, OnePayInternational } from '../../src/onepay';
+import { OnePayDomestic, OnePayInternational } from 'vn-payments';
 /* eslint-disable no-param-reassign */
 import { Countries } from '../countries';
 

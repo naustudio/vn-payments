@@ -287,4 +287,14 @@ OnePayInternational.checkoutSchema = new SimpleSchema({
 	vpcVersion           : { type: String, max: 2 },
 });
 
+/**
+ * OnePayInternational test config
+ */
+OnePayInternational.TEST_CONFIG = {
+	accessCode: '6BEB2546',
+	merchant: 'TESTONEPAY',
+	paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
+	secureSecret: '6D0870CDE5F24F34F3915FB0045120DB',
+};
+
 export { OnePayInternational };
