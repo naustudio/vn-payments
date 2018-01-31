@@ -1,4 +1,4 @@
-/* © 2017 NauStud.io
+/* © 2018 NauStud.io
  * @author Eric Tran
  */
 export { VNPay } from './VNPay';
