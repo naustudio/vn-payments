@@ -35,10 +35,10 @@ export function pack(secret, encoding = 'hex') {
 
 /**
  * Equivalent to PHP's `hash_hmac` function
- * @param  {[type]} code       [description]
- * @param  {[type]} secureCode [description]
- * @param  {[type]} pack       [description]
- * @return {[type]}            [description]
+ * @param  {string} code       hashing algorithm
+ * @param  {string} secureCode secure code to be hashed
+ * @param  {Buffer} p          Secure secret packed into hex buffer
+ * @return {string}            digested hash
  */
 export function hashHmac(code, secureCode, p) {
 	const hmac = crypto.createHmac(code, p);
