@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: onepay/OnePayDomestic.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: onepay/OnePayDomestic.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* © 2018 NauStud.io
+ * @author Thanh
+ */
+import SimpleSchema from 'simpl-schema';
+import { OnePay } from './OnePay';
+import { urlRegExp } from '../utils';
+
+/**
+ * OnePay Domestic payment gateway helper.
+ *
+ * Supports VN domestic ATM cards.
+ *
+ * @extends OnePay
+ *
+ * @example
+ * import { OnePayDomestic } from 'vn-payments';
+ *
+ * const TEST_CONFIG = OnePayDomestic.TEST_CONFIG;
+ *
+ * const onepayCheckout = new OnePayDomestic({
+ * 	accessCode: TEST_CONFIG.accessCode,
+ * 	merchant: TEST_CONFIG.merchant,
+ * 	paymentGateway: TEST_CONFIG.paymentGateway,
+ * 	secureSecret: TEST_CONFIG.secureSecret,
+ * });
+ *
+ * // checkoutUrl is an URL instance
+ * const checkoutUrl = await onepayCheckout.buildCheckoutUrl(params);
+ *
+ * this.response.writeHead(301, { Location: checkoutUrl.href });
+ * this.response.end();
+ */
+class OnePayDomestic extends OnePay {
+	/**
+	 *
+	 * @param {*} responseCode Responde code from gateway
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 */
+	static getReturnUrlStatus(responseCode, locale = 'vn') {
+		const responseCodeTable = {
+			0: {
+				vn: 'Giao dịch thành công',
+				en: 'Approved',
+			},
+			1: {
+				vn: 'Ngân hàng từ chối giao dịch',
+				en: 'Bank Declined',
+			},
+			3: {
+				vn: 'Mã đơn vị không tồn tại',
+				en: 'Merchant not exist',
+			},
+			4: {
+				vn: 'Không đúng access code',
+				en: 'Invalid access code',
+			},
+			5: {
+				vn: 'Số tiền không hợp lệ',
+				en: 'Invalid amount',
+			},
+			6: {
+				vn: 'Mã tiền tệ không tồn tại',
+				en: 'Invalid currency code',
+			},
+			7: {
+				vn: 'Lỗi không xác định',
+				en: 'Unspecified Failure ',
+			},
+			8: {
+				vn: 'Số thẻ không đúng',
+				en: 'Invalid card Number',
+			},
+			9: {
+				vn: 'Tên chủ thẻ không đúng',
+				en: 'Invalid card name',
+			},
+			10: {
+				vn: 'Thẻ hết hạn/Thẻ bị khóa',
+				en: 'Expired Card',
+			},
+			11: {
+				vn: 'Thẻ chưa đăng ký sử dụng dịch vụ',
+				en: 'Card Not Registed Service(internet banking)',
+			},
+			12: {
+				vn: 'Ngày phát hành/Hết hạn không đúng',
+				en: 'Invalid card date',
+			},
+			13: {
+				vn: 'Vượt quá hạn mức thanh toán',
+				en: 'Exist Amount',
+			},
+			21: {
+				vn: 'Số tiền không đủ để thanh toán',
+				en: 'Insufficient fund',
+			},
+			22: {
+				vn: 'Thông tin tài khoản không đúng',
+				en: 'Invalid Account',
+			},
+			23: {
+				vn: 'Tài khoản bị khóa',
+				en: 'Account Locked',
+			},
+			24: {
+				vn: 'Thông tin thẻ không đúng',
+				en: 'Invalid Card Info',
+			},
+			25: {
+				vn: 'OTP không đúng',
+				en: 'Invalid OTP',
+			},
+			253: {
+				vn: 'Quá thời gian thanh toán',
+				en: 'Transaction timeout',
+			},
+			99: {
+				vn: 'Người sử dụng hủy giao dịch',
+				en: 'User cancel',
+			},
+			default: {
+				vn: 'Giao dịch thất bại',
+				en: 'Unknown Failure',
+			},
+		};
+
+		const respondText = responseCodeTable[responseCode];
+
+		return respondText ? respondText[locale] : responseCodeTable.default[locale];
+	}
+
+	/**
+	 * Instantiate a OnePayDomestic checkout helper
+	 *
+	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 * @return {void}
+	 */
+	constructor(config = {}) {
+		super(config, 'domestic');
+	}
+
+	/**
+	 *
+	 * @param {*} payload
+	 * @override
+	 */
+	validateCheckoutPayload(payload) {
+		OnePayDomestic.checkoutSchema.validate(payload);
+	}
+
+	/**
+	 * @return {Object} default payload object
+	 */
+	get checkoutPayloadDefaults() {
+		/* prettier-ignore */
+		return {
+			billingCity: '',
+			billingCountry: '',
+			billingPostCode: '',
+			billingStateProvince: '',
+			billingStreet: '',
+			currency: OnePay.CURRENCY_VND,
+			deliveryAddress: '',
+			deliveryCity: '',
+			deliveryCountry: '',
+			customerEmail: null, // do not use '' since it will be validated with Email RegExp
+			customerPhone: '',
+			deliveryProvince: '',
+			locale: OnePay.LOCALE_VN,
+			title: 'VPC 3-Party',
+			customerId: '',
+			vpcAccessCode: '',
+			vpcCommand: OnePay.COMMAND,
+			vpcMerchant: '',
+			vpcVersion: OnePay.VERSION,
+		};
+	}
+	/**
+	 * @typedef {Object} OnePayDomesticReturnObject
+	 * @property {boolean} isSuccess whether the payment succeeded or not
+	 * @property {number} amount amount paid by customer, already divided by 100
+	 * @property {string} command should be same with checkout request
+	 * @property {string} currencyCode currency code, should be same with checkout request
+	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
+	 * @property {string} locale locale code, should be same with checkout request
+	 * @property {string} merchant merchant ID, should be same with checkout request
+	 * @property {string} message Approve or error message based on response code
+	 * @property {string} orderId merchant's order ID, should be same with checkout request
+	 * @property {string} responseCode response code, payment has errors if it is non-zero
+	 * @property {string} secureHash checksum of the returned data, used to verify data integrity
+	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
+	 * @property {string} version should be same with checkout request
+	 *
+	 * @property {string} vpc_AdditionData e.g: 970436
+	 * @property {string} vpc_Amount e.g: 1000000
+	 * @property {string} vpc_Command e.g: pay
+	 * @property {string} vpc_CurrencyCode e.g: VND
+	 * @property {string} vpc_Locale e.g: vn
+	 * @property {string} vpc_Merchant e.g: ONEPAY
+	 * @property {string} vpc_MerchTxnRef e.g: TEST_15160802610161733380665
+	 * @property {string} vpc_OrderInfo e.g: TEST_15160802610161733380665
+	 * @property {string} vpc_SecureHash e.g: B5CD330E2DC1B1C116A068366F69717F54AD77E1BE0C40E4E3700551BE9D5004
+	 * @property {string} vpc_TransactionNo e.g: 1618136
+	 * @property {string} vpc_TxnResponseCode e.g: 0
+	 * @property {string} vpc_Version e.g: 2
+	 */
+	/**
+	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
+	 *
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
+	 *
+	 * @param {*} query
+	 * @returns { Promise&lt;OnePayDomesticReturnObject> }
+	 */
+	verifyReturnUrl(query) {
+		return super.verifyReturnUrl(query).then(verifyResults => {
+			const returnObject = {
+				amount: parseInt(query.vpc_Amount, 10) / 100,
+				command: query.vpc_Command,
+				currencyCode: query.vpc_CurrencyCode,
+				locale: query.vpc_Locale,
+				merchant: query.vpc_Merchant,
+				message: OnePayDomestic.getReturnUrlStatus(query.vpc_TxnResponseCode, query.vpc_Locale), // no message from gateway, we'll look it up on our side
+				gatewayTransactionNo: query.vpc_TransactionNo,
+				orderId: query.vpc_OrderInfo,
+				responseCode: query.vpc_TxnResponseCode,
+				secureHash: query.vpc_SecureHash,
+				transactionId: query.vpc_MerchTxnRef,
+				version: query.vpc_Version,
+			};
+
+			// keep vpc_* fields from gateway
+			return Object.assign(returnObject, query, verifyResults);
+		});
+	}
+}
+
+// The schema is based on field data requirements from OnePay's dev document
+/* prettier-ignore */
+OnePayDomestic.checkoutSchema = new SimpleSchema({
+	againLink            : { type: String, optional: true, max: 64, regEx: urlRegExp },
+	// NOTE: there is an inconsistency in OnePayDom vs. Intl that we had to test to find out,
+	// while intl allows 10 digits, domestic only allows max 9 digits (999.999.999VND)
+	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
+	// NOTE: billing address is not expected in domestic but keep them here so that
+	// same input data can be used for both dom. and intl. gateway
+	billingCity          : { type: String, optional: true, max: 64 },
+	billingCountry       : { type: String, optional: true, max: 2 },
+	billingPostCode      : { type: String, optional: true, max: 64 },
+	billingStateProvince : { type: String, optional: true, max: 64 },
+	billingStreet        : { type: String, optional: true, max: 64 },
+	clientIp             : { type: String, max: 15 },
+	currency             : { type: String, allowedValues: ['VND'] },
+	customerEmail        : { type: String, optional: true, max: 24, regEx: SimpleSchema.RegEx.Email },
+	customerId           : { type: String, optional: true, max: 64 },
+	customerPhone        : { type: String, optional: true, max: 16 },
+	deliveryAddress      : { type: String, optional: true, max: 64 },
+	deliveryCity         : { type: String, optional: true, max: 64 },
+	deliveryCountry      : { type: String, optional: true, max: 8 },
+	deliveryProvince     : { type: String, optional: true, max: 64 },
+	locale               : { type: String, allowedValues: ['vn', 'en'] },
+	orderId              : { type: String, max: 32 },
+	returnUrl            : { type: String, max: 64, regEx: urlRegExp },
+	title                : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for this field, this is just a safe value
+	transactionId        : { type: String, max: 34 },
+	vpcAccessCode        : { type: String, max: 8 },
+	vpcCommand           : { type: String, max: 16 },
+	vpcMerchant          : { type: String, max: 16 },
+	vpcVersion           : { type: String, max: 2 },
+});
+
+/**
+ * OnePayDomestic test configs
+ */
+OnePayDomestic.TEST_CONFIG = {
+	accessCode: 'D67342C2',
+	merchant: 'ONEPAY',
+	paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
+	secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
+};
+
+export { OnePayDomestic };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="NganLuong.html">NganLuong</a></li><li><a href="OnePayDomestic.html">OnePayDomestic</a></li><li><a href="OnePayInternational.html">OnePayInternational</a></li><li><a href="SohaPay.html">SohaPay</a></li><li><a href="VNPay.html">VNPay</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 18:22:38 GMT+0700 (+07)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

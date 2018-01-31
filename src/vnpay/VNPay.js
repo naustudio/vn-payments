@@ -9,9 +9,10 @@ import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
 /**
  * VNPay payment gateway helper
  *
- * @example:
- * ```
- * import { VNPay, TEST_CONFIG } from './imports/vnpay';
+ * @example
+ * import { VNPay } from 'vn-payments';
+ *
+ * const TEST_CONFIG = VNPay.TEST_CONFIG;
  *
  * const vnpayCheckout = new VNPay({
  * 	paymentGateway: TEST_CONFIG.paymentGateway,
@@ -20,11 +21,10 @@ import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
  * });
  *
  * // checkoutUrl is an URL instance
- * const checkoutUrl = vnpayCheckout.buildCheckoutUrl(params);
+ * const checkoutUrl = await vnpayCheckout.buildCheckoutUrl(params);
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();
- * ```
  */
 class VNPay {
 	/**
@@ -45,72 +45,78 @@ class VNPay {
 	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
 	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
-	 * @return {URL}    The URL object used to redirect
+	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
-		// Mảng các tham số chuyển tới VNPay Payment
-		const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
-		const config = this.config;
+		return new Promise((resolve, reject) => {
+			// Mảng các tham số chuyển tới VNPay Payment
+			const data = Object.assign({}, this.checkoutPayloadDefaults, payload);
+			const config = this.config;
 
-		data.vnpSecretKey = config.secureSecret;
-		data.vnpMerchant = config.merchant;
+			data.vnpSecretKey = config.secureSecret;
+			data.vnpMerchant = config.merchant;
 
-		// Input type checking
-		this.validateCheckoutPayload(data);
+			// Input type checking
+			try {
+				this.validateCheckoutPayload(data);
+			} catch (error) {
+				reject(error.message);
+			}
 
-		// convert amount to VNPay format (100 = 1VND):
-		data.amount = Math.floor(data.amount * 100);
+			// convert amount to VNPay format (100 = 1VND):
+			data.amount = Math.floor(data.amount * 100);
 
-		/* prettier-ignore */
-		const arrParam = {
-			vnp_Version        : data.vnpVersion,
-			vnp_Command        : data.vnpCommand,
-			vnp_TmnCode        : data.vnpMerchant,
-			vnp_Locale         : data.locale,
-			vnp_CurrCode       : data.currency,
-			vnp_TxnRef         : data.orderId,
-			vnp_OrderInfo      : data.orderInfo,
-			vnp_OrderType      : data.orderType,
-			vnp_Amount         : String(data.amount),
-			vnp_ReturnUrl      : data.returnUrl,
-			vnp_IpAddr         : data.clientIp,
-			vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
-		};
+			/* prettier-ignore */
+			const arrParam = {
+				vnp_Version        : data.vnpVersion,
+				vnp_Command        : data.vnpCommand,
+				vnp_TmnCode        : data.vnpMerchant,
+				vnp_Locale         : data.locale,
+				vnp_BankCode       : data.bankCode,
+				vnp_CurrCode       : data.currency,
+				vnp_TxnRef         : data.orderId,
+				vnp_OrderInfo      : data.orderInfo,
+				vnp_OrderType      : data.orderType,
+				vnp_Amount         : String(data.amount),
+				vnp_ReturnUrl      : data.returnUrl,
+				vnp_IpAddr         : data.clientIp,
+				vnp_CreateDate     : data.createdDate || vnPayDateFormat(new Date()),
+			};
 
-		if (data.bankCode) {
-			arrParam.vnp_BankCode = data.bankCode;
-		}
+			// Step 2. Create the target redirect URL at VNPay server
+			const redirectUrl = new URL(config.paymentGateway);
+			const secureCode = [];
 
-		// Step 2. Create the target redirect URL at VNPay server
-		const redirectUrl = new URL(config.paymentGateway);
-		const secureCode = [];
+			Object.keys(arrParam)
+				.sort()
+				.forEach(key => {
+					const value = arrParam[key];
 
-		Object.keys(arrParam)
-			.sort()
-			.forEach(key => {
-				const value = arrParam[key];
+					if (value == null || value.length === 0) {
+						// skip empty params (but they must be optional)
+						return;
+					}
 
-				if (value == null || value.length === 0) {
-					// skip empty params (but they must be optional)
-					return;
-				}
+					redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
 
-				redirectUrl.searchParams.append(key, value); // no need to encode URI with URLSearchParams object
+					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
+						// secureCode is digested from vnp_* params but they should not be URI encoded
+						secureCode.push(`${key}=${value}`);
+					}
+				});
 
-				if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-					// secureCode is digested from vnp_* params but they should not be URI encoded
-					secureCode.push(`${key}=${value}`);
-				}
-			});
+			/* Step 3. calculate the param checksum with md5*/
 
-		/* Step 3. calculate the param checksum with md5*/
+			if (secureCode.length > 0) {
+				redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
+				redirectUrl.searchParams.append(
+					'vnp_SecureHash',
+					createMd5Hash(data.vnpSecretKey + secureCode.join('&'))
+				);
+			}
 
-		if (secureCode.length > 0) {
-			redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
-			redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
-		}
-
-		return redirectUrl;
+			resolve(redirectUrl);
+		});
 	}
 
 	/**
@@ -136,7 +142,7 @@ class VNPay {
 	}
 
 	/**
-	 * @typedef VNPayReturnObject
+	 * @typedef {Object} VNPayReturnObject
 	 * @property {boolean} isSuccess whether the payment succeeded or not
 	 * @property {string} message Approve or error message based on response code
 	 * @property {string} merchant merchant ID, should be same with checkout request
@@ -169,40 +175,45 @@ class VNPay {
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {VNPayReturnObject}
+	 * @return {Promise<VNPayReturnObject>}
 	 */
 	verifyReturnUrl(query) {
-		const returnObject = this._mapQueryToObject(query);
+		return new Promise(resolve => {
+			const returnObject = this._mapQueryToObject(query);
 
-		const data = Object.assign({}, query);
-		const config = this.config;
-		const vnpTxnSecureHash = data.vnp_SecureHash;
-		const verifyResults = {};
-		delete data.vnp_SecureHashType;
-		delete data.vnp_SecureHash;
+			const data = Object.assign({}, query);
+			const config = this.config;
+			const vnpTxnSecureHash = data.vnp_SecureHash;
+			const verifyResults = {};
+			delete data.vnp_SecureHashType;
+			delete data.vnp_SecureHash;
 
-		if (config.secureSecret.length > 0) {
-			const secureCode = [];
+			if (config.secureSecret.length > 0) {
+				const secureCode = [];
 
-			Object.keys(data)
-				.sort() // need to sort the key by alphabetically
-				.forEach(key => {
-					const value = data[key];
+				Object.keys(data)
+					.sort() // need to sort the key by alphabetically
+					.forEach(key => {
+						const value = data[key];
 
-					if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
-						secureCode.push(`${key}=${value}`);
-					}
-				});
+						if (value.length > 0 && (key.substr(0, 4) === 'vnp_' || key.substr(0, 5) === 'user_')) {
+							secureCode.push(`${key}=${value}`);
+						}
+					});
 
-			if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
-				verifyResults.isSuccess = returnObject.responseCode === '00';
-			} else {
-				verifyResults.isSuccess = false;
-				verifyResults.message = 'Wrong checksum';
+				if (
+					toUpperCase(vnpTxnSecureHash) ===
+					toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))
+				) {
+					verifyResults.isSuccess = returnObject.responseCode === '00';
+				} else {
+					verifyResults.isSuccess = false;
+					verifyResults.message = 'Wrong checksum';
+				}
 			}
-		}
 
-		return Object.assign(returnObject, query, verifyResults);
+			resolve(Object.assign(returnObject, query, verifyResults));
+		});
 	}
 
 	_mapQueryToObject(query) {
@@ -270,14 +281,17 @@ class VNPay {
 			'09': {
 				vn:
 					'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.',
-				en: 'Transaction failed: Cards / accounts of customer who has not yet registered for Internet Banking service.',
+				en:
+					'Transaction failed: Cards / accounts of customer who has not yet registered for Internet Banking service.',
 			},
 			10: {
 				vn: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
-				en: 'Transaction failed: Customer incorrectly validate the card / account information more than 3 times',
+				en:
+					'Transaction failed: Customer incorrectly validate the card / account information more than 3 times',
 			},
 			11: {
-				vn: 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.',
+				vn:
+					'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.',
 				en: 'Transaction failed: Pending payment is expired. Please try again.',
 			},
 			24: {
@@ -352,5 +366,11 @@ VNPay.COMMAND = 'pay';
 VNPay.CURRENCY_VND = 'VND';
 VNPay.LOCALE_EN = 'en';
 VNPay.LOCALE_VN = 'vn';
+
+VNPay.TEST_CONFIG = {
+	paymentGateway: 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+	merchant: 'COCOSIN',
+	secureSecret: 'RAOEXHYVSDDIIENYWSLDIIZTANXUXZFJ',
+};
 
 export { VNPay };

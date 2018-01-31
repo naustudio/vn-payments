@@ -1,5 +1,6 @@
-import { OnePayDomestic, OnePayInternational } from '../../src/onepay';
+import { OnePayDomestic, OnePayInternational } from 'vn-payments';
 /* eslint-disable no-param-reassign */
+import { Countries } from '../countries';
 
 const onepayIntl = new OnePayInternational({
 	paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
@@ -19,28 +20,28 @@ export function checkoutOnePayDomestic(req, res) {
 	const checkoutData = res.locals.checkoutData;
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/onepaydom/callback`;
 
-	const checkoutUrl = onepayDom.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return onepayDom.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackOnePayDomestic(req, res) {
 	const query = req.query;
 
-	const results = onepayDom.verifyReturnUrl(query);
+	return onepayDom.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.orderId || '';
+			res.locals.price = results.amount;
 
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.orderId || '';
-		res.locals.price = results.amount;
-
-		res.locals.isSucceed = results.isSuccess;
-		// TODO: render error message
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }
 
 export function checkoutOnePayInternational(req, res) {
@@ -49,30 +50,31 @@ export function checkoutOnePayInternational(req, res) {
 	checkoutData.againLink = `http://${req.headers.host}/`; // back URL when user cancel payment
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/onepayintl/callback`;
 
-	const checkoutUrl = onepayIntl.buildCheckoutUrl(checkoutData);
-	res.locals.checkoutUrl = checkoutUrl;
+	return onepayIntl.buildCheckoutUrl(checkoutData).then(checkoutUrl => {
+		res.locals.checkoutUrl = checkoutUrl;
 
-	return checkoutUrl;
+		return checkoutUrl;
+	});
 }
 
 export function callbackOnePayInternational(req, res) {
 	const query = req.query;
 
-	const results = onepayIntl.verifyReturnUrl(query);
+	return onepayIntl.verifyReturnUrl(query).then(results => {
+		if (results) {
+			res.locals.email = 'tu.nguyen@naustud.io';
+			res.locals.orderId = results.orderId || '';
+			res.locals.price = results.amount;
+			res.locals.billingStreet = results.billingStreet;
+			res.locals.billingCountry = Countries[results.billingCountry];
+			res.locals.billingStateProvince = results.billingStateProvince;
+			res.locals.billingCity = results.billingCity;
+			res.locals.billingPostalCode = results.billingPostCode;
 
-	if (results) {
-		res.locals.email = 'tu.nguyen@naustud.io';
-		res.locals.orderId = results.orderId || '';
-		res.locals.price = results.amount;
-		res.locals.billingStreet = results.billingStreet;
-		res.locals.billingCountry = results.billingCountry;
-		res.locals.billingStateProvince = results.billingStateProvince;
-		res.locals.billingCity = results.billingCity;
-		res.locals.billingPostalCode = results.billingPostCode;
-
-		res.locals.isSucceed = results.isSuccess;
-		res.locals.message = results.message;
-	} else {
-		res.locals.isSucceed = false;
-	}
+			res.locals.isSucceed = results.isSuccess;
+			res.locals.message = results.message;
+		} else {
+			res.locals.isSucceed = false;
+		}
+	});
 }

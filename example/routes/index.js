@@ -8,6 +8,8 @@ import {
 	callbackOnePayInternational,
 } from './onepay-handlers';
 import { checkoutVNPay, callbackVNPay } from './vnpay-handlers';
+import { checkoutNganLuong, callbackNganLuong } from './nganluong-handlers';
+import { checkoutSohaPay, callbackSohaPay } from './sohapay-handlers';
 
 const routes = Router();
 
@@ -55,20 +57,20 @@ routes.post('/payment/checkout', (req, res) => {
 	const amount = parseInt(params.amount.replace(/,/g, ''), 10);
 	const now = new Date();
 
+	// NOTE: only set the common required fields and optional fields from all gateways here, redundant fields will invalidate the payload schema checker
 	const checkoutData = {
 		amount,
-		clientIp,
+		clientIp: clientIp.length > 15 ? '127.0.0.1' : clientIp,
 		locale: 'vn',
-		// TODO: fill in billing address and ship address with address fields from form
 		billingCity: params.billingCity || '',
 		billingPostCode: params.billingPostCode || '',
 		billingStateProvince: params.billingStateProvince || '',
 		billingStreet: params.billingStreet || '',
 		billingCountry: params.billingCountry || '',
-		currency: 'VND',
 		deliveryAddress: params.billingStreet || '',
 		deliveryCity: params.billingCity || '',
 		deliveryCountry: params.billingCountry || '',
+		currency: 'VND',
 		deliveryProvince: params.billingStateProvince || '',
 		customerEmail: params.email,
 		customerPhone: params.phoneNumber,
@@ -81,59 +83,88 @@ routes.post('/payment/checkout', (req, res) => {
 	// pass checkoutData to gateway middleware via res.locals
 	res.locals.checkoutData = checkoutData;
 
-	// Note: these handler are synchronous
+	// Note: these handler are asynchronous
+	let asyncCheckout = null;
 	switch (params.paymentMethod) {
 		case 'onepayInternational':
-			checkoutOnePayInternational(req, res);
+			asyncCheckout = checkoutOnePayInternational(req, res);
 			break;
 		case 'onepayDomestic':
-			checkoutOnePayDomestic(req, res);
+			asyncCheckout = checkoutOnePayDomestic(req, res);
 			break;
 		case 'vnPay':
-			checkoutVNPay(req, res);
+			asyncCheckout = checkoutVNPay(req, res);
+			break;
+		case 'nganluong':
+			// this param is not expected in other gateway
+			checkoutData.customerName = `${params.firstname || ''} ${params.lastname || ''}`.trim();
+			asyncCheckout = checkoutNganLuong(req, res);
+			break;
+		case 'sohaPay':
+			asyncCheckout = checkoutSohaPay(req, res);
 			break;
 		default:
 			break;
 	}
 
-	const checkoutUrl = res.locals.checkoutUrl;
-
-	res.writeHead(301, { Location: checkoutUrl.href });
-	res.end();
+	if (asyncCheckout) {
+		asyncCheckout
+			.then(checkoutUrl => {
+				res.writeHead(301, { Location: checkoutUrl.href });
+				res.end();
+			})
+			.catch(err => {
+				res.send(err);
+			});
+	} else {
+		res.send('Payment method not found');
+	}
 });
 
 routes.get('/payment/:gateway/callback', (req, res) => {
 	const gateway = req.params.gateway;
 	console.log('gateway', req.params.gateway);
+	let asyncFunc = null;
 
 	switch (gateway) {
 		case 'onepaydom':
-			callbackOnePayDomestic(req, res);
+			asyncFunc = callbackOnePayDomestic(req, res);
 			break;
 		case 'onepayintl':
-			callbackOnePayInternational(req, res);
+			asyncFunc = callbackOnePayInternational(req, res);
 			break;
 		case 'vnpay':
-			callbackVNPay(req, res);
+			asyncFunc = callbackVNPay(req, res);
+			break;
+		case 'sohapay':
+			asyncFunc = callbackSohaPay(req, res);
+			break;
+		case 'nganluong':
+			asyncFunc = callbackNganLuong(req, res);
 			break;
 		default:
 			break;
 	}
 
-	// TODO: render callback result here
-	res.render('result', {
-		title: `Nau Store Payment via ${gateway.toUpperCase()}`,
-		isSucceed: res.locals.isSucceed,
-		email: res.locals.email,
-		orderId: res.locals.orderId,
-		price: res.locals.price,
-		message: res.locals.message,
-		billingStreet: res.locals.billingStreet,
-		billingCountry: res.locals.billingCountry,
-		billingCity: res.locals.billingCity,
-		billingStateProvince: res.locals.billingStateProvince,
-		billingPostalCode: res.locals.billingPostalCode,
-	});
+	if (asyncFunc) {
+		asyncFunc.then(() => {
+			res.render('result', {
+				title: `Nau Store Payment via ${gateway.toUpperCase()}`,
+				isSucceed: res.locals.isSucceed,
+				email: res.locals.email,
+				orderId: res.locals.orderId,
+				price: res.locals.price,
+				message: res.locals.message,
+				billingStreet: res.locals.billingStreet,
+				billingCountry: res.locals.billingCountry,
+				billingCity: res.locals.billingCity,
+				billingStateProvince: res.locals.billingStateProvince,
+				billingPostalCode: res.locals.billingPostalCode,
+			});
+		});
+	} else {
+		res.send('No callback found');
+	}
 });
 
 export default routes;

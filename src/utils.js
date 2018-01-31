@@ -1,6 +1,8 @@
-/* © 2017 NauStud.io
+/* © 2018 NauStud.io
  * @author Eric Tran
  */
+/** @module utils */
+
 import crypto from 'crypto';
 
 const urlRegExp = /https?:\/\/.*/;
@@ -8,8 +10,10 @@ const urlRegExp = /https?:\/\/.*/;
 export { urlRegExp };
 
 /**
- * Convenient function to convert String to upper case
- * @param {*} s
+ * Global function to convert String to upper case, with type checking
+ *
+ * @param {string} s
+ * @return {string} all upper case string
  */
 export function toUpperCase(s = '') {
 	if (typeof s !== 'string') {
@@ -20,29 +24,34 @@ export function toUpperCase(s = '') {
 }
 
 /**
- * Equivalent to PHP's `pack` function, use Node native Buffer
+ * Equivalent to PHP's `pack` function, using Node native Buffer
+ * <br>
  * Note: PHP
- *     pack('H*', secretCode)
- * is equivalent to Node
- *     Buffer.from(secretCode, 'hex')
+ * <br>
+ * <pre>    <code>pack('H*', data)</code></pre>
+ * is equivalent to Node:
+ * <br>
+ * <pre>    <code>Buffer.from(data, 'hex')</code></pre>
  *
- * @param {*} secret
+ * @param {*} data
  * @param {*} encoding
+ * @return {Buffer} Buffer of data encoded with `encoding` method
  */
-export function pack(secret, encoding = 'hex') {
-	return Buffer.from(secret, encoding);
+export function pack(data, encoding = 'hex') {
+	return Buffer.from(data, encoding);
 }
 
 /**
- * Equivalent to PHP's `hash_hmac` function
- * @param  {[type]} code       [description]
- * @param  {[type]} secureCode [description]
- * @param  {[type]} pack       [description]
- * @return {[type]}            [description]
+ * Equivalent to PHP's `hash_hmac` function.
+ *
+ * @param  {string} algorithm  hashing algorithm
+ * @param  {*}      data       data string to be hashed
+ * @param  {Buffer} secret     Secret key used to hash data, generated with `pack` method
+ * @return {string}            digested hash
  */
-export function hashHmac(code, secureCode, p) {
-	const hmac = crypto.createHmac(code, p);
-	hmac.update(secureCode);
+export function hashHmac(algorithm, data, secret) {
+	const hmac = crypto.createHmac(algorithm, secret);
+	hmac.update(data);
 
 	return hmac.digest('hex');
 }
@@ -50,6 +59,7 @@ export function hashHmac(code, secureCode, p) {
 /**
  * Convenient function to convert number to 2 digit number string
  * @param {*} number
+ * @return {string} formatted number
  */
 export function to2DigitNumber(number) {
 	if (isNaN(number)) {
@@ -64,7 +74,9 @@ export function to2DigitNumber(number) {
 
 /**
  * Convenient function to convert date to format yyyyMMddHHmmss
- * @param {*} date
+ *
+ * @param {Date} date Date object that need to be formatted
+ * @return {string} date string formatted in yyyyMMddHHmmss
  */
 export function vnPayDateFormat(date) {
 	if (date.constructor.name !== 'Date') {
@@ -83,8 +95,10 @@ export function vnPayDateFormat(date) {
 }
 
 /**
- * Convenient function to create md5 hash from string
+ * Convenient function to create md5 hash from string.
+ *
  * @param {*} data
+ * @return {string} md5 hash
  */
 export function createMd5Hash(data) {
 	return crypto

@@ -6,27 +6,29 @@ import { OnePay } from './OnePay';
 import { urlRegExp } from '../utils';
 
 /**
- * OnePay Domestic payment gateway helper
+ * OnePay Domestic payment gateway helper.
  *
- * Supports VN domestic ATM cards
+ * Supports VN domestic ATM cards.
  *
- * @example:
- * ```
- * import { OnePayDomestic, TEST_DOM_CONFIG } from './imports/onepay';
+ * @extends OnePay
+ *
+ * @example
+ * import { OnePayDomestic } from 'vn-payments';
+ *
+ * const TEST_CONFIG = OnePayDomestic.TEST_CONFIG;
  *
  * const onepayCheckout = new OnePayDomestic({
- * 	accessCode: TEST_DOM_CONFIG.accessCode,
- * 	merchant: TEST_DOM_CONFIG.merchant,
- * 	paymentGateway: TEST_DOM_CONFIG.paymentGateway,
- * 	secureSecret: TEST_DOM_CONFIG.secureSecret,
+ * 	accessCode: TEST_CONFIG.accessCode,
+ * 	merchant: TEST_CONFIG.merchant,
+ * 	paymentGateway: TEST_CONFIG.paymentGateway,
+ * 	secureSecret: TEST_CONFIG.secureSecret,
  * });
  *
  * // checkoutUrl is an URL instance
- * const checkoutUrl = onepayCheckout.buildCheckoutUrl(params);
+ * const checkoutUrl = await onepayCheckout.buildCheckoutUrl(params);
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();
- * ```
  */
 class OnePayDomestic extends OnePay {
 	/**
@@ -173,64 +175,63 @@ class OnePayDomestic extends OnePay {
 			vpcVersion: OnePay.VERSION,
 		};
 	}
-
+	/**
+	 * @typedef {Object} OnePayDomesticReturnObject
+	 * @property {boolean} isSuccess whether the payment succeeded or not
+	 * @property {number} amount amount paid by customer, already divided by 100
+	 * @property {string} command should be same with checkout request
+	 * @property {string} currencyCode currency code, should be same with checkout request
+	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
+	 * @property {string} locale locale code, should be same with checkout request
+	 * @property {string} merchant merchant ID, should be same with checkout request
+	 * @property {string} message Approve or error message based on response code
+	 * @property {string} orderId merchant's order ID, should be same with checkout request
+	 * @property {string} responseCode response code, payment has errors if it is non-zero
+	 * @property {string} secureHash checksum of the returned data, used to verify data integrity
+	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
+	 * @property {string} version should be same with checkout request
+	 *
+	 * @property {string} vpc_AdditionData e.g: 970436
+	 * @property {string} vpc_Amount e.g: 1000000
+	 * @property {string} vpc_Command e.g: pay
+	 * @property {string} vpc_CurrencyCode e.g: VND
+	 * @property {string} vpc_Locale e.g: vn
+	 * @property {string} vpc_Merchant e.g: ONEPAY
+	 * @property {string} vpc_MerchTxnRef e.g: TEST_15160802610161733380665
+	 * @property {string} vpc_OrderInfo e.g: TEST_15160802610161733380665
+	 * @property {string} vpc_SecureHash e.g: B5CD330E2DC1B1C116A068366F69717F54AD77E1BE0C40E4E3700551BE9D5004
+	 * @property {string} vpc_TransactionNo e.g: 1618136
+	 * @property {string} vpc_TxnResponseCode e.g: 0
+	 * @property {string} vpc_Version e.g: 2
+	 */
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
 	 *
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param {*} query
-	 * @returns { OnePayDomesticReturnObject }
+	 * @returns { Promise<OnePayDomesticReturnObject> }
 	 */
 	verifyReturnUrl(query) {
-		const verifyResults = super.verifyReturnUrl(query);
-		/**
-		 * @typedef OnePayDomesticReturnObject
-		 * @property {boolean} isSuccess whether the payment succeeded or not
-		 * @property {number} amount amount paid by customer, already divided by 100
-		 * @property {string} command should be same with checkout request
-		 * @property {string} currencyCode currency code, should be same with checkout request
-		 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
-		 * @property {string} locale locale code, should be same with checkout request
-		 * @property {string} merchant merchant ID, should be same with checkout request
-		 * @property {string} message Approve or error message based on response code
-		 * @property {string} orderId merchant's order ID, should be same with checkout request
-		 * @property {string} responseCode response code, payment has errors if it is non-zero
-		 * @property {string} secureHash checksum of the returned data, used to verify data integrity
-		 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
-		 * @property {string} version should be same with checkout request
-		 *
-		 * @property {string} vpc_AdditionData e.g: 970436
-		 * @property {string} vpc_Amount e.g: 1000000
-		 * @property {string} vpc_Command e.g: pay
-		 * @property {string} vpc_CurrencyCode e.g: VND
-		 * @property {string} vpc_Locale e.g: vn
-		 * @property {string} vpc_Merchant e.g: ONEPAY
-		 * @property {string} vpc_MerchTxnRef e.g: TEST_15160802610161733380665
-		 * @property {string} vpc_OrderInfo e.g: TEST_15160802610161733380665
-		 * @property {string} vpc_SecureHash e.g: B5CD330E2DC1B1C116A068366F69717F54AD77E1BE0C40E4E3700551BE9D5004
-		 * @property {string} vpc_TransactionNo e.g: 1618136
-		 * @property {string} vpc_TxnResponseCode e.g: 0
-		 * @property {string} vpc_Version e.g: 2
-		 */
+		return super.verifyReturnUrl(query).then(verifyResults => {
+			const returnObject = {
+				amount: parseInt(query.vpc_Amount, 10) / 100,
+				command: query.vpc_Command,
+				currencyCode: query.vpc_CurrencyCode,
+				locale: query.vpc_Locale,
+				merchant: query.vpc_Merchant,
+				message: OnePayDomestic.getReturnUrlStatus(query.vpc_TxnResponseCode, query.vpc_Locale), // no message from gateway, we'll look it up on our side
+				gatewayTransactionNo: query.vpc_TransactionNo,
+				orderId: query.vpc_OrderInfo,
+				responseCode: query.vpc_TxnResponseCode,
+				secureHash: query.vpc_SecureHash,
+				transactionId: query.vpc_MerchTxnRef,
+				version: query.vpc_Version,
+			};
 
-		const returnObject = {
-			amount: parseInt(query.vpc_Amount, 10) / 100,
-			command: query.vpc_Command,
-			currencyCode: query.vpc_CurrencyCode,
-			locale: query.vpc_Locale,
-			merchant: query.vpc_Merchant,
-			message: OnePayDomestic.getReturnUrlStatus(query.vpc_TxnResponseCode, query.vpc_Locale), // no message from gateway, we'll look it up on our side
-			gatewayTransactionNo: query.vpc_TransactionNo,
-			orderId: query.vpc_OrderInfo,
-			responseCode: query.vpc_TxnResponseCode,
-			secureHash: query.vpc_SecureHash,
-			transactionId: query.vpc_MerchTxnRef,
-			version: query.vpc_Version,
-		};
-
-		// keep vpc_* fields from gateway
-		return Object.assign(returnObject, query, verifyResults);
+			// keep vpc_* fields from gateway
+			return Object.assign(returnObject, query, verifyResults);
+		});
 	}
 }
 
@@ -267,5 +268,15 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 	vpcMerchant          : { type: String, max: 16 },
 	vpcVersion           : { type: String, max: 2 },
 });
+
+/**
+ * OnePayDomestic test configs
+ */
+OnePayDomestic.TEST_CONFIG = {
+	accessCode: 'D67342C2',
+	merchant: 'ONEPAY',
+	paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
+	secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
+};
 
 export { OnePayDomestic };

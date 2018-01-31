@@ -1,120 +1,165 @@
 # vn-payments
+
+[![By Nau Studio](https://img.shields.io/badge/By-Nau%20Studio-977857.svg)](https://naustud.io)
 [![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
 [![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg)](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop)
+[![npm version](https://img.shields.io/npm/v/vn-payments.svg)](https://www.npmjs.com/package/vn-payments)
 [![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
+Vietnam payment gateway helpers for NodeJS.
 
-## Getting started
+## Supported Payment Gateways
 
-```sh
-# Clone the project
-git clone git@github.com:vmasto/express-babel.git
-cd express-babel
+* [x] OnePay (Domestic & International)
+* [x] VNPay
+* [x] SohaPay
+* [x] NganLuong
 
-# Make it your own
-rm -rf .git && git init && npm init
+Planned gateways:
 
-# Install dependencies
-npm install
+* [ ] AlePay
+* [ ] 123Pay
 
-# or if you're using Yarn
-yarn
-```
-Then you can begin development:
+## Install
 
 ```sh
-# yarn
-yarn run dev
-
 # npm
-npm run dev
-```
-
-This will launch a [nodemon](https://nodemon.io/) process for automatic server restarts when your code changes.
-
-### Testing
-
-Testing is powered by [Jest](https://facebook.github.io/jest/). This project also uses [supertest](https://github.com/visionmedia/supertest) for demonstrating a simple routing smoke test suite. Feel free to remove supertest entirely if you don't wish to use it.
-
-Start the test runner in watch mode with:
-
-```sh
+npm install vn-payments --save
 # yarn
-yarn test
-
-# npm
-npm test
+yarn add vn-payments
 ```
 
-You can also generate coverage with:
+## Usage
 
-```sh
-# yarn
-yarn test --coverage
+### Payment Workflow:
 
-# npm
-npm test --coverage
+Below is sequence diagram of typical payment gateway process:
+
+![Typical payment gateway process](docs/payment-gateway-process.jpg)
+
+<div align="center"><em>Diagram taken from OnePay Intl documentation</em></div>
+
+`vn-payments` provides gateway helpers classes that build URL for _DO request_ and verify _DR Response_.
+
+### JavaScript sample code:
+
+Import one of the payment gateway class from `vn-payments`:
+
+```js
+// ESM
+import { OnePayDomestic } from 'vn-payments';
+import { OnePayInternational } from 'vn-payments';
+import { VNPay } from 'vn-payments';
+import { SohaPay } from 'vn-payments';
+import { NganLuong } from 'vn-payments';
+// CommonJS
+const { OnePayDomestic } = require('vn-payments');
+const { OnePayInternational } = require('vn-payments');
+const { VNPay } = require('vn-payments');
+const { SohaPay } = require('vn-payments');
+const { NganLuong } = require('vn-payments');
 ```
 
-### Linting
+Instantiate the helper with merchant configs provided from the payment provider:
 
-Linting is set up using [ESLint](http://eslint.org/). It uses ESLint's default [eslint:recommended](https://github.com/eslint/eslint/blob/master/conf/eslint.json) rules. Feel free to use your own rules and/or extend another popular linting config (e.g. [airbnb's](https://www.npmjs.com/package/eslint-config-airbnb) or [standard](https://github.com/feross/eslint-config-standard)).
-
-Begin linting in watch mode with:
-
-```sh
-# yarn
-yarn run lint
-
-# npm
-npm run lint
+```js
+const onepayIntl = new OnePayInternational({
+  paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
+  merchant: 'TESTONEPAY',
+  accessCode: '6BEB2546',
+  secureSecret: '6D0870CDE5F24F34F3915FB0045120DB',
+});
 ```
 
-To begin linting and start the server simultaneously, edit the `package.json` like this:
+Build checkout URL by passing checkout data to **buildCheckoutUrl** method. The checkout data is a structured object and will be validated with **GatewayClass.checkoutSchema** which is an instance of [`simpl-schema`](https://github.com/aldeed/simple-schema-js).
 
-```
-"dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\" | npm run lint"
-```
+Checkout URL is an instance of so-called [WHATWG URL](https://nodejs.org/api/url.html#url_url), which assist parsing URL string into parts.
 
-### Environmental variables in development
+Then, redirect client to payment gateway's checkout handler:
 
-The project uses [dotenv](https://www.npmjs.com/package/dotenv) for setting environmental variables during development. Simply copy `.env.example`, rename it to `.env` and add your env vars as you see fit.
+```js
+routes.post('/payment/checkout', (req, res) => {
+  const params = Object.assign({}, req.body);
 
-It is **strongly** recommended **never** to check in your .env file to version control. It should only include environment-specific values such as database passwords or API keys used in development. Your production env variables should be different and be set differently depending on your hosting solution. `dotenv` is only for development.
+  // construct checkout payload from form data and app's defaults
+  const checkoutData = {
+    amount: parseInt(params.amount, 10),
+    customerId: params.email,
+    currency: 'VND',
+    /*...*/
+  };
 
-### Deployment
-
-Deployment is specific to hosting platform/provider but generally:
-
-```sh
-# yarn
-yarn run build
-
-# npm
-npm run build
-```
-
-will compile your `src` into `/dist`, and
-
-```sh
-# yarn
-yarn start
-
-# npm
-npm start
+  // buildCheckoutUrl is async operation and will return a Promise
+  onepayIntl
+    .buildCheckoutUrl(checkoutData)
+    .then(checkoutUrl => {
+      res.writeHead(301, { Location: checkoutUrl.href });
+      res.end();
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
 ```
 
-will run `build` (via the `prestart` hook) and start the compiled application from the `/dist` folder.
+Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along
 
-The last command is generally what most hosting providers use to start your application when deployed, so it should take care of everything.
+```js
+routes.get('/payment/callback', (req, res) => {
+  const query = req.query;
 
-You can find small guides for Heroku, App Engine and AWS in [the deployment](DEPLOYMENT.md) document.
+  onepayIntl.verifyReturnUrl(query).then(results => {
+    if (results.isSucceed) {
+      res.render('success', {
+        title: 'Nau Store - Thank You',
+        orderId: results.orderId,
+        price: results.price,
+        message: results.message,
+      });
+    } else {
+      res.render('errors', {
+        title: 'Nau Store - Payment Errors',
+        message: results.message,
+      });
+    }
+  });
+});
+```
+
+## Example
+
+See the Express checkout cart in the **example** folder.
+
+#### HOWTO:
+
+* Clone this repository.
+* Run `npm install` in both project root and `example` folder
+* Inside `example` folder, execute: `npm start`
+
+## API Document
+
+See [documentation](http://code.naustud.io/node-vn-payments)
+
+## Contributing
+
+Interested in contributing to this project? See [CONTRIBUTING.md](https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md)
+
+## Road Map
+
+* [x] Implement `buildCheckoutUrl` (A.K.A. `DO Request`) for OnePay, VNPay, SohaPay, NganLuong
+* [x] Implement `verifyReturnUrl` (A.K.A. `DR Response`)for OnePay, VNPay, SohaPay, NganLuong
+* [ ] Implement `queryDR` methods for existing gateways
+* [ ] Implement helper class for **AlePay**
+* [ ] Implement helper class for **123Pay**
 
 ## FAQ
 
+[TBC]
+
 ## Thanks
 
-- The Express app was based on [Express Babel Starter Kit](https://github.com/vmasto/express-babel) by [@vmasto](https://github.com/vmasto)
+* [Express starter kit](https://github.com/vmasto/express-babel) for the checkout cart example.
+* Vietnam payment gateway's developers who worked with Nau Studio in preliminary projects that allows us make sure this code work.
 
 ## License
 
@@ -131,11 +176,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-VNPay Test account
-
-Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
--           Số thẻ: 9704198526191432198
--           Tên chủ thẻ: NGUYEN VAN A
--           Ngày phát hành: 07/15
--           Mật khẩu OTP mặc định: 123456
+(docs/):
