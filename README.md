@@ -35,7 +35,7 @@ yarn add vn-payments
 
 Below is sequence diagram of typical payment gateway process:
 
-![Typical payment gateway process](docs/payment-gateway-process.jpg)
+![Typical payment gateway process](https://raw.githubusercontent.com/naustudio/node-vn-payments/master/docs/payment-gateway-process.jpg)
 
 <div align="center"><em>Diagram taken from OnePay Intl documentation</em></div>
 
