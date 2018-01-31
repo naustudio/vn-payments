@@ -6,19 +6,22 @@ import { OnePay } from './OnePay';
 import { urlRegExp } from '../utils';
 
 /**
- * OnePay Domestic payment gateway helper
+ * OnePay Domestic payment gateway helper.
  *
- * Supports VN domestic ATM cards
+ * Supports VN domestic ATM cards.
  *
- * @example:
- * ```
- * import { OnePayDomestic, TEST_DOM_CONFIG } from './imports/onepay';
+ * @extends OnePay
+ *
+ * @example
+ * import { OnePayDomestic } from 'vn-payments';
+ *
+ * const TEST_CONFIG = OnePayDomestic.TEST_CONFIG;
  *
  * const onepayCheckout = new OnePayDomestic({
- * 	accessCode: TEST_DOM_CONFIG.accessCode,
- * 	merchant: TEST_DOM_CONFIG.merchant,
- * 	paymentGateway: TEST_DOM_CONFIG.paymentGateway,
- * 	secureSecret: TEST_DOM_CONFIG.secureSecret,
+ * 	accessCode: TEST_CONFIG.accessCode,
+ * 	merchant: TEST_CONFIG.merchant,
+ * 	paymentGateway: TEST_CONFIG.paymentGateway,
+ * 	secureSecret: TEST_CONFIG.secureSecret,
  * });
  *
  * // checkoutUrl is an URL instance
@@ -26,7 +29,6 @@ import { urlRegExp } from '../utils';
  *
  * this.response.writeHead(301, { Location: checkoutUrl.href });
  * this.response.end();
- * ```
  */
 class OnePayDomestic extends OnePay {
 	/**
@@ -174,7 +176,7 @@ class OnePayDomestic extends OnePay {
 		};
 	}
 	/**
-	 * @typedef OnePayDomesticReturnObject
+	 * @typedef {Object} OnePayDomesticReturnObject
 	 * @property {boolean} isSuccess whether the payment succeeded or not
 	 * @property {number} amount amount paid by customer, already divided by 100
 	 * @property {string} command should be same with checkout request

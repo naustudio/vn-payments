@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>vn-payments</h1><p><a href="https://naustud.io"><img src="https://img.shields.io/badge/By-Nau%20Studio-977857.svg" alt="By Nau Studio"></a>
+<a href="https://travis-ci.org/naustudio/node-vn-payments/"><img src="https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg" alt="Travis CI build status"></a>
+<a href="https://codecov.io/gh/naustudio/node-vn-payments/branch/develop"><img src="https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg" alt="Code coverage status"></a>
+<a href="https://www.npmjs.com/package/vn-payments"><img src="https://img.shields.io/npm/v/vn-payments.svg" alt="npm version"></a>
+<a href="https://github.com/naustudio/node-vn-payments/blob/master/LICENSE"><img src="https://img.shields.io/github/license/naustudio/node-vn-payments.svg" alt="GitHub license"></a></p>
+<p>Vietnam payment gateway helpers for NodeJS.</p>
+<h2>Supported Payment Gateways</h2><ul>
+<li>[x] OnePay (Domestic &amp; International)</li>
+<li>[x] VNPay</li>
+<li>[x] SohaPay</li>
+<li>[x] NganLuong</li>
+</ul>
+<p>Planned gateways:</p>
+<ul>
+<li>[ ] AlePay</li>
+<li>[ ] 123Pay</li>
+</ul>
+<h2>Install</h2><pre class="prettyprint source lang-sh"><code># npm
+npm install vn-payments --save
+# yarn
+yarn add vn-payments</code></pre><h2>Usage</h2><h3>Gateway Workflow:</h3><p>Below is sequence diagram of typical payment gateway process:</p>
+<p><img src="docs/payment-gateway-process.jpg" alt="Typical payment gateway process"></p>
+<div align="center"><em>Diagram taken from OnePay Intl documentation</em></div>
+
+<p><code>vn-payments</code> provides gateway helpers classes that build URL for <em>DO request</em> and verify <em>DR Response</em>.</p>
+<h3>JavaScript sample code:</h3><p>Import one of the payment gateway class from <code>vn-payments</code>:</p>
+<pre class="prettyprint source lang-js"><code>// ESM
+import { OnePayDomestic } from 'vn-payments';
+import { OnePayInternational } from 'vn-payments';
+import { VNPay } from 'vn-payments';
+import { SohaPay } from 'vn-payments';
+import { NganLuong } from 'vn-payments';
+// CommonJS
+const { OnePayDomestic } = require('vn-payments');
+const { OnePayInternational } = require('vn-payments');
+const { VNPay } = require('vn-payments');
+const { SohaPay } = require('vn-payments');
+const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the helper with merchant configs provided from the payment provider:</p>
+<pre class="prettyprint source lang-js"><code>const onepayIntl = new OnePayInternational({
+  paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
+  merchant: 'TESTONEPAY',
+  accessCode: '6BEB2546',
+  secureSecret: '6D0870CDE5F24F34F3915FB0045120DB',
+});</code></pre><p>Build checkout URL by passing checkout data to <strong>buildCheckoutUrl</strong> method. The checkout data is a structured object and will be validated with <strong>GatewayClass.checkoutSchema</strong> which is an instance of <a href="https://github.com/aldeed/simple-schema-js"><code>simpl-schema</code></a>.</p>
+<p>Checkout URL is an instance of so-called <a href="https://nodejs.org/api/url.html#url_url">WHATWG URL</a>, which assist parsing URL string into parts.</p>
+<p>Then, redirect client to payment gateway's checkout handler:</p>
+<pre class="prettyprint source lang-js"><code>routes.post('/payment/checkout', (req, res) => {
+  const params = Object.assign({}, req.body);
+
+  // construct checkout payload from form data and app's defaults
+  const checkoutData = {
+    amount: parseInt(params.amount, 10),
+    customerId: params.email,
+    currency: 'VND',
+    /*...*/
+  };
+
+  // buildCheckoutUrl is async operation and will return a Promise
+  onepayIntl
+    .buildCheckoutUrl(checkoutData)
+    .then(checkoutUrl => {
+      res.writeHead(301, { Location: checkoutUrl.href });
+      res.end();
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});</code></pre><p>Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along</p>
+<pre class="prettyprint source lang-js"><code>routes.get('/payment/callback', (req, res) => {
+  const query = req.query;
+
+  onepayIntl.verifyReturnUrl(query).then(results => {
+    if (results.isSucceed) {
+      res.render('success', {
+        title: 'Nau Store - Thank You',
+        orderId: results.orderId,
+        price: results.price,
+        message: results.message,
+      });
+    } else {
+      res.render('errors', {
+        title: 'Nau Store - Payment Errors',
+        message: results.message,
+      });
+    }
+  });
+});</code></pre><h2>Example</h2><p>See the Express checkout cart in the <strong>example</strong> folder.</p>
+<h4>HOWTO:</h4><ul>
+<li>Clone this repository.</li>
+<li>Run <code>npm install</code> in both project root and <code>example</code> folder</li>
+<li>Inside <code>example</code> folder, execute: <code>npm start</code></li>
+</ul>
+<h2>API Document</h2><p>See <a href="http://code.naustud.io/node-vn-payments">documentation</a></p>
+<h2>Contributing</h2><p>Interested in contributing to this project? See <a href="https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a></p>
+<h2>Road Map</h2><ul>
+<li>[x] Implement <code>buildCheckoutUrl</code> (A.K.A. <code>DO Request</code>) for OnePay, VNPay, SohaPay, NganLuong</li>
+<li>[x] Implement <code>verifyReturnUrl</code> (A.K.A. <code>DR Response</code>)for OnePay, VNPay, SohaPay, NganLuong</li>
+<li>[ ] Implement <code>queryDR</code> methods for existing gateways</li>
+<li>[ ] Implement helper class for <strong>AlePay</strong></li>
+<li>[ ] Implement helper class for <strong>123Pay</strong></li>
+</ul>
+<h2>FAQ</h2><p>[TBC]</p>
+<h2>Thanks</h2><ul>
+<li><a href="https://github.com/vmasto/express-babel">Express starter kit</a> for the checkout cart example.</li>
+<li>Vietnam payment gateway's developers who worked with Nau Studio in preliminary projects that allows us make sure this code work.</li>
+</ul>
+<h2>License</h2><p>Copyright 2018 Nau Studio <https://naustud.io></p>
+<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<pre class="prettyprint source"><code>http://www.apache.org/licenses/LICENSE-2.0</code></pre><p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+(docs/):</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="NganLuong.html">NganLuong</a></li><li><a href="OnePayDomestic.html">OnePayDomestic</a></li><li><a href="OnePayInternational.html">OnePayInternational</a></li><li><a href="SohaPay.html">SohaPay</a></li><li><a href="VNPay.html">VNPay</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 18:22:38 GMT+0700 (+07)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

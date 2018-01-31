@@ -1,0 +1,4248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Global</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Global</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="NganLuongReturnObject">NganLuongReturnObject</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">whether the payment succeeded or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Approve or error message based on response code</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's transaction ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">amount paid by customer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">order info, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response code, payment has errors if it is non-zero</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bankCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">bank code of the bank where payment was occurred</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gatewayTransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Gateway's own transaction ID, used to look up at Gateway's side</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '00'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '43614-fc2a3698ee92604d5000434ed129d6a8'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: ''</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transaction_status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '00'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>receiver_email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'tung.tran@naustud.io'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'adidas'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>total_amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '90000'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>payment_method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'ATM_ONLINE'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bank_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'BAB'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>payment_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '2'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order_description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'Test'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tax_amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '0'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discount_amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '0'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fee_shipping</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '0'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>return_url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fnganluong%2Fcallback'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancel_url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'http%3A%2F%2Flocalhost%3A8080%2F'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buyer_fullname</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'Nguyen Hue'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buyer_email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'tu.nguyen@naustud.io'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buyer_mobile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '0948231723'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buyer_address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'TEst'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>affiliate_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: ''</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transaction_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '19563733'</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="nganluong_NganLuong.js.html">nganluong/NganLuong.js</a>, <a href="nganluong_NganLuong.js.html#line158">line 158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="OnePayDomesticReturnObject">OnePayDomesticReturnObject</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">whether the payment succeeded or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">amount paid by customer, already divided by 100</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currencyCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">currency code, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gatewayTransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Gateway's own transaction ID, used to look up at Gateway's side</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">locale code, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Approve or error message based on response code</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's order ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response code, payment has errors if it is non-zero</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">checksum of the returned data, used to verify data integrity</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's transaction ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AdditionData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 970436</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 1000000</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: pay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CurrencyCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: VND</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: vn</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: ONEPAY</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_MerchTxnRef</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: TEST_15160802610161733380665</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_OrderInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: TEST_15160802610161733380665</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_SecureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: B5CD330E2DC1B1C116A068366F69717F54AD77E1BE0C40E4E3700551BE9D5004</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_TransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 1618136</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_TxnResponseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 0</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 2</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="OnePayInternationalReturnObject">OnePayInternationalReturnObject</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">whether the payment succeeded or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">amount paid by customer, already divided by 100</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>billingCity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">billing address' city</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>billingCountry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">billing address' country</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>billingPostCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">billing address' post code</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>billingStateProvince</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">billing address' state or province</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>billingStreet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">billing address and street name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">type of card used to pay, VC, MC, JC, AE</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currencyCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">currency code, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gatewayTransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Gateway's own transaction ID, used to look up at Gateway's side</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">locale code</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Approve or error message from gateway</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's order ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response code, payment has errors if it is non-zero</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">checksum of the returned data, used to verify data integrity</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's transaction ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_3DSECI</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 06</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_3DSenrolled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: N</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_3DSXID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: zklRMXTS2puX%2Btj0DwOJyq6T6s8%3D</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AcqAVSRespCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Unsupported</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AcqCSCRespCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Unsupported</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AcqResponseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 00</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 200000</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AuthorizeId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 523190</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVS_City</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Hanoi</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVS_Country</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: VNM</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVS_PostCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 10000</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVS_StateProv</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Hoan+Kiem</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVS_Street01</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 194+Tran+Quang+Khai</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVSRequestCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Z</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_AVSResultCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Unsupported</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_BatchNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 20180116</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: VC</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CardLevelIndicator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 88</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CardNum</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 400555xxxxxx0001</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: pay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CommercialCard</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: U</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CommercialCardIndicator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 3</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_CSCResultCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Unsupported</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: en_VN</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_MarketSpecificData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 8</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: TESTONEPAY</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_MerchTxnRef</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: TEST_1516078223875-387026611</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Approved</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_OrderInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: TEST_1516078223875-387026611</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_ReceiptNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 801615523190</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_ReturnACI</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 8</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_RiskOverallResult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: ACC</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_SecureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 0375408701C885CA396ED9A085D0E79B7D5437CD2FC021A96E3703787CC2874C</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_TransactionIdentifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 1234567890123456789</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_TransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 62267</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_TxnResponseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 0</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_VerSecurityLevel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 06</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_Version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_VerStatus</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: E</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vpc_VerType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 3DS</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="onepay_OnePayInternational.js.html">onepay/OnePayInternational.js</a>, <a href="onepay_OnePayInternational.js.html#line158">line 158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="SohaPayReturnObject">SohaPayReturnObject</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">whether the payment succeeded or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">returned from SohaPay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">transaction id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderEmail</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">customer email</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderSession</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">session token came from SohaPay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">amount paid by customer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>siteCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">unique code assigned by SohaPay for merchant</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response status code of SohaPay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">description of the payment</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response message from SohaPay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secureCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">checksum of the returned data, used to verify data integrity</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error_text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'Giao dịch thanh toán bị huỷ bỏ'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'node-2018-01-19T131933.811Z'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order_email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'tu.nguyen@naustud.io'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>order_session</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'd3bdef93fa01cd37f7e426fa25f5d1a0'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>price</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: '90000'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>site_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'test'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transaction_info</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 'Thanh toan giay adidas'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secure_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: FC5283C6B93C1D8F9A9329293DA38FFC3204FA6CE75661972419DAA6E5A1B7B5</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sohapay_SohaPay.js.html">sohapay/SohaPay.js</a>, <a href="sohapay_SohaPay.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="VNPayReturnObject">VNPayReturnObject</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">whether the payment succeeded or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Approve or error message based on response code</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>merchant</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">merchant's transaction ID, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">amount paid by customer, already divided by 100</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">order info, should be same with checkout request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">response code, payment has errors if it is non-zero</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bankCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">bank code of the bank where payment was occurred</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bankTranNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">bank transaction ID, used to look up at Bank's side</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cardType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">type of card</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>payDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">date when transaction occurred</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gatewayTransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Gateway's own transaction ID, used to look up at Gateway's side</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>secureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">checksum of the returned data, used to verify data integrity</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_TmnCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: COCOSIN</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_TxnRef</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: node-2018-01-15T10:04:36.540Z</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_Amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 90000000</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_OrderInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: Thanh toan giay adidas</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_ResponseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 00</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_BankCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: NCB</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_BankTranNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 20180115170515</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_CardType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: ATM</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_PayDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 20180115170716</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_TransactionNo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 13008888</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vnp_SecureHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">e.g: 115ad37de7ae4d28eb819ca3d3d85b20</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line144">line 144</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="NganLuong.html">NganLuong</a></li><li><a href="OnePayDomestic.html">OnePayDomestic</a></li><li><a href="OnePayInternational.html">OnePayInternational</a></li><li><a href="SohaPay.html">SohaPay</a></li><li><a href="VNPay.html">VNPay</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 18:22:38 GMT+0700 (+07)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
