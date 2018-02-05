@@ -141,7 +141,7 @@ class OnePayDomestic extends OnePay {
 
 	/**
 	 *
-	 * @param {*} payload
+	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
 	validateCheckoutPayload(payload) {
@@ -149,7 +149,7 @@ class OnePayDomestic extends OnePay {
 	}
 
 	/**
-	 * @return {Object} default payload object
+	 * @return {OnePayCheckoutPayload} default payload object
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -235,12 +235,11 @@ class OnePayDomestic extends OnePay {
 	}
 }
 
+/* prettier-ignore */
 /**
  * The schema is based on field data requirements from OnePay's dev document
- *
- * @typedef {SimpleSchema} OnePayInternationalCheckoutSchema
+ * @type {SimpleSchema}
  */
-/* prettier-ignore */
 OnePayDomestic.checkoutSchema = new SimpleSchema({
 	againLink            : { type: String, optional: true, max: 64, regEx: urlRegExp },
 	// NOTE: there is an inconsistency in OnePayDom vs. Intl that we had to test to find out,

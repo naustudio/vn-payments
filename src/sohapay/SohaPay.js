@@ -38,7 +38,7 @@ class SohaPay {
 	/**
 	 * Build checkout URL to redirect to the payment gateway
 	 *
-	 * @param  {Object} payload Object that contains needed data for the URL builder
+	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder
 	 * @return {Promise<URL>}    The URL object used to redirect
 	 */
 	buildCheckoutUrl(payload) {
@@ -107,7 +107,7 @@ class SohaPay {
 	/**
 	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
 	 *
-	 * @param {*} payload
+	 * @param {SohaPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
 		SohaPay.checkoutSchema.validate(payload);
@@ -218,14 +218,52 @@ class SohaPay {
 	}
 }
 
-// static properties
+/**
+ * SohaPay configSchema
+ * @type {SimpleSchema}
+ */
 SohaPay.configSchema = new SimpleSchema({
 	merchantCode: { type: String },
 	paymentGateway: { type: String },
 	secureSecret: { type: String },
 });
 
+/**
+ * @typedef {Object} SohaPayCheckoutPayload
+ * @property {string} merchantCode
+ * @property {string} paymentGateway
+ * @property {string} secureSecret
+ * @property {string} language  max: 16
+ * @property {string} orderId  max: 34
+ * @property {string} customerEmail  max: 24, regEx: SimpleSchema.RegEx.Email
+ * @property {string} customerPhone  max: 15
+ * @property {string} returnUrl  max: 255
+ * @property {number} amount Integer, max: 9999999999
+ * @property {string} paymentType  max: 1
+ * @property {string} siteCode  max: 8
+ * @property {string} transactionInfo  max: 255
+ * @property {string} version  max: 1
+ * @property {string} locale  optional: true, max: 2
+ * @property {string} currency  optional: true, max: 4
+ * @property {string} billingCity  optional: true, max: 64
+ * @property {string} billingCountry  optional: true, max: 2
+ * @property {string} billingPostCode  optional: true, max: 64
+ * @property {string} billingStateProvince  optional: true, max: 64
+ * @property {string} billingStreet  optional: true, max: 64
+ * @property {string} deliveryAddress  optional: true, max: 255
+ * @property {string} deliveryCity  optional: true, max: 255
+ * @property {string} deliveryCountry  optional: true, max: 255
+ * @property {string} deliveryProvince  optional: true, max: 255
+ * @property {string} clientIp  optional: true, max: 15
+ * @property {string} transactionId  optional: true, max: 40
+ * @property {string} customerId  optional: true, max: 255
+ */
+
 /* prettier-ignore */
+/**
+ * SohaPay checkoutSchema
+ * @type {SimpleSchema}
+ */
 SohaPay.checkoutSchema = new SimpleSchema({
 	language				: { type: String, max: 16 },
 	orderId					: { type: String, max: 34 },

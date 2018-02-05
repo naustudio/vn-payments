@@ -44,7 +44,7 @@ class VNPay {
 	 *
 	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
-	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
+	 * @param  {VNPayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
@@ -121,15 +121,15 @@ class VNPay {
 
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * Build the schema in subclass
-	 * @param {*} payload
+	 *
+	 * @param {VNPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
 		VNPay.dataSchema.validate(payload);
 	}
 
 	/**
-	 * @return {Object} default payload object
+	 * @return {VNPayCheckoutPayload} default payload object
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -322,8 +322,45 @@ class VNPay {
 	}
 }
 
-// The schema is based on field data requirements from VNPay's dev document
+/**
+ * @typedef {Object} VNPayCheckoutPayload
+ * @property {string} createdDate  optional: true
+ * @property {number} amount The pay amount, Integer, max: 9999999999
+ * @property {string} clientIp  max: 16
+ * @property {string} currency  allowedValues: ['VND']
+ * @property {string} billingCity  optional: true, max: 255
+ * @property {string} billingCountry  optional: true, max: 255
+ * @property {string} billingPostCode  optional: true, max: 255
+ * @property {string} billingStateProvince  optional: true, max: 255
+ * @property {string} billingStreet  optional: true, max: 255
+ * @property {string} customerEmail  optional: true, max: 255, regEx: SimpleSchema.RegEx.Email
+ * @property {string} customerId  optional: true, max: 255
+ * @property {string} customerPhone  optional: true, max: 255
+ * @property {string} deliveryAddress  optional: true, max: 255
+ * @property {string} deliveryCity  optional: true, max: 255
+ * @property {string} deliveryCountry  optional: true, max: 255
+ * @property {string} deliveryProvince  optional: true, max: 255
+ * @property {string} bankCode  optional: true, max: 50
+ * @property {string} locale  allowedValues: ['vn', 'en']
+ * @property {string} orderId  max: 34
+ * @property {string} orderInfo  max: 255
+ * @property {string} orderType  max: 40
+ * @property {string} returnUrl  max: 255
+ * @property {string} transactionId  max: 40
+ * @property {string} vnpSecretKey  max: 32
+ * @property {string} vnpMerchant  max: 16
+ * @property {string} vnpCommand  max: 16
+ * @property {string} vnpVersion  max: 2
+ * @property {string} paymentGateway  regEx: SimpleSchema.RegEx.Url
+ * @property {string} merchant
+ * @property {string} secureSecret
+ */
+
 /* prettier-ignore */
+/**
+ * The schema is based on field data requirements from VNPay's dev document
+ * @type {SimpleSchema}
+ */
 VNPay.dataSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
 	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
@@ -354,6 +391,10 @@ VNPay.dataSchema = new SimpleSchema({
 	vnpVersion           : { type: String, max: 2 },
 });
 
+/**
+ * VNPay configSchema
+ * @type {SimpleSchema}
+ */
 VNPay.configSchema = new SimpleSchema({
 	paymentGateway: { type: String, regEx: SimpleSchema.RegEx.Url },
 	merchant: { type: String },

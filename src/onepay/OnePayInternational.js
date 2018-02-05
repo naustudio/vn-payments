@@ -121,7 +121,7 @@ class OnePayInternational extends OnePay {
 
 	/**
 	 *
-	 * @param {*} payload
+	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
 	validateCheckoutPayload(payload) {
@@ -129,7 +129,7 @@ class OnePayInternational extends OnePay {
 	}
 
 	/**
-	 * @return {Object} default payload object
+	 * @return {OnePayCheckoutPayload} default payload object
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
