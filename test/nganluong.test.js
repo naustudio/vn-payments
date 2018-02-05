@@ -96,7 +96,9 @@ describe('NganLuong', () => {
 			it('should throw errors at wrong amount input', async () => {
 				checkoutPayload.amount = '100';
 
-				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Amount must be of type Integer');
+				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe(
+					'Amount must be of type Integer'
+				);
 
 				checkoutPayload.amount = 123.45;
 				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Amount must be an integer');
