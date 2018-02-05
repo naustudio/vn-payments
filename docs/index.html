@@ -49,11 +49,15 @@
 <a href="https://www.npmjs.com/package/vn-payments"><img src="https://img.shields.io/npm/v/vn-payments.svg" alt="npm version"></a>
 <a href="https://github.com/naustudio/node-vn-payments/blob/master/LICENSE"><img src="https://img.shields.io/github/license/naustudio/node-vn-payments.svg" alt="GitHub license"></a></p>
 <p>Vietnam payment gateway helpers for NodeJS.</p>
+<blockquote>
+<p>From our experience doing NodeJS e-commerce website in Vietnam, implementing online payment process is often troublesome and error-prone due to strict hashing algorithm and uncertain remote request rejections.
+Besides, many payment gateways in Vietnam don't have sample code or SDK for server-side JavaScript (yet). Therefore, we have gathered a set of JavaScript classes (written in ES6) that help NodeJS apps exchange data with payment gateways with more confidence and ease by validating payload object and normalize multiple gateways specs into a common API.</p>
+</blockquote>
 <h2>Supported Payment Gateways</h2><ul>
-<li>[x] OnePay (Domestic &amp; International)</li>
-<li>[x] VNPay</li>
-<li>[x] SohaPay</li>
-<li>[x] NganLuong</li>
+<li><a href="http://onepay.com.vn/">OnePay</a> (Domestic &amp; International)</li>
+<li><a href="https://vnpay.vn/">VNPay</a></li>
+<li><a href="https://sohapay.vn/">SohaPay</a></li>
+<li><a href="https://www.nganluong.vn/nganluong/home.html">NganLuong</a></li>
 </ul>
 <p>Planned gateways:</p>
 <ul>
@@ -65,9 +69,10 @@ npm install vn-payments --save
 # yarn
 yarn add vn-payments</code></pre><h2>Usage</h2><h3>Payment Workflow:</h3><p>Below is sequence diagram of typical payment gateway process:</p>
 <p><img src="https://raw.githubusercontent.com/naustudio/node-vn-payments/master/docs/payment-gateway-process.jpg" alt="Typical payment gateway process"></p>
-<div align="center"><em>Diagram taken from OnePay Intl documentation</em></div>
+<p align="center"><em>Diagram taken from OnePay Intl documentation</em></p>
 
-<p><code>vn-payments</code> provides gateway helpers classes that build URL for <em>DO request</em> and verify <em>DR Response</em>.</p>
+<p><strong><code>vn-payments</code></strong> provides helper classes that build URL for <em>DO request</em> and verify <em>DR Response</em> for supported payment gateway.</p>
+<p>Currently we haven't implemented the <em>QueryQR()</em> functions. It is in our road map for next release.</p>
 <h3>JavaScript sample code:</h3><p>Import one of the payment gateway class from <code>vn-payments</code>:</p>
 <pre class="prettyprint source lang-js"><code>// ESM
 import { OnePayDomestic } from 'vn-payments';
@@ -129,17 +134,18 @@ const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the hel
       });
     }
   });
-});</code></pre><h2>Example</h2><p>See the Express checkout cart in the <strong>example</strong> folder.</p>
-<h4>HOWTO:</h4><ul>
+});</code></pre><p>For <em>IPN Request</em> to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the <code>verifyReturnUrl</code> to validate parameters sent from Gateway.</p>
+<h2>Example</h2><p>See the Express checkout cart in the <strong>example</strong> folder.</p>
+<h4>Example Getting Started:</h4><ul>
 <li>Clone this repository.</li>
-<li>Run <code>npm install</code> in both project root and <code>example</code> folder</li>
+<li>Run <code>npm install</code> in <code>example</code> folder</li>
 <li>Inside <code>example</code> folder, execute: <code>npm start</code></li>
 </ul>
-<h2>API Document</h2><p>See <a href="http://code.naustud.io/node-vn-payments">documentation</a></p>
+<h2>API Document</h2><p>See <a href="http://code.naustud.io/node-vn-payments">documentation</a>.</p>
 <h2>Contributing</h2><p>Interested in contributing to this project? See <a href="https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 <h2>Road Map</h2><ul>
 <li>[x] Implement <code>buildCheckoutUrl</code> (A.K.A. <code>DO Request</code>) for OnePay, VNPay, SohaPay, NganLuong</li>
-<li>[x] Implement <code>verifyReturnUrl</code> (A.K.A. <code>DR Response</code>)for OnePay, VNPay, SohaPay, NganLuong</li>
+<li>[x] Implement <code>verifyReturnUrl</code> (A.K.A. <code>DR Response</code>) for OnePay, VNPay, SohaPay, NganLuong</li>
 <li>[ ] Implement <code>queryDR</code> methods for existing gateways</li>
 <li>[ ] Implement helper class for <strong>AlePay</strong></li>
 <li>[ ] Implement helper class for <strong>123Pay</strong></li>
@@ -157,8 +163,7 @@ You may obtain a copy of the License at</p>
 distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
-(docs/):</p></article>
+limitations under the License.</p></article>
     </section>
 
 
@@ -175,7 +180,7 @@ limitations under the License.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 18:42:35 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 05 2018 16:11:12 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

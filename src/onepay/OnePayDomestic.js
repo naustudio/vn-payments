@@ -141,7 +141,7 @@ class OnePayDomestic extends OnePay {
 
 	/**
 	 *
-	 * @param {*} payload
+	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
 	validateCheckoutPayload(payload) {
@@ -149,7 +149,7 @@ class OnePayDomestic extends OnePay {
 	}
 
 	/**
-	 * @return {Object} default payload object
+	 * @return {OnePayCheckoutPayload} default payload object
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -235,8 +235,11 @@ class OnePayDomestic extends OnePay {
 	}
 }
 
-// The schema is based on field data requirements from OnePay's dev document
 /* prettier-ignore */
+/**
+ * The schema is based on field data requirements from OnePay's dev document
+ * @type {SimpleSchema}
+ */
 OnePayDomestic.checkoutSchema = new SimpleSchema({
 	againLink            : { type: String, optional: true, max: 64, regEx: urlRegExp },
 	// NOTE: there is an inconsistency in OnePayDom vs. Intl that we had to test to find out,
@@ -260,7 +263,7 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 	deliveryProvince     : { type: String, optional: true, max: 64 },
 	locale               : { type: String, allowedValues: ['vn', 'en'] },
 	orderId              : { type: String, max: 32 },
-	returnUrl            : { type: String, max: 64, regEx: urlRegExp },
+	returnUrl            : { type: String, max: 255, regEx: urlRegExp }, // NOTE: returnURL is documented with 64 chars limit but seem not a hard limit, and 64 is too few in some scenario
 	title                : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for this field, this is just a safe value
 	transactionId        : { type: String, max: 34 },
 	vpcAccessCode        : { type: String, max: 8 },

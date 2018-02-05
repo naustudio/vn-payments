@@ -6,7 +6,7 @@ import SimpleSchema from 'simpl-schema';
 import { toUpperCase, pack, hashHmac } from '../utils';
 
 /**
- * This is the base class for domestic and intl payment gateways
+ * This is the base class for OnePay's domestic and intl payment gateways
  * which bear the common hashing algorithym.
  *
  * It should not be used alone.
@@ -32,8 +32,8 @@ class OnePay {
 	 *
 	 * Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
 	 *
-	 * @param  {Object} payload Object that contains needed data for the URL builder, refer to typeCheck object above
-	 * @return {Promise} buildCheckoutUrl promise
+	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
+	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -127,13 +127,16 @@ class OnePay {
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 	 * Build the schema in subclass
-	 * @param {*} payload
+	 * @param {OnePayCheckoutPayload} payload
 	 */
-	// eslint-disable-next-line no-unused-vars
-	validateCheckoutPayload(payload) {
+	validateCheckoutPayload(/*payload*/) {
 		throw new Error('validateCheckoutPayload() requires overloading');
 	}
 
+	/**
+	 * Return default checkout Payloads
+	 * @return {OnePayCheckoutPayload} default payloads
+	 */
 	get checkoutPayloadDefaults() {
 		return {};
 	}
@@ -185,6 +188,41 @@ class OnePay {
 	}
 }
 
+/**
+ * OnePay checkout payload object, with normalized field names and validation rules based on OnePay's dev document
+ *
+ * @typedef {Object} OnePayCheckoutPayload
+ * @property {string} againLink optional: true, max: 64, regEx: urlRegExp
+ * @property {number} amount max: 9999999999
+ * @property {string} billingCity optional: true, max: 64
+ * @property {string} billingCountry optional: true, max: 2
+ * @property {string} billingPostCode optional: true, max: 64
+ * @property {string} billingStateProvince optional: true, max: 64
+ * @property {string} billingStreet optional: true, max: 64
+ * @property {string} clientIp max: 15
+ * @property {string} currency allowedValues: ['VND']
+ * @property {string} customerEmail optional: true, max: 24, regEx: SimpleSchema.RegEx.Email
+ * @property {string} customerId optional: true, max: 64
+ * @property {string} customerPhone optional: true, max: 16
+ * @property {string} deliveryAddress optional: true, max: 64
+ * @property {string} deliveryCity optional: true, max: 64
+ * @property {string} deliveryCountry optional: true, max: 8
+ * @property {string} deliveryProvince optional: true, max: 64
+ * @property {string} locale allowedValues: ['vn', 'en']
+ * @property {string} orderId max: 32
+ * @property {string} returnUrl max: 255, regEx: urlRegExp. <br>NOTE: returnURL is documented with 64 chars limit but seem not a hard limit, and 64 is too few in some scenar
+ * @property {string} title optional: true, max: 255. <br>NOTE: no max limit documented for this field, this is just a safe val
+ * @property {string} transactionId max: 34
+ * @property {string} vpcAccessCode max: 8
+ * @property {string} vpcCommand max: 16
+ * @property {string} vpcMerchant max: 16
+ * @property {string} vpcVersion max: 2
+ */
+
+/**
+ * OnePay configSchema
+ * @type {SimpleSchema}
+ */
 OnePay.configSchema = new SimpleSchema({
 	accessCode: { type: String },
 	merchant: { type: String },

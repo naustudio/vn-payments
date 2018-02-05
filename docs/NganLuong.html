@@ -214,6 +214,78 @@ this.response.end();</code></pre>
 
         
             
+<h4 class="name" id=".dataSchema"><span class="type-signature">(static) </span>dataSchema<span class="type-signature"> :SimpleSchema</span></h4>
+
+
+
+
+<div class="description">
+    The schema is based on field data requirements from NganLuong's dev document
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">SimpleSchema</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="nganluong_NganLuong.js.html">nganluong/NganLuong.js</a>, <a href="nganluong_NganLuong.js.html#line518">line 518</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id=".TEST_CONFIG"><span class="type-signature">(static) </span>TEST_CONFIG<span class="type-signature"></span></h4>
 
 
@@ -258,7 +330,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="nganluong_NganLuong.js.html">nganluong/NganLuong.js</a>, <a href="nganluong_NganLuong.js.html#line522">line 522</a>
+        <a href="nganluong_NganLuong.js.html">nganluong/NganLuong.js</a>, <a href="nganluong_NganLuong.js.html#line575">line 575</a>
     </li></ul></dd>
     
 
@@ -344,6 +416,198 @@ this.response.end();</code></pre>
     
 
     
+    <h4 class="name" id=".getReturnUrlStatus"><span class="type-signature">(static) </span>getReturnUrlStatus<span class="signature">(responseCode, locale)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get known response code status
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">[description]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    vn
+                
+                </td>
+            
+
+            <td class="description last">[description]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="nganluong_NganLuong.js.html">nganluong/NganLuong.js</a>, <a href="nganluong_NganLuong.js.html#line295">line 295</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    [description]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="buildCheckoutUrl"><span class="type-signature"></span>buildCheckoutUrl<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
     
 
@@ -396,7 +660,7 @@ Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham s
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="global.html#NganLuongCheckoutPayload">NganLuongCheckoutPayload</a></span>
 
 
             
@@ -512,7 +776,6 @@ Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham s
 
 <div class="description">
     Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-Build the schema in subclass
 </div>
 
 
@@ -554,7 +817,7 @@ Build the schema in subclass
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type"><a href="global.html#NganLuongCheckoutPayload">NganLuongCheckoutPayload</a></span>
 
 
             
@@ -810,7 +1073,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 18:42:35 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 05 2018 16:11:12 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

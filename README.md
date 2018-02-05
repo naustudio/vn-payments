@@ -8,12 +8,15 @@
 
 Vietnam payment gateway helpers for NodeJS.
 
+> From our experience doing NodeJS e-commerce website in Vietnam, implementing online payment process is often troublesome and error-prone due to strict hashing algorithm and uncertain remote request rejections.
+> Besides, many payment gateways in Vietnam don't have sample code or SDK for server-side JavaScript (yet). Therefore, we have gathered a set of JavaScript classes (written in ES6) that help NodeJS apps exchange data with payment gateways with more confidence and ease by validating payload object and normalize multiple gateways specs into a common API.
+
 ## Supported Payment Gateways
 
-* [x] OnePay (Domestic & International)
-* [x] VNPay
-* [x] SohaPay
-* [x] NganLuong
+* [OnePay](http://onepay.com.vn/) (Domestic & International)
+* [VNPay](https://vnpay.vn/)
+* [SohaPay](https://sohapay.vn/)
+* [NganLuong](https://www.nganluong.vn/nganluong/home.html)
 
 Planned gateways:
 
@@ -37,9 +40,11 @@ Below is sequence diagram of typical payment gateway process:
 
 ![Typical payment gateway process](https://raw.githubusercontent.com/naustudio/node-vn-payments/master/docs/payment-gateway-process.jpg)
 
-<div align="center"><em>Diagram taken from OnePay Intl documentation</em></div>
+<p align="center"><em>Diagram taken from OnePay Intl documentation</em></p>
 
-`vn-payments` provides gateway helpers classes that build URL for _DO request_ and verify _DR Response_.
+**`vn-payments`** provides helper classes that build URL for _DO request_ and verify _DR Response_ for supported payment gateway.
+
+Currently we haven't implemented the _QueryQR()_ functions. It is in our road map for next release.
 
 ### JavaScript sample code:
 
@@ -126,19 +131,21 @@ routes.get('/payment/callback', (req, res) => {
 });
 ```
 
+For _IPN Request_ to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the `verifyReturnUrl` to validate parameters sent from Gateway.
+
 ## Example
 
 See the Express checkout cart in the **example** folder.
 
-#### HOWTO:
+#### Example Getting Started:
 
 * Clone this repository.
-* Run `npm install` in both project root and `example` folder
+* Run `npm install` in `example` folder
 * Inside `example` folder, execute: `npm start`
 
 ## API Document
 
-See [documentation](http://code.naustud.io/node-vn-payments)
+See [documentation](http://code.naustud.io/node-vn-payments).
 
 ## Contributing
 
@@ -147,7 +154,7 @@ Interested in contributing to this project? See [CONTRIBUTING.md](https://github
 ## Road Map
 
 * [x] Implement `buildCheckoutUrl` (A.K.A. `DO Request`) for OnePay, VNPay, SohaPay, NganLuong
-* [x] Implement `verifyReturnUrl` (A.K.A. `DR Response`)for OnePay, VNPay, SohaPay, NganLuong
+* [x] Implement `verifyReturnUrl` (A.K.A. `DR Response`) for OnePay, VNPay, SohaPay, NganLuong
 * [ ] Implement `queryDR` methods for existing gateways
 * [ ] Implement helper class for **AlePay**
 * [ ] Implement helper class for **123Pay**
@@ -176,4 +183,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-(docs/):
