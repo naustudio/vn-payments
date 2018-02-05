@@ -6,7 +6,7 @@
 [![npm version](https://img.shields.io/npm/v/vn-payments.svg)](https://www.npmjs.com/package/vn-payments)
 [![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
-Vietnam payment gateway helpers for NodeJS.
+Vietnam payment gateway helpers for NodeJS. Check out live demo [here](https://vn-payments-demo.now.sh).
 
 > From our experience doing NodeJS e-commerce website in Vietnam, implementing online payment process is often troublesome and error-prone due to strict hashing algorithm and uncertain remote request rejections.
 > Besides, many payment gateways in Vietnam don't have sample code or SDK for server-side JavaScript (yet). Therefore, we have gathered a set of JavaScript classes (written in ES6) that help NodeJS apps exchange data with payment gateways with more confidence and ease by validating payload object and normalize multiple gateways specs into a common API.
@@ -133,7 +133,7 @@ routes.get('/payment/callback', (req, res) => {
 
 For _IPN Request_ to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the `verifyReturnUrl` to validate parameters sent from Gateway.
 
-## Example
+## Example ([Live Demo](https://vn-payments-demo.now.sh))
 
 See the Express checkout cart in the **example** folder.
 
