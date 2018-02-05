@@ -1,18 +1,14 @@
 <div class="container">
 
 	<h1>{{ title }}</h1>
-	<p>Welcome to #{{title}}</p>
-
+	<p>This is a fake checkout cart to demo <a href="https://www.npmjs.com/package/vn-payments"><em>vn-payments</em></a> NodeJS package</p>
 
 	<div class="content">
 		<form class="ui form content-inner" action="/payment/checkout" method="POST" autocomplete>
 			<div class="main">
 
 				<div class="field">
-					<label>Autofill</label>
-					<div class="field">
-						<input type="checkbox" class="autofill-checkbox">
-					</div>
+					<label><input id="autofill-checkbox" type="checkbox" class="autofill-checkbox"> Lazy? Check me to auto-fill.</label>
 				</div>
 
 				<div class="field">
@@ -289,7 +285,7 @@
 							<option value="UZ">Uzbekistan</option>
 							<option value="VU">Vanuatu</option>
 							<option value="VE">Venezuela, Bolivarian Republic of</option>
-							<option value="VN">Viet Nam</option>
+							<option value="VN" selected>Viet Nam</option>
 							<option value="VG">Virgin Islands, British</option>
 							<option value="VI">Virgin Islands, U.S.</option>
 							<option value="WF">Wallis and Futuna</option>
@@ -320,7 +316,7 @@
 							</span>
 							<img src="./img/adidas-boost.jpeg" alt="">
 						</div>
-						<h5 class="cart__item__title">Adidas boost</h5>
+						<h5 class="cart__item__title">Adidas Sneakers</h5>
 					</span>
 				</div>
 
@@ -349,7 +345,7 @@
 				</div>
 
 				<div class="grouped fields">
-					<label for="fruit">Select payment method:</label>
+					<label for="fruit">Select payment method: <a href="https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md#testing-cards-for-payment-tests" title="See testing cards info" target="_blank">(?)</a></label>
 					<div class="field">
 						<div class="ui radio checkbox">
 							<input type="radio" name="paymentMethod" checked="" tabindex="0" class="hidden" value="onepayDomestic">
@@ -383,13 +379,16 @@
 							<label>Ngân Lượng</label>
 						</div>
 					</div>
-					<div class="field">
+					{{!-- <div class="field">
 						<a target="_blank" href="https://sandbox.nganluong.vn:8088/nl30/button_payment.php?receiver=tung.tran@naustud.io&product_name=Adidas&price=90000&return_url=http://localhost:8080/payment/nganluong/callback&comments=Test"><img src="https://sandbox.nganluong.vn:8088/nl30/css/newhome/img/button/safe-pay-2.png"border="0" /></a>
-					</div>
+					</div> --}}
 				</div>
 
 				<div class="ui error message"></div>
 			</div>
 		</form>
 	</div>
+	<footer class="ui footer segment">
+		<p>&copy; 2018 <a href="https://naustud.io">Nau Studio</a>. Apache 2.0 license. <a href="https://github.com/naustudio/node-vn-payments">Github Project</a>. <a href="http://code.naustud.io/node-vn-payments/">API Doc.</a></p>
+	</footer>
 </div>

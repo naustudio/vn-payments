@@ -143,6 +143,10 @@ See the Express checkout cart in the **example** folder.
 * Run `npm install` in `example` folder
 * Inside `example` folder, execute: `npm start`
 
+#### Test cards for testing out example:
+
+See testing cards info in [CONTRIBUTING.md](https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md#testing-cards-for-payment-tests)
+
 ## API Document
 
 See [documentation](http://code.naustud.io/node-vn-payments).
