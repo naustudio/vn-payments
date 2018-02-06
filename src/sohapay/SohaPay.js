@@ -182,16 +182,16 @@ class SohaPay {
 					});
 
 				const isEqual =
-					toUpperCase(secureHash) ===
-					toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
+					toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
 
 				if (!isEqual) {
 					verifyResults.isSuccess = false;
 					verifyResults.message = 'Wrong checksum';
 				} else if (data.error_text) {
 					verifyResults.isSuccess = false;
-					verifyResults.message = data.error_text;
+					verifyResults.message = returnObject.errorMessage;
 				} else {
+					verifyResults.message = returnObject.responseMessage;
 					verifyResults.isSuccess = returnObject.responseCode === '0';
 				}
 			}
@@ -202,7 +202,7 @@ class SohaPay {
 
 	_mapQueryToObject(query) {
 		const returnObject = {
-			message: query.error_text,
+			errorMessage: query.error_text,
 			transactionId: query.order_code,
 			orderEmail: query.order_email,
 			orderSession: query.order_session,

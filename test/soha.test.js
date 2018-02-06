@@ -140,6 +140,23 @@ describe('SohaPay', () => {
 
 			expect(errorResults.isSuccess).toEqual(false);
 			expect(errorResults.message).toEqual('Giao dịch thanh toán bị huỷ bỏ');
+
+			const successReturnUrl = {
+				response_message: 'Thanh toán thành công',
+				order_code: 'node-2018-01-18T162833.777Z',
+				order_email: 'tu.nguyen@naustud.io',
+				order_session: '0d592799a73979ce68e5beacd3fb3dc0',
+				price: '90000',
+				site_code: 'test',
+				transaction_info: 'Thanh toan giay adidas',
+				response_code: '0',
+				secure_code: 'F7CC9597BF341527DFDE0BBC04660C59BC57C0E4D19B23ACFEF3A0F3F466E6F3',
+			};
+
+			errorResults = await sohaPay.verifyReturnUrl(successReturnUrl);
+
+			expect(errorResults.isSuccess).toEqual(true);
+			expect(errorResults.message).toEqual('Thanh toán thành công');
 		});
 	});
 });
