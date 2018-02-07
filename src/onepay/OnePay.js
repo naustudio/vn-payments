@@ -8,16 +8,21 @@ import { toUpperCase, pack, hashHmac } from '../utils';
 /**
  * This is the base class for OnePay's domestic and intl payment gateways
  * which bear the common hashing algorithym.
- *
+ * <br>
  * It should not be used alone.
- *
+ * <br>
+ * Đây là lớp cơ sở cho lớp OnePayDomestic và lớp OnePayInternational. Lớp này chứa các thuật toán mã hóa chung.
+ * <br>
+ * Lớp này không nên được sử dụng để khai báo.
  * @private
  */
 class OnePay {
 	/**
 	 * Instantiate a OnePay checkout helper
+	 * <br>
+	 * Khởi tạo hàm thanh toán OnePay
 	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
 	constructor(config = {}, type = 'domestic') {
@@ -29,10 +34,10 @@ class OnePay {
 
 	/**
 	 * Build checkout URL to redirect to the payment gateway.
-	 *
+	 * <br>
 	 * Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
 	 *
-	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
+	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
@@ -126,7 +131,12 @@ class OnePay {
 
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
 	 * Build the schema in subclass
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 * <br>
+	 * Cấu trúc dữ liệu được thêm vào trong lớp con của lớp OnePay
 	 * @param {OnePayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(/*payload*/) {
@@ -143,7 +153,7 @@ class OnePay {
 
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *
+	 *	<br>
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`)

@@ -34,6 +34,7 @@ class OnePayInternational extends OnePay {
 	 *
 	 * @param {*} responseCode Responde code from gateway
 	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 * @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {

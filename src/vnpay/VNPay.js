@@ -109,10 +109,7 @@ class VNPay {
 
 			if (secureCode.length > 0) {
 				redirectUrl.searchParams.append('vnp_SecureHashType', 'MD5');
-				redirectUrl.searchParams.append(
-					'vnp_SecureHash',
-					createMd5Hash(data.vnpSecretKey + secureCode.join('&'))
-				);
+				redirectUrl.searchParams.append('vnp_SecureHash', createMd5Hash(data.vnpSecretKey + secureCode.join('&')));
 			}
 
 			resolve(redirectUrl);
@@ -201,10 +198,7 @@ class VNPay {
 						}
 					});
 
-				if (
-					toUpperCase(vnpTxnSecureHash) ===
-					toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))
-				) {
+				if (toUpperCase(vnpTxnSecureHash) === toUpperCase(createMd5Hash(config.secureSecret + secureCode.join('&')))) {
 					verifyResults.isSuccess = returnObject.responseCode === '00';
 				} else {
 					verifyResults.isSuccess = false;
@@ -235,6 +229,12 @@ class VNPay {
 		return returnObject;
 	}
 
+	/**
+	 *
+	 * @param {*} responseCode Responde code from gateway
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 *  @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
+	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
 			'00': {
@@ -281,17 +281,14 @@ class VNPay {
 			'09': {
 				vn:
 					'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.',
-				en:
-					'Transaction failed: Cards / accounts of customer who has not yet registered for Internet Banking service.',
+				en: 'Transaction failed: Cards / accounts of customer who has not yet registered for Internet Banking service.',
 			},
 			10: {
 				vn: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
-				en:
-					'Transaction failed: Customer incorrectly validate the card / account information more than 3 times',
+				en: 'Transaction failed: Customer incorrectly validate the card / account information more than 3 times',
 			},
 			11: {
-				vn:
-					'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.',
+				vn: 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.',
 				en: 'Transaction failed: Pending payment is expired. Please try again.',
 			},
 			24: {
