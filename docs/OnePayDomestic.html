@@ -31,8 +31,13 @@
         <h2><span class="attribs"><span class="type-signature"></span></span>OnePayDomestic<span class="signature">(config)</span><span class="type-signature"></span></h2>
         
             <div class="class-description">OnePay Domestic payment gateway helper.
-
-Supports VN domestic ATM cards.</div>
+<br>
+Supports VN domestic ATM cards
+<br>
+<br>
+Hàm hỗ trợ cổng thanh toán nội địa OnePay
+<br>
+Hỗ trợ thẻ ATM nội địa</div>
         
     
 </header>
@@ -56,6 +61,8 @@ Supports VN domestic ATM cards.</div>
 
 <div class="description">
     Instantiate a OnePayDomestic checkout helper
+<br>
+Khởi tạo hàm thanh toán OnePayDomestic
 </div>
 
 
@@ -107,7 +114,7 @@ Supports VN domestic ATM cards.</div>
 
             
 
-            <td class="description last">check OnePay.configSchema for data type requirements</td>
+            <td class="description last">check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu</td>
         </tr>
 
     
@@ -148,7 +155,7 @@ Supports VN domestic ATM cards.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line33">line 33</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -234,6 +241,8 @@ this.response.end();</code></pre>
 
 <div class="description">
     The schema is based on field data requirements from OnePay's dev document
+<br>
+Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu OnePay
 </div>
 
 
@@ -281,7 +290,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line243">line 243</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line251">line 251</a>
     </li></ul></dd>
     
 
@@ -306,6 +315,8 @@ this.response.end();</code></pre>
 
 <div class="description">
     OnePayDomestic test configs
+<br>
+Cấu hình dùng thử OnePayDomestic
 </div>
 
 
@@ -343,7 +354,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line278">line 278</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line288">line 288</a>
     </li></ul></dd>
     
 
@@ -406,7 +417,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line154">line 154</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line160">line 160</a>
     </li></ul></dd>
     
 
@@ -496,7 +507,7 @@ this.response.end();</code></pre>
                 </td>
             
 
-            <td class="description last">Responde code from gateway</td>
+            <td class="description last">Response code from gateway <br> Mã trả về từ cổng thanh toán</td>
         </tr>
 
     
@@ -525,7 +536,7 @@ this.response.end();</code></pre>
                 </td>
             
 
-            <td class="description last">Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese</td>
+            <td class="description last">Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam</td>
         </tr>
 
     
@@ -566,7 +577,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line39">line 39</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -609,7 +620,7 @@ this.response.end();</code></pre>
 
 <div class="description">
     Build checkout URL to redirect to the payment gateway.
-
+<br>
 Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
 </div>
 
@@ -662,7 +673,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
 
             
 
-            <td class="description last">Object that contains needed data for the URL builder, refer to typeCheck object above</td>
+            <td class="description last">Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.</td>
         </tr>
 
     
@@ -773,7 +784,12 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
 
 <div class="description">
     Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+<br>
 Build the schema in subclass
+<br><br>
+Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
+<br>
+Cấu trúc dữ liệu được thêm vào trong lớp con của lớp OnePay
 </div>
 
 
@@ -871,7 +887,7 @@ Build the schema in subclass
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line132">line 132</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -914,7 +930,7 @@ Build the schema in subclass
 
 <div class="description">
     Verify return query string from OnePay using enclosed vpc_SecureHash string
-
+	<br>
 Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 </div>
 
@@ -1013,7 +1029,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line215">line 215</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line221">line 221</a>
     </li></ul></dd>
     
 
@@ -1081,7 +1097,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 05 2018 17:48:51 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Feb 07 2018 12:23:48 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

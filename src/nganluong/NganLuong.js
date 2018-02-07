@@ -255,9 +255,7 @@ class NganLuong {
 						} else {
 							resolve({
 								isSuccess: false,
-								message:
-									objectResponse.description ||
-									NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
+								message: objectResponse.description || NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
 							});
 						}
 					});

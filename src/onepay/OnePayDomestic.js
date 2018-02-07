@@ -7,8 +7,13 @@ import { urlRegExp } from '../utils';
 
 /**
  * OnePay Domestic payment gateway helper.
- *
- * Supports VN domestic ATM cards.
+ * <br>
+ * Supports VN domestic ATM cards
+ * <br>
+ * <br>
+ * Hàm hỗ trợ cổng thanh toán nội địa OnePay
+ * <br>
+ * Hỗ trợ thẻ ATM nội địa
  *
  * @extends OnePay
  *
@@ -33,8 +38,8 @@ import { urlRegExp } from '../utils';
 class OnePayDomestic extends OnePay {
 	/**
 	 *
-	 * @param {*} responseCode Responde code from gateway
-	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 * @param {*} responseCode Response code from gateway <br> Mã trả về từ cổng thanh toán
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -131,8 +136,9 @@ class OnePayDomestic extends OnePay {
 
 	/**
 	 * Instantiate a OnePayDomestic checkout helper
-	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 * <br>
+	 * Khởi tạo hàm thanh toán OnePayDomestic
+	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
 	constructor(config = {}) {
@@ -206,7 +212,7 @@ class OnePayDomestic extends OnePay {
 	 */
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *
+	 *	<br>
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param {*} query
@@ -238,6 +244,8 @@ class OnePayDomestic extends OnePay {
 /* prettier-ignore */
 /**
  * The schema is based on field data requirements from OnePay's dev document
+ * <br>
+ * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu OnePay
  * @type {SimpleSchema}
  */
 OnePayDomestic.checkoutSchema = new SimpleSchema({
@@ -274,6 +282,8 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 
 /**
  * OnePayDomestic test configs
+ * <br>
+ * Cấu hình dùng thử OnePayDomestic
  */
 OnePayDomestic.TEST_CONFIG = {
 	accessCode: 'D67342C2',
