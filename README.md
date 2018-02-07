@@ -1,8 +1,8 @@
 # vn-payments
 
 [![By Nau Studio](https://img.shields.io/badge/By-Nau%20Studio-977857.svg)](https://naustud.io)
-[![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
-[![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg)](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop)
+[![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
+[![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments.svg)](https://codecov.io/gh/naustudio/node-vn-payments)
 [![npm version](https://img.shields.io/npm/v/vn-payments.svg)](https://www.npmjs.com/package/vn-payments)
 [![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
