@@ -7,7 +7,7 @@
 	"contributors": [
 		"Thanh Tran <thanh@naustud.io>"
 	],
-	"typings": "src/index.d.ts",
+	"types": "./src/index.d.ts",
 	"license": "Apache-2.0",
 	"main": "dist/index.js",
 	"engines": {
