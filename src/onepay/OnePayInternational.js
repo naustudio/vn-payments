@@ -7,8 +7,13 @@ import { urlRegExp } from '../utils';
 
 /**
  * OnePay International payment gateway helper.
- *
+ * <br>
  * Supports Master Card, Visa.
+ * <br>
+ * Hàm hỗ trợ thanh toán qua OnePay Quốc Tế
+ * <br>
+ * Hỗ trợ thẻ Master và Visa
+ *
  *
  * @extends OnePay
  * @example
@@ -32,8 +37,8 @@ import { urlRegExp } from '../utils';
 class OnePayInternational extends OnePay {
 	/**
 	 *
-	 * @param {*} responseCode Responde code from gateway
-	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 * @param {*} responseCode Responde code from gateway <br> Mã trả về từ cổng thanh toán
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
 	 * @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
@@ -112,8 +117,9 @@ class OnePayInternational extends OnePay {
 
 	/**
 	 * Instantiate a OnePayInternational checkout helper
-	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 *<br>
+	 * Khởi tạo hàm thanh toán OnePayInternational
+	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
 	constructor(config = {}) {
@@ -221,7 +227,7 @@ class OnePayInternational extends OnePay {
 	 */
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *
+	 * <br>
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
 	 * @param {*} query
@@ -296,6 +302,8 @@ OnePayInternational.checkoutSchema = new SimpleSchema({
 
 /**
  * OnePayInternational test config
+ * <br>
+ * Cấu hình dùng thử OnePayInternational
  */
 OnePayInternational.TEST_CONFIG = {
 	accessCode: '6BEB2546',

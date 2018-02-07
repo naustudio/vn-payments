@@ -8,8 +8,12 @@ import { toUpperCase, hashHmac, pack } from '../utils';
 
 /**
  * SohaPay payment gateway helper.
- *
+ * <br>
  * NOTE: Our test card deprecated, so we couldn't test this gateway thoroghly.
+ * <br>
+ * Hàm hỗ trợ thanh toán qua SohaPay
+ *<br>
+ * Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này
  *
  * @example
  * import { SohaPay } from 'vn-payments';
@@ -30,6 +34,14 @@ import { toUpperCase, hashHmac, pack } from '../utils';
  * this.response.end();
  */
 class SohaPay {
+	/**
+	 * Instantiate a SohaPay checkout helper
+	 * <br>
+	 * Khởi tạo hàm thanh toán SohaPay
+	 *
+	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @return {void}
+	 */
 	constructor(config = {}) {
 		this.config = Object.assign({}, config);
 		SohaPay.configSchema.validate(this.config);
@@ -37,8 +49,9 @@ class SohaPay {
 
 	/**
 	 * Build checkout URL to redirect to the payment gateway
-	 *
-	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder
+	 * <br>
+	 * Hàm xây dựng url để redirect qua Soha gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
 	 * @return {Promise<URL>}    The URL object used to redirect
 	 */
 	buildCheckoutUrl(payload) {
@@ -106,7 +119,8 @@ class SohaPay {
 
 	/**
 	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
-	 *
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
 	 * @param {SohaPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
@@ -149,10 +163,10 @@ class SohaPay {
 	/**
 	 *
 	 * Verify return query string from SohaPay using enclosed secureCode string
-	 *
+	 * <br>
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)
+	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> Dữ liệu được trả về từ GET handler (`response.query`)
 	 * @return {SohaPayReturnObject}
 	 * @return {Promise<Object>}
 	 */
@@ -297,6 +311,8 @@ SohaPay.VERSION = '2';
 
 /**
  * SohaPay test configs
+ * <br>
+ * Cấu hình dùng thử SohaPay
  */
 SohaPay.TEST_CONFIG = {
 	merchantCode: 'test',
