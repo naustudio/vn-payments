@@ -290,7 +290,7 @@ Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu O
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line251">line 251</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -316,7 +316,7 @@ Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu O
 <div class="description">
     OnePayDomestic test configs
 <br>
-Cấu hình dùng thử OnePayDomestic
+Cấu hình dùng thử OnePay Domestic
 </div>
 
 
@@ -354,7 +354,7 @@ Cấu hình dùng thử OnePayDomestic
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line288">line 288</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line289">line 289</a>
     </li></ul></dd>
     
 
@@ -417,7 +417,7 @@ Cấu hình dùng thử OnePayDomestic
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line160">line 160</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -445,7 +445,7 @@ Cấu hình dùng thử OnePayDomestic
     
 
     
-    <h4 class="name" id=".getReturnUrlStatus"><span class="type-signature">(static) </span>getReturnUrlStatus<span class="signature">(responseCode, locale)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getReturnUrlStatus"><span class="type-signature">(static) </span>getReturnUrlStatus<span class="signature">(responseCode, locale)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -577,7 +577,7 @@ Cấu hình dùng thử OnePayDomestic
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line44">line 44</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -600,6 +600,28 @@ Cấu hình dùng thử OnePayDomestic
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -719,7 +741,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line38">line 38</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -786,8 +808,8 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
     Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 <br>
 Build the schema in subclass
-<br><br>
-Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
+<br>
+Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
 <br>
 Cấu trúc dữ liệu được thêm vào trong lớp con của lớp OnePay
 </div>
@@ -887,7 +909,7 @@ Cấu trúc dữ liệu được thêm vào trong lớp con của lớp OnePay
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line137">line 137</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -1029,7 +1051,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line221">line 221</a>
+        <a href="onepay_OnePayDomestic.js.html">onepay/OnePayDomestic.js</a>, <a href="onepay_OnePayDomestic.js.html#line222">line 222</a>
     </li></ul></dd>
     
 
@@ -1097,7 +1119,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Feb 07 2018 12:23:48 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Feb 07 2018 16:28:00 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

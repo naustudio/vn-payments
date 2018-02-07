@@ -39,7 +39,8 @@ class OnePayDomestic extends OnePay {
 	/**
 	 *
 	 * @param {*} responseCode Response code from gateway <br> Mã trả về từ cổng thanh toán
-	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
+	 * @param {*} 	locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
+	 * @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -283,7 +284,7 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 /**
  * OnePayDomestic test configs
  * <br>
- * Cấu hình dùng thử OnePayDomestic
+ * Cấu hình dùng thử OnePay Domestic
  */
 OnePayDomestic.TEST_CONFIG = {
 	accessCode: 'D67342C2',
