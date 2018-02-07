@@ -122,7 +122,7 @@ class VNPay {
 	 * @param {VNPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
-		VNPay.dataSchema.validate(payload);
+		VNPay.checkoutSchema.validate(payload);
 	}
 
 	/**
@@ -358,7 +358,7 @@ class VNPay {
  * The schema is based on field data requirements from VNPay's dev document
  * @type {SimpleSchema}
  */
-VNPay.dataSchema = new SimpleSchema({
+VNPay.checkoutSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
 	amount               : { type: SimpleSchema.Integer, max: 9999999999 },
 	clientIp             : { type: String, max: 16 },

@@ -145,7 +145,7 @@ class NganLuong {
 	 * @param {NganLuongCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
-		NganLuong.dataSchema.validate(payload);
+		NganLuong.checkoutSchema.validate(payload);
 	}
 
 	/**
@@ -523,7 +523,7 @@ class NganLuong {
  * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng
  * @type {SimpleSchema}
  */
-NganLuong.dataSchema = new SimpleSchema({
+NganLuong.checkoutSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
 	amount               : { type: SimpleSchema.Integer },
 	clientIp             : { type: String, optional: true, max: 16 },

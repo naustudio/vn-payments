@@ -359,3 +359,257 @@ declare namespace onepay {
 		vpc_Version?: string;
 	}
 }
+
+/**
+ * Ngan Luong payment gateway helper.
+ *
+ * Supports VN domestic ATM cards.
+ *
+ * @extends NganLuong
+ */
+declare class NganLuong {
+	/**
+	 * NganLuong configSchema
+	 */
+	static configSchema: SimpleSchema;
+
+	/**
+	 * NganLuong dataSchema
+	 */
+	static dataSchema: SimpleSchema;
+
+	/**
+	 * NganLuong API Version
+	 */
+	static VERSION: string;
+
+	/**
+	 * NganLuong API command string
+	 */
+	static COMMAND: string;
+
+	/**
+	 * NganLuong VND currency code
+	 */
+	static CURRENCY_VND: string;
+
+	/**
+	 * NganLuong English locale code
+	 */
+	static LOCALE_EN: string;
+
+	/**
+	 * NganLuong Vietnamese locale code
+	 */
+	static LOCALE_VN: string;
+
+	/**
+	 * Instantiate a NganLuong checkout helper
+	 * <br>
+	 * Khởi tạo hàm thanh toán NganLuong
+	 *
+	 * @param  {Object} config check NganLuong.configSchema for data type requirements <br> Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @return {void}
+	 */
+	constructor(config: nganluong.NganLuongConfig);
+
+	/**
+	 * Build checkoutUrl to redirect to the payment gateway
+	 * <br>
+	 * Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 *
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * @return {Promise<URL>} buildCheckoutUrl promise
+	 */
+	buildCheckoutUrl(payload: nganluong.NganLuongCheckoutPayload): Promise<URL>;
+}
+
+export { NganLuong };
+
+declare namespace nganluong {
+	export interface NganLuongConfig {
+		/**
+		 * NganLuong payment gateway (API Url to send payment request)
+		 */
+		paymentGateway: string;
+		/**
+		 * NganLuong merchant id
+		 */
+		merchant: string;
+		/**
+		 * NganLuong receiver email, who will receive the money (usually is merchant email)
+		 */
+		receiverEmail: string;
+		/**
+		 * NganLuong merchant secret string
+		 */
+		secureSecret: string;
+	}
+
+	export interface NganLuongCheckoutPayload {
+		/**
+		 * optional: true
+		 */
+		createdDate?: string;
+		/**
+		 *   The payment mount
+		 */
+		amount: number;
+		/**
+		 *  optional: true, max: 16
+		 */
+		clientIp?: string;
+		/**
+		 *   allowedValues: ['vnd', 'VND', 'USD', 'usd']
+		 */
+		currency: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingCity?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingCountry?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingPostCode?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingStateProvince?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingStreet?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		customerId?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryAddress?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryCity?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryCountry?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryProvince?: string;
+		/**
+		 *   allowedValues: ['vi', 'en']
+		 */
+		locale: string;
+		/**
+		 *   max: 34
+		 */
+		orderId: string;
+		/**
+		 *   max: 255, regEx: SimpleSchema.RegEx.Email
+		 */
+		receiverEmail: string;
+		/**
+		 *   allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
+		 */
+		paymentMethod: string;
+		/**
+		 *   max: 50
+		 */
+		bankCode: string;
+		/**
+		 *   optional: true, allowedValues: ['1', '2']
+		 */
+		paymentType?: string;
+		/**
+		 *   optional: true, max: 500
+		 */
+		orderInfo?: string;
+		/**
+		 *   Integer, optional: true
+		 */
+		taxAmount?: number;
+		/**
+		 *  Integer, optional: true
+		 */
+		discountAmount?: number;
+		/**
+		 *  Integer, optional: true
+		 */
+		feeShipping?: number;
+		/**
+		 *  max: 255, regEx: SimpleSchema.RegEx.Email
+		 */
+		customerEmail: string;
+		/**
+		 *   max: 255
+		 */
+		customerPhone: string;
+		/**
+		 *   max: 255
+		 */
+		customerName: string;
+		/**
+		 *   max: 255
+		 */
+		returnUrl: string;
+		/**
+		 *   max: 255, optional: true
+		 */
+		cancelUrl?: string;
+		/**
+		 *   Integer, optional: true; minutes
+		 */
+		timeLimit?: number;
+		/**
+		 *  max: 255, optional: true
+		 */
+		affiliateCode?: string;
+		/**
+		 *   optional: true
+		 */
+		totalItem?: string;
+		/**
+		 *   max: 40
+		 */
+		transactionId: string;
+		/**
+		 *   max: 32
+		 */
+		nganluongSecretKey: string;
+		/**
+		 *   max: 16
+		 */
+		nganluongMerchant: string;
+		/**
+		 *   max: 32
+		 */
+		nganluongCommand: string;
+		/**
+		 *   max: 3
+		 */
+		nganluongVersion: string;
+		/**
+		 *   regEx: SimpleSchema.RegEx.Url
+		 */
+		paymentGateway: string;
+		/**
+		 *
+		 */
+		merchant: string;
+		/**
+		 *
+		 */
+		receiverEmail: string;
+		/**
+		 *
+		 */
+		secureSecret: string;
+	}
+}
