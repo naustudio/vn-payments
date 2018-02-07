@@ -8,6 +8,8 @@ import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
 
 /**
  * VNPay payment gateway helper
+ * <br>
+ * Hàm hỗ trợ thanh toán qua VNPay
  *
  * @example
  * import { VNPay } from 'vn-payments';
@@ -29,8 +31,9 @@ import { vnPayDateFormat, createMd5Hash, toUpperCase } from '../utils';
 class VNPay {
 	/**
 	 * Instantiate a VNPay checkout helper
-	 *
-	 * @param  {Object} config check VNPay.configSchema for data type requirements
+	 * <br>
+	 * Khởi tạo hàm thanh toán VNPay
+	 * @param  {Object} config check VNPay.configSchema for data type requirements <br> Xem VNPay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
 	constructor(config) {
@@ -41,10 +44,10 @@ class VNPay {
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
-	 *
+	 * <br>
 	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
-	 * @param  {VNPayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
+	 * @param  {VNPayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
@@ -117,7 +120,13 @@ class VNPay {
 	}
 
 	/**
+	 *
+	 * @param {NganLuongCheckoutPayload} payload
+	 */
+	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
 	 *
 	 * @param {VNPayCheckoutPayload} payload
 	 */
@@ -168,10 +177,10 @@ class VNPay {
 	 */
 	/**
 	 * Verify return query string from VNPay using enclosed vnp_SecureHash string
-	 *
+	 * <br>
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)
+	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
 	 * @return {Promise<VNPayReturnObject>}
 	 */
 	verifyReturnUrl(query) {
@@ -230,9 +239,11 @@ class VNPay {
 	}
 
 	/**
-	 *
-	 * @param {*} responseCode Responde code from gateway
-	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 * Get known response code status
+	 * <br>
+	 * Lấy chuỗi trạng thái từ response code đã biết
+	 * @param {*} responseCode Responde code from gateway <br> Mã trả về từ cổng thanh toán
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
 	 *  @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
@@ -356,6 +367,8 @@ class VNPay {
 /* prettier-ignore */
 /**
  * The schema is based on field data requirements from VNPay's dev document
+ * <br>
+ * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu VNPay
  * @type {SimpleSchema}
  */
 VNPay.dataSchema = new SimpleSchema({
