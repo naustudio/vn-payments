@@ -362,10 +362,10 @@ declare namespace onepay {
 
 /**
  * Ngan Luong payment gateway helper.
- *
  * Supports VN domestic ATM cards.
  *
- * @extends NganLuong
+ * Hàm hỗ trợ thanh toán qua Ngân Lượng
+ *
  */
 declare class NganLuong {
 	/**
@@ -606,10 +606,217 @@ declare namespace nganluong {
 		/**
 		 *
 		 */
-		receiverEmail: string;
+		secureSecret: string;
+	}
+}
+
+/**
+ * SohaPay payment gateway helper.
+ * NOTE: Our test card deprecated, so we couldn't test this gateway thoroghly.
+ *
+ * Hàm hỗ trợ thanh toán qua SohaPay
+ * Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này
+ *
+ */
+declare class SohaPay {
+	/**
+	 * SohaPay configSchema
+	 */
+	static configSchema: SimpleSchema;
+
+	/**
+	 * SohaPay dataSchema
+	 */
+	static checkoutSchema: SimpleSchema;
+
+	/**
+	 * SohaPay API Version
+	 */
+	static VERSION: string;
+
+	/**
+	 * SohaPay English locale code
+	 */
+	static LOCALE_EN: string;
+
+	/**
+	 * SohaPay Vietnamese locale code
+	 */
+	static LOCALE_VN: string;
+
+	/**
+	 * Instantiate a SohaPay checkout helper
+	 * <br>
+	 * Khởi tạo hàm thanh toán SohaPay
+	 *
+	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @return {void}
+	 */
+	constructor(config: sohapay.SohaPayConfig);
+
+	/**
+	 * Build checkoutUrl to redirect to the payment gateway
+	 * <br>
+	 * Hàm xây dựng url để redirect qua SohaPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 *
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * @return {Promise<URL>} buildCheckoutUrl promise
+	 */
+	buildCheckoutUrl(payload: sohapay.SohaPayCheckoutPayload): Promise<URL>;
+}
+
+export { SohaPay };
+
+declare namespace sohapay {
+	export interface SohaPayConfig {
 		/**
-		 *
+		 * SohaPay merchant id
+		 */
+		merchantCode: string;
+		/**
+		 * SohaPay payment gateway (API Url to send payment request)
+		 */
+		paymentGateway: string;
+		/**
+		 * NganLuong merchant secret string
 		 */
 		secureSecret: string;
+	}
+
+	export interface SohaPayCheckoutPayload {
+		/**
+		 *  max: 16
+		 */
+		language: string;
+
+		/**
+		 *  max: 34
+		 */
+		orderId: string;
+
+		/**
+		 * regEx: SimpleSchema.RegEx.Url
+		 * max: 24
+		 */
+		customerEmail: string;
+
+		/**
+		 * max: 15
+		 */
+		customerPhone: string;
+
+		/**
+		 * max: 255
+		 */
+		returnUrl: string;
+
+		/**
+		 * max: 9999999999
+		 */
+		amount: number;
+
+		/**
+		 * max: 1
+		 */
+		paymentType: string;
+
+		/**
+		 * max: 8
+		 */
+		siteCode: string;
+
+		/**
+		 * max: 255
+		 */
+		transactionInfo: string;
+
+		/**
+		 * max: 1
+		 */
+		version: string;
+
+		/**
+		 * optional: true
+		 * max: 2
+		 */
+		locale?: string;
+
+		/**
+		 * optional: true
+		 * max: 4
+		 */
+		currency?: string;
+
+		/**
+		 * optional: true
+		 * max: 64
+		 */
+		billingCity?: string;
+
+		/**
+		 * optional: true
+		 * max: 2
+		 */
+		billingCountry?: string;
+
+		/**
+		 * optional: true
+		 * max: 64
+		 */
+		billingPostCode?: string;
+
+		/**
+		 * optional: true
+		 * max: 64
+		 */
+		billingStateProvince?: string;
+
+		/**
+		 * optional: true
+		 * max: 64
+		 */
+		billingStreet?: string;
+
+		/**
+		 * optional: true
+		 * max: 255
+		 */
+		deliveryAddress?: string;
+
+		/**
+		 * optional: true
+		 * max: 255
+		 */
+		deliveryCity?: string;
+
+		/**
+		 * optional: true
+		 * max: 255
+		 */
+		deliveryCountry?: string;
+
+		/**
+		 * optional: true
+		 * max: 255
+		 */
+		deliveryProvince?: string;
+
+		/**
+		 * optional: true
+		 * max: 15
+		 */
+		clientIp?: string;
+
+		/**
+		 * optional: true
+		 * max: 40
+		 */
+		transactionId?: string;
+
+		/**
+		 * optional: true
+		 * max: 40
+		 */
+		customerId?: string;
 	}
 }

@@ -130,7 +130,7 @@ class SohaPay {
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
 		return {
-			language             : SohaPay.LANGUAGE_VN,
+			language             : SohaPay.LOCALE_VN,
 			version           	 : SohaPay.VERSION,
 		};
 	}
@@ -305,8 +305,8 @@ SohaPay.checkoutSchema = new SimpleSchema({
 	customerId				: { type: String, optional: true, max: 255 },
 });
 
-SohaPay.LANGUAGE_VN = 'vi';
-SohaPay.LANGUAGE_EN = 'en';
+SohaPay.LOCALE_VN = 'vi';
+SohaPay.LOCALE_EN = 'en';
 SohaPay.VERSION = '2';
 
 /**
