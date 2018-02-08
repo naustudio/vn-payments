@@ -445,7 +445,7 @@ declare class NganLuong {
 	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
 	 * @return {Promise<nganluong.NganLuongReturnObject>}
 	 */
-	verifyReturnUrl(query: object): nganluong.NganLuongReturnObject
+	verifyReturnUrl(query: object): Promise<nganluong.NganLuongReturnObject>;
 }
 
 export { NganLuong };
@@ -634,130 +634,130 @@ declare namespace nganluong {
 	}
 
 	export interface NganLuongReturnObject {
-		/** 
+		/**
 		 * whether the payment succeeded or not
 		 */
-		isSuccess: boolean
-		/** 
+		isSuccess: boolean;
+		/**
 		 * Approve or error message based on response code
 		 */
-		message: string
-		/** 
+		message: string;
+		/**
 		 * merchant ID, should be same with checkout request
 		 */
-		merchant: string
-		/** 
+		merchant: string;
+		/**
 		 * merchant's transaction ID, should be same with checkout request
 		 */
-		transactionId: string
-		/** 
+		transactionId: string;
+		/**
 		 * amount paid by customer
 		 */
-		amount: string
-		/** 
+		amount: string;
+		/**
 		 * order info, should be same with checkout request
 		 */
-		orderInfo: string
-		/** 
+		orderInfo: string;
+		/**
 		 * response code, payment has errors if it is non-zero
 		 */
-		responseCode: string
-		/** 
+		responseCode: string;
+		/**
 		 * bank code of the bank where payment was occurred
 		 */
-		bankCode: string
-		/** 
+		bankCode: string;
+		/**
 		 * Gateway's own transaction ID, used to look up at Gateway's side
 		 */
-		gatewayTransactionNo: string
-		/** 
+		gatewayTransactionNo: string;
+		/**
 		 * e.g: '00'
 		 */
-		error_code: string
-		/** 
+		error_code: string;
+		/**
 		 * e.g: '43614-fc2a3698ee92604d5000434ed129d6a8'
 		 */
-		token: string
-		/** 
+		token: string;
+		/**
 		 * e.g: ''
 		 */
-		description: string
-		/** 
+		description: string;
+		/**
 		 * e.g: '00'
 		 */
-		transaction_status: string
-		/** 
+		transaction_status: string;
+		/**
 		 * e.g: 'tung.tran@naustud.io'
 		 */
-		receiver_email: string
-		/** 
+		receiver_email: string;
+		/**
 		 * e.g: 'adidas'
 		 */
-		order_code: string
-		/** 
+		order_code: string;
+		/**
 		 * e.g: '90000'
 		 */
-		total_amount: string
-		/** 
+		total_amount: string;
+		/**
 		 * e.g: 'ATM_ONLINE'
 		 */
-		payment_method: string
-		/** 
+		payment_method: string;
+		/**
 		 * e.g: 'BAB'
 		 */
-		bank_code: string
-		/** 
+		bank_code: string;
+		/**
 		 * e.g: '2'
 		 */
-		payment_type: string
-		/** 
+		payment_type: string;
+		/**
 		 * e.g: 'Test'
 		 */
-		order_description: string
-		/** 
+		order_description: string;
+		/**
 		 * e.g: '0'
 		 */
-		tax_amount: string
-		/** 
+		tax_amount: string;
+		/**
 		 * e.g: '0'
 		 */
-		discount_amount: string
-		/** 
+		discount_amount: string;
+		/**
 		 * e.g: '0'
 		 */
-		fee_shipping: string
-		/** 
+		fee_shipping: string;
+		/**
 		 * e.g: 'http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fnganluong%2Fcallback'
 		 */
-		return_url: string
-		/** 
+		return_url: string;
+		/**
 		 * e.g: 'http%3A%2F%2Flocalhost%3A8080%2F'
 		 */
-		cancel_url: string
-		/** 
+		cancel_url: string;
+		/**
 		 * e.g: 'Nguyen Hue'
 		 */
-		buyer_fullname: string
-		/** 
+		buyer_fullname: string;
+		/**
 		 * e.g: 'tu.nguyen@naustud.io'
 		 */
-		buyer_email: string
-		/** 
+		buyer_email: string;
+		/**
 		 * e.g: '0948231723'
 		 */
-		buyer_mobile: string
-		/** 
+		buyer_mobile: string;
+		/**
 		 * e.g: 'TEst'
 		 */
-		buyer_address: string
-		/** 
+		buyer_address: string;
+		/**
 		 * e.g: ''
 		 */
-		affiliate_code: string
-		/** 
+		affiliate_code: string;
+		/**
 		 * e.g: '19563733'
 		 */
-		transaction_id: string
+		transaction_id: string;
 	}
 }
 
@@ -814,6 +814,30 @@ declare class SohaPay {
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload: sohapay.SohaPayCheckoutPayload): Promise<URL>;
+
+	/**
+	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
+	 * @param {SohaPayCheckoutPayload} payload
+	 */
+	validateCheckoutPayload(payload: sohapay.SohaPayCheckoutPayload): Promise<URL>;
+
+	/**
+	 * @return {SohaPayCheckoutPayload} default payload object
+	 */
+	checkoutPayloadDefaults: sohapay.SohaPayCheckoutPayload;
+
+	/**
+	 * Verify return query string from SohaPay using enclosed secureCode string
+	 * <br>
+	 *
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> Dữ liệu được trả về từ GET handler (`response.query`)
+	 * @return {Promise<sohapay.SohaPayReturnObject>}
+	 */
+	verifyReturnUrl(query: object): Promise<sohapay.SohaPayReturnObject>;
 }
 
 export { SohaPay };
@@ -969,5 +993,102 @@ declare namespace sohapay {
 		 * max: 40
 		 */
 		customerId?: string;
+	}
+
+	export interface SohaPayReturnObject {
+		/**
+		 * whether the payment succeeded or not
+		 */
+		isSuccess: boolean;
+
+		/**
+		 *
+		 */
+		message: string;
+
+		/**
+		 * transaction id
+		 */
+		transactionId: string;
+
+		/**
+		 *  customer email
+		 */
+		orderEmail: string;
+
+		/**
+		 *  session token came from SohaPay
+		 */
+		orderSession: string;
+
+		/**
+		 *  amount paid by customer
+		 */
+		amount: string;
+
+		/**
+		 * unique code assigned by SohaPay for merchant
+		 */
+		siteCode: string;
+
+		/**
+		 * response status code of SohaPay
+		 */
+		responseCode: string;
+
+		/**
+		 * description of the payment
+		 */
+		transactionInfo: string;
+		/**
+		 * response message from SohaPay
+		 */
+		responseMessage: string;
+
+		/**
+		 * checksum of the returned data, used to verify data integrity
+		 */
+		secureCode: string;
+
+		/**
+		 *  Error text returned from SohaPay Gateway
+		 *  e.g: 'Giao dịch thanh toán bị huỷ bỏ'
+		 */
+		error_text: string;
+
+		/**
+		 * e.g: 'node-2018-01-19T131933.811Z'
+		 */
+		order_code: string;
+
+		/**
+		 *  e.g: 'dev@naustud.io'
+		 */
+		order_email: string;
+
+		/**
+		 * e.g: 'd3bdef93fa01cd37f7e426fa25f5d1a0'
+		 */
+		order_session: string;
+
+		/**
+		 * e.g: '90000'
+		 */
+		price: string;
+
+		/**
+		 * e.g: 'test'
+		 */
+		site_code: string;
+
+		/**
+		 * e.g: 'Thanh toan giay adidas'
+		 */
+		transaction_info: string;
+
+		/**
+		 * e.g: FC5283C6B93C1D8F9A9329293DA38FFC3204FA6CE75661972419DAA6E5A1B7B5
+		 */
+		secure_code: string;
 	}
 }
