@@ -422,6 +422,30 @@ declare class NganLuong {
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload: nganluong.NganLuongCheckoutPayload): Promise<URL>;
+
+	/**
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 *
+	 * @param {NganLuongCheckoutPayload} payload
+	 */
+	validateCheckoutPayload(payload: nganluong.NganLuongCheckoutPayload): void;
+
+	/**
+	 * @return {NganLuongCheckoutPayload} default payload object
+	 */
+	checkoutPayloadDefaults: nganluong.NganLuongCheckoutPayload;
+
+	/**
+	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
+	 * <br>
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
+	 * @return {Promise<nganluong.NganLuongReturnObject>}
+	 */
+	verifyReturnUrl(query: object): nganluong.NganLuongReturnObject
 }
 
 export { NganLuong };
@@ -607,6 +631,133 @@ declare namespace nganluong {
 		 *
 		 */
 		secureSecret: string;
+	}
+
+	export interface NganLuongReturnObject {
+		/** 
+		 * whether the payment succeeded or not
+		 */
+		isSuccess: boolean
+		/** 
+		 * Approve or error message based on response code
+		 */
+		message: string
+		/** 
+		 * merchant ID, should be same with checkout request
+		 */
+		merchant: string
+		/** 
+		 * merchant's transaction ID, should be same with checkout request
+		 */
+		transactionId: string
+		/** 
+		 * amount paid by customer
+		 */
+		amount: string
+		/** 
+		 * order info, should be same with checkout request
+		 */
+		orderInfo: string
+		/** 
+		 * response code, payment has errors if it is non-zero
+		 */
+		responseCode: string
+		/** 
+		 * bank code of the bank where payment was occurred
+		 */
+		bankCode: string
+		/** 
+		 * Gateway's own transaction ID, used to look up at Gateway's side
+		 */
+		gatewayTransactionNo: string
+		/** 
+		 * e.g: '00'
+		 */
+		error_code: string
+		/** 
+		 * e.g: '43614-fc2a3698ee92604d5000434ed129d6a8'
+		 */
+		token: string
+		/** 
+		 * e.g: ''
+		 */
+		description: string
+		/** 
+		 * e.g: '00'
+		 */
+		transaction_status: string
+		/** 
+		 * e.g: 'tung.tran@naustud.io'
+		 */
+		receiver_email: string
+		/** 
+		 * e.g: 'adidas'
+		 */
+		order_code: string
+		/** 
+		 * e.g: '90000'
+		 */
+		total_amount: string
+		/** 
+		 * e.g: 'ATM_ONLINE'
+		 */
+		payment_method: string
+		/** 
+		 * e.g: 'BAB'
+		 */
+		bank_code: string
+		/** 
+		 * e.g: '2'
+		 */
+		payment_type: string
+		/** 
+		 * e.g: 'Test'
+		 */
+		order_description: string
+		/** 
+		 * e.g: '0'
+		 */
+		tax_amount: string
+		/** 
+		 * e.g: '0'
+		 */
+		discount_amount: string
+		/** 
+		 * e.g: '0'
+		 */
+		fee_shipping: string
+		/** 
+		 * e.g: 'http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fnganluong%2Fcallback'
+		 */
+		return_url: string
+		/** 
+		 * e.g: 'http%3A%2F%2Flocalhost%3A8080%2F'
+		 */
+		cancel_url: string
+		/** 
+		 * e.g: 'Nguyen Hue'
+		 */
+		buyer_fullname: string
+		/** 
+		 * e.g: 'tu.nguyen@naustud.io'
+		 */
+		buyer_email: string
+		/** 
+		 * e.g: '0948231723'
+		 */
+		buyer_mobile: string
+		/** 
+		 * e.g: 'TEst'
+		 */
+		buyer_address: string
+		/** 
+		 * e.g: ''
+		 */
+		affiliate_code: string
+		/** 
+		 * e.g: '19563733'
+		 */
+		transaction_id: string
 	}
 }
 
