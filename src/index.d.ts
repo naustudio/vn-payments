@@ -612,7 +612,7 @@ declare namespace nganluong {
 
 /**
  * SohaPay payment gateway helper.
- * NOTE: Our test card deprecated, so we couldn't test this gateway thoroghly.
+ * NOTE: Our test card deprecated, so we couldn't test this gateway thoroughly.
  *
  * Hàm hỗ trợ thanh toán qua SohaPay
  * Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này

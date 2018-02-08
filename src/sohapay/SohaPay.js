@@ -9,7 +9,7 @@ import { toUpperCase, hashHmac, pack } from '../utils';
 /**
  * SohaPay payment gateway helper.
  * <br>
- * NOTE: Our test card deprecated, so we couldn't test this gateway thoroghly.
+ * NOTE: Our test card deprecated, so we couldn't test this gateway thoroughly.
  * <br>
  * Hàm hỗ trợ thanh toán qua SohaPay
  *<br>
