@@ -10,7 +10,7 @@ import { createMd5Hash } from '../utils';
 /**
  * NganLuong payment gateway helper
  * <br>
- * Hàm hỗ trợ thanh toán qua Ngân Lượng
+ * _Hàm hỗ trợ thanh toán qua Ngân Lượng_
  *
  * @example
  * import { NganLuong } from 'vn-payments';
@@ -34,9 +34,9 @@ class NganLuong {
 	/**
 	 * Instantiate a NganLuong checkout helper
 	 * <br>
-	 * Khởi tạo hàm thanh toán NganLuong
+	 * _Khởi tạo hàm thanh toán NganLuong_
 	 *
-	 * @param  {Object} config check NganLuong.configSchema for data type requirements <br> Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @param  {Object} config check NganLuong.configSchema for data type requirements <br> _Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config) {
@@ -48,9 +48,9 @@ class NganLuong {
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
 	 * <br>
-	 * Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 * _Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)_
 	 *
-	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
@@ -140,7 +140,7 @@ class NganLuong {
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 *
 	 * @param {NganLuongCheckoutPayload} payload
 	 */
@@ -149,7 +149,10 @@ class NganLuong {
 	}
 
 	/**
-	 * @return {NganLuongCheckoutPayload} default payload object
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {NganLuongCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -199,10 +202,10 @@ class NganLuong {
 	/**
 	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
 	 *<br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment_
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
-	 * @return {Promise<NganLuongReturnObject>}
+	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
+	 * @return {Promise<NganLuongReturnObject>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
@@ -293,10 +296,10 @@ class NganLuong {
 	/**
 	 * Get known response code status
 	 * <br>
-	 * Lấy chuỗi trạng thái từ response code đã biết
-	 * @param  {string} responseCode Response code from gateway <br> Mã trả về từ cổng thanh toán
-	 * @param  {string} locale       Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
-	 * @return {string}              A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
+	 * _Lấy chuỗi trạng thái từ response code đã biết_
+	 * @param  {string} responseCode Response code from gateway <br> _Mã trả về từ cổng thanh toán_
+	 * @param  {string} locale       Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam_
+	 * @return {string}              A string contains error status converted from response code <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -520,7 +523,7 @@ class NganLuong {
 /**
  * The schema is based on field data requirements from NganLuong's dev document
  * <br>
- * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng
+ * _Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng_
  * @type {SimpleSchema}
  */
 NganLuong.checkoutSchema = new SimpleSchema({
@@ -580,7 +583,7 @@ NganLuong.LOCALE_VN = 'vi';
 /**
  * NganLuong test configs
  * <br>
- * Cấu hình dùng thử Ngân Lượng
+ * _Cấu hình dùng thử Ngân Lượng_
  */
 NganLuong.TEST_CONFIG = {
 	paymentGateway: 'https://sandbox.nganluong.vn:8088/nl30/checkout.api.nganluong.post.php',

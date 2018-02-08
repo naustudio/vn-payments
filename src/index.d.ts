@@ -97,6 +97,57 @@ declare class OnePay {
 declare class OnePayDomestic extends OnePay {
 	/**
 	 *
+	 * @param {*} responseCode Response code from gateway. <br> _Mã trả về từ cổng thanh toán._
+	 * @param {*} 	locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese. <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, Việt Nam là 'vn'_
+	 * @return {string}  A string contains error status converted from response code. <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
+	 */
+	static getReturnUrlStatus(responseCode: Object, locale: string): string;
+
+	/**
+	 * Instantiate a OnePayDomestic checkout helper
+	 * <br>
+	 * _Khởi tạo hàm thanh toán OnePayDomestic_
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
+	 * @return {void}
+	 */
+	constructor(config: onepay.OnePayConfig);
+
+	/**
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Build the schema in subclass.
+	 * <br>
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
+	 * @param {OnePayCheckoutPayload} payload
+	 * @override
+	 */
+	validateCheckoutPayload(payload: onepay.OnePayCheckoutPayload): void;
+
+	/**
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {OnePayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
+	 */
+	checkoutPayloadDefaults: onepay.OnePayCheckoutPayload;
+
+	/**
+	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
+	 *
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
+	 *
+	 * @param {*} query Query data object from GET handler (`response.query`). <br> _Object query trả về từ GET handler_
+	 * @returns { Promise<OnePayDomesticReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
+	 */
+	verifyReturnUrl(query: Promise<onepay.OnePayDomesticReturnObject>): Promise<onepay.OnePayDomesticReturnObject>;
+}
+
+export { OnePayDomestic };
+
+declare class OnePayInternational extends OnePay {
+	/**
+	 *
 	 * @param {*} responseCode Responde code from gateway
 	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
 	 * @return {string} Localized status string from the response code
@@ -104,40 +155,55 @@ declare class OnePayDomestic extends OnePay {
 	static getReturnUrlStatus(responseCode: Object, locale: string): string;
 
 	/**
-	 * Instantiate a OnePayDomestic checkout helper
-	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 * Instantiate a OnePayInternational checkout helper
+	 *<br>
+	 * _Khởi tạo hàm thanh toán OnePayInternational_
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config: onepay.OnePayConfig);
 
 	/**
-	 *
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Build the schema in subclass.
+	 * <br>
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
 	validateCheckoutPayload(payload: onepay.OnePayCheckoutPayload): void;
 
 	/**
-	 * @return {OnePayCheckoutPayload} default payload object
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {OnePayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
 	 */
 	checkoutPayloadDefaults: onepay.OnePayCheckoutPayload;
 
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
+	 * <br>
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
 	 *
 	 * @param {*} query
-	 * @returns { Promise<OnePayDomesticReturnObject> }
+	 * @returns { Promise<OnePayInternationalReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
-	verifyReturnUrl(query: Promise<onepay.OnePayDomesticReturnObject>): Promise<onepay.OnePayDomesticReturnObject>;
+	verifyReturnUrl(
+		query: onepay.OnePayInternationalReturnObject
+	): Promise<onepay.OnePayInternationalReturnObject>;
 }
 
-export { OnePayDomestic };
+export { OnePayInternational };
 
 declare namespace onepay {
 	export interface OnePayConfig {
+		/**
+		 * Unique merchant code assigned by OnePay
+		 */
+		merchant: string;
 		/**
 		 *
 		 */
@@ -357,6 +423,249 @@ declare namespace onepay {
 		 * e.g: 2
 		 */
 		vpc_Version?: string;
+	}
+
+	export interface OnePayInternationalReturnObject {
+		/**
+		 * whether the payment succeeded or not
+		 */
+		isSuccess: boolean;
+		/**
+		 * amount paid by customer, already divided by 100
+		 */
+		amount: number;
+		/**
+		 * should be same with checkout request
+		 */
+		command: string;
+		/**
+		 * currency code, should be same with checkout request
+		 */
+		currencyCode: string;
+		/**
+		 * Gateway's own transaction ID, used to look up at Gateway's side
+		 */
+		gatewayTransactionNo: string;
+		/**
+		 * locale code, should be same with checkout request
+		 */
+		locale: string;
+		/**
+		 * merchant ID, should be same with checkout request
+		 */
+		merchant: string;
+		/**
+		 * Approve or error message based on response code
+		 */
+		message: string;
+		/**
+		 * merchant's order ID, should be same with checkout request
+		 */
+		orderId: string;
+		/**
+		 * response code, payment has errors if it is non-zero
+		 */
+		responseCode: string;
+		/**
+		 * checksum of the returned data, used to verify data integrity
+		 */
+		secureHash: string;
+		/**
+		 * merchant's transaction ID, should be same with checkout request
+		 */
+		transactionId: string;
+		/**
+		 * should be same with checkout request
+		 */
+		version: string;
+		/**
+		 * e.g: 970436
+		 */
+		vpc_AdditionData?: string;
+		/**
+		 * e.g: 1000000
+		 */
+		vpc_Amount?: string;
+		/**
+		 * e.g: pay
+		 */
+		vpc_Command?: string;
+		/**
+		 * e.g: vn
+		 */
+		vpc_Locale?: string;
+		/**
+		 * e.g: ONEPAY
+		 */
+		vpc_Merchant?: string;
+		/**
+		 * e.g: TEST_15160802610161733380665
+		 */
+		vpc_MerchTxnRef?: string;
+		/**
+		 * e.g: TEST_15160802610161733380665
+		 */
+		vpc_OrderInfo?: string;
+		/**
+		 * e.g: B5CD330E2DC1B1C116A068366F69717F54AD77E1BE0C40E4E3700551BE9D5004
+		 */
+		vpc_SecureHash?: string;
+		/**
+		 * e.g: 1618136
+		 */
+		vpc_TransactionNo?: string;
+		/**
+		 * e.g: 0
+		 */
+		vpc_TxnResponseCode?: string;
+		/**
+		 * e.g: 2
+		 */
+		vpc_Version?: string;
+		/**
+		 * billing address' city
+		 */
+		billingCity: string;
+		/**
+		 *  billing address' country
+		 */
+		billingCountry: string;
+		/**
+		 * billing address' post code
+		 */
+		billingPostCode: string;
+		/**
+		 * billing address' state or province
+		 */
+		billingStateProvince: string;
+		/**
+		 * billing address and street name
+		 */
+		billingStreet: string;
+		/**
+		 * type of card used to pay, VC, MC, JC, AE
+		 */
+		card: string;
+		/**
+		 * e.g: 06
+		 */
+		vpc_3DSECI: string;
+		/**
+		 * e.g: N
+		 */
+		vpc_3DSenrolled: string;
+		/**
+		 * e.g: zklRMXTS2puX%2Btj0DwOJyq6T6s8%3D
+		 */
+		vpc_3DSXID: string;
+		/**
+		 * e.g: Unsupported
+		 */
+		vpc_AcqAVSRespCode: string;
+		/**
+		 * e.g: Unsupported
+		 */
+		vpc_AcqCSCRespCode: string;
+		/**
+		 * e.g: 00
+		 */
+		vpc_AcqResponseCode: string;
+		/**
+		 * e.g: 523190
+		 */
+		vpc_AuthorizeId: string;
+		/**
+		 * e.g: Hanoi
+		 */
+		vpc_AVS_City: string;
+		/**
+		 * e.g: VNM
+		 */
+		vpc_AVS_Country: string;
+		/**
+		 * e.g: 10000
+		 */
+		vpc_AVS_PostCode: string;
+		/**
+		 * e.g: Hoan+Kiem
+		 */
+		vpc_AVS_StateProv: string;
+		/**
+		 * e.g: 194+Tran+Quang+Khai
+		 */
+		vpc_AVS_Street01: string;
+		/**
+		 * e.g: Z
+		 */
+		vpc_AVSRequestCode: string;
+		/**
+		 * e.g: Unsupported
+		 */
+		vpc_AVSResultCode: string;
+		/**
+		 * e.g: 20180116
+		 */
+		vpc_BatchNo: string;
+		/**
+		 * e.g: VC
+		 */
+		vpc_Card: string;
+		/**
+		 * e.g: 88
+		 */
+		vpc_CardLevelIndicator: string;
+		/**
+		 * e.g: 400555xxxxxx0001
+		 */
+		vpc_CardNum: string;
+		/**
+		 * e.g: U
+		 */
+		vpc_CommercialCard: string;
+		/**
+		 * e.g: 3
+		 */
+		vpc_CommercialCardIndicator: string;
+		/**
+		 * e.g: Unsupported
+		 */
+		vpc_CSCResultCode: string;
+		/**
+		 * e.g: 8
+		 */
+		vpc_MarketSpecificData: string;
+		/**
+		 * e.g: Approved
+		 */
+		vpc_Message: string;
+		/**
+		 * e.g: 801615523190
+		 */
+		vpc_ReceiptNo: string;
+		/**
+		 * e.g: 8
+		 */
+		vpc_ReturnACI: string;
+		/**
+		 * e.g: ACC
+		 */
+		vpc_RiskOverallResult: string;
+		/**
+		 * e.g: 1234567890123456789
+		 */
+		vpc_TransactionIdentifier: string;
+		/**
+		 * e.g: 06
+		 */
+		vpc_VerSecurityLevel: string;
+		/**
+		 * e.g: E
+		 */
+		vpc_VerStatus: string;
+		/**
+		 * e.g: 3DS
+		 */
+		vpc_VerType: string;
 	}
 }
 
