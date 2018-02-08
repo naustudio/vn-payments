@@ -540,13 +540,13 @@ declare namespace nganluong {
 		 */
 		receiverEmail: string;
 		/**
-		 *   allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
+		 *   allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
 		 */
 		paymentMethod: string;
 		/**
-		 *   max: 50
+		 *   optional: true, max: 50 (required with ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
 		 */
-		bankCode: string;
+		bankCode?: string;
 		/**
 		 *   optional: true, allowedValues: ['1', '2']
 		 */

@@ -491,8 +491,8 @@ class NganLuong {
  * @property {string} locale  allowedValues: ['vi', 'en']
  * @property {string} orderId  max: 34
  * @property {string} receiverEmail  max: 255, regEx: SimpleSchema.RegEx.Email
- * @property {string} paymentMethod  allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
- * @property {string} bankCode  max: 50
+ * @property {string} paymentMethod  allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
+ * @property {string} bankCode  optional: true, max: 50 (required with ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
  * @property {string} paymentType  optional: true, allowedValues: ['1', '2']
  * @property {string} orderInfo  optional: true, max: 500
  * @property {number} taxAmount Integer, optional: true
@@ -541,8 +541,8 @@ NganLuong.checkoutSchema = new SimpleSchema({
 	locale               : { type: String, allowedValues: ['vi', 'en'] },
 	orderId              : { type: String, max: 34 },
 	receiverEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
-	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
-	bankCode             : { type: String, max: 50 },
+	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
+	bankCode             : { type: String, optional: true, max: 50 },
 	paymentType          : { type: String, optional: true, allowedValues: ['1', '2'] },
 	orderInfo            : { type: String, optional: true, max: 500 },
 	taxAmount            : { type: SimpleSchema.Integer, optional: true },
