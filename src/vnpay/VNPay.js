@@ -120,10 +120,6 @@ class VNPay {
 	}
 
 	/**
-	 *
-	 * @param {NganLuongCheckoutPayload} payload
-	 */
-	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 	 * <br>
 	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
@@ -154,7 +150,7 @@ class VNPay {
 	 * @property {string} merchant merchant ID, should be same with checkout request
 	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
 	 * @property {number} amount amount paid by customer, already divided by 100
-	 * @property {number} orderInfo order info, should be same with checkout request
+	 * @property {string} orderInfo order info, should be same with checkout request
 	 * @property {string} responseCode response code, payment has errors if it is non-zero
 	 * @property {string} bankCode bank code of the bank where payment was occurred
 	 * @property {string} bankTranNo bank transaction ID, used to look up at Bank's side

@@ -1092,3 +1092,336 @@ declare namespace sohapay {
 		secure_code: string;
 	}
 }
+
+/**
+ * VNPay payment gateway helper
+ * <br>
+ * Hàm hỗ trợ thanh toán qua VNPay
+ *
+ */
+declare class VNPay {
+	/**
+	 * VNPay configSchema
+	 * @type {SimpleSchema}
+	 */
+	static configSchema: SimpleSchema;
+
+	/**
+	 * The schema is based on field data requirements from VNPay's dev document
+	 * <br>
+	 * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu VNPay
+	 * @type {SimpleSchema}
+	 */
+	static checkoutSchema: SimpleSchema;
+
+	/**
+	 * VNPay API version
+	 */
+	static VERSION: string;
+
+	/**
+	 * VNPay API command string for one time payment
+	 */
+	static COMMAND: string;
+
+	/**
+	 * VNPay VND currency code
+	 */
+	static CURRENCY_VND: string;
+
+	/**
+	 * English locale code
+	 */
+	static LOCALE_EN: string;
+
+	/**
+	 * Vietnamese locale code
+	 */
+	static LOCALE_VN: string;
+
+	/**
+	 * Instantiate a VNPay checkout helper
+	 * <br>
+	 * Khởi tạo hàm thanh toán VNPay
+	 * @param  {Object} config check VNPay.configSchema for data type requirements <br> Xem VNPay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @return {void}
+	 */
+	constructor(config: vnpay.VNPayConfig);
+
+	/**
+	 * Build checkoutUrl to redirect to the payment gateway
+	 * <br>
+	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 *
+	 * @param  {VNPayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * @return {Promise<URL>} buildCheckoutUrl promise
+	 */
+	buildCheckoutUrl(payload: vnpay.VNPayCheckoutPayload): Promise<URL>;
+
+	/**
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 *
+	 * @param {VNPayCheckoutPayload} payload
+	 */
+	validateCheckoutPayload(payload: vnpay.VNPayCheckoutPayload): void;
+
+	/**
+	 * @return {VNPayCheckoutPayload} default payload object
+	 */
+	checkoutPayloadDefaults: vnpay.VNPayCheckoutPayload;
+
+	/**
+	 * Verify return query string from VNPay using enclosed vnp_SecureHash string
+	 * <br>
+	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
+	 * @return {Promise<VNPayReturnObject>}
+	 */
+	verifyReturnUrl(query: object): Promise<vnpay.VNPayReturnObject>;
+}
+
+export { VNPay };
+
+declare namespace vnpay {
+	export interface VNPayConfig {
+		/**
+		 * VNPay payment Gateway (API Url to send payment request)
+		 */
+		paymentGateway: string;
+
+		/**
+		 * VNPay merchant code
+		 */
+		merchant: string;
+
+		/**
+		 * VNPay merchant secure code
+		 */
+		secureSecret: string;
+	}
+
+	export interface VNPayCheckoutPayload {
+		/**
+		 * optional: true
+		 */
+		createdDate?: string;
+		/**
+		 *   The pay amount, Integer, max: 9999999999
+		 */
+		amount: number;
+		/**
+		 *  max: 16
+		 */
+		clientIp: string;
+		/**
+		 *   allowedValues: ['VND']
+		 */
+		currency: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingCity?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingCountry?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingPostCode?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingStateProvince?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		billingStreet?: string;
+		/**
+		 *   optional: true, max: 255, regEx: SimpleSchema.RegEx.Email
+		 */
+		customerEmail?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		customerId?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		customerPhone?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryAddress?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryCity?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryCountry?: string;
+		/**
+		 *   optional: true, max: 255
+		 */
+		deliveryProvince?: string;
+		/**
+		 *   optional: true, max: 50
+		 */
+		bankCode?: string;
+		/**
+		 *   allowedValues: ['vn', 'en']
+		 */
+		locale: string;
+		/**
+		 *   max: 34
+		 */
+		orderId: string;
+		/**
+		 *   max: 255
+		 */
+		orderInfo: string;
+		/**
+		 *   max: 40
+		 */
+		orderType: string;
+		/**
+		 *   max: 255
+		 */
+		returnUrl: string;
+		/**
+		 *   max: 40
+		 */
+		transactionId: string;
+		/**
+		 *   max: 32
+		 */
+		vnpSecretKey: string;
+		/**
+		 *   max: 16
+		 */
+		vnpMerchant: string;
+		/**
+		 *   max: 16
+		 */
+		vnpCommand: string;
+		/**
+		 *   max: 2
+		 */
+		vnpVersion: string;
+		/**
+		 *   regEx: SimpleSchema.RegEx.Url
+		 */
+		paymentGateway: string;
+		/**
+		 *
+		 */
+		merchant: string;
+		/**
+		 *
+		 */
+		secureSecret: string;
+	}
+
+	export interface VNPayReturnObject {
+		/**
+		 * whether the payment succeeded or not
+		 */
+		isSuccess: string;
+		/**
+		 * Approve or error message based on response code
+		 */
+		message: string;
+		/**
+		 * merchant ID, should be same with checkout request
+		 */
+		merchant: string;
+		/**
+		 * merchant's transaction ID, should be same with checkout request
+		 */
+		transactionId: string;
+		/**
+		 * amount paid by customer, already divided by 100
+		 */
+		amount: number;
+		/**
+		 * order info, should be same with checkout request
+		 */
+		orderInfo: string;
+		/**
+		 * response code, payment has errors if it is non-zero
+		 */
+		responseCode: string;
+		/**
+		 * bank code of the bank where payment was occurred
+		 */
+		bankCode: string;
+		/**
+		 * bank transaction ID, used to look up at Bank's side
+		 */
+		bankTranNo: string;
+		/**
+		 * type of card
+		 */
+		cardType: string;
+		/**
+		 * date when transaction occurred
+		 */
+		payDate: string;
+		/**
+		 * Gateway's own transaction ID, used to look up at Gateway's side
+		 */
+		gatewayTransactionNo: string;
+		/**
+		 * checksum of the returned data, used to verify data integrity
+		 */
+		secureHash: string;
+		/**
+		 * e.g: COCOSIN
+		 */
+		vnp_TmnCode: string;
+		/**
+		 * e.g: node-2018-01-15T10:04:36.540Z
+		 */
+		vnp_TxnRef: string;
+		/**
+		 * e.g: 90000000
+		 */
+		vnp_Amount: string;
+		/**
+		 * e.g: Thanh toan giay adidas
+		 */
+		vnp_OrderInfo: string;
+		/**
+		 * e.g: 00
+		 */
+		vnp_ResponseCode: string;
+		/**
+		 * e.g: NCB
+		 */
+		vnp_BankCode: string;
+		/**
+		 * e.g: 20180115170515
+		 */
+		vnp_BankTranNo: string;
+		/**
+		 * e.g: ATM
+		 */
+		vnp_CardType: string;
+		/**
+		 * e.g: 20180115170716
+		 */
+		vnp_PayDate: string;
+		/**
+		 * e.g: 13008888
+		 */
+		vnp_TransactionNo: string;
+		/**
+		 * e.g: 115ad37de7ae4d28eb819ca3d3d85b20
+		 */
+		vnp_SecureHash: string;
+	}
+}
