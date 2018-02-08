@@ -127,10 +127,8 @@ class OnePayInternational extends OnePay {
 	}
 
 	/**
-	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * <br>
-	 * Build the schema in subclass.
-	 * <br>
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema.
+	 *
 	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
 	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 * @param {OnePayCheckoutPayload} payload
@@ -310,7 +308,7 @@ OnePayInternational.checkoutSchema = new SimpleSchema({
 
 /**
  * OnePayInternational test config
- * <br>
+ *
  * _Cấu hình dùng thử OnePayInternational_
  */
 OnePayInternational.TEST_CONFIG = {

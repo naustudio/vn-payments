@@ -3,16 +3,17 @@
 // Definitions by: Nau Studio team <dev@naustud.io>
 
 /**
- * SimpleSchema from <code>simpl-schema</code> npm package
+ * SimpleSchema from `simpl-schema` npm package
  */
 declare class SimpleSchema {}
 
 /**
  * This is the base class for OnePay's domestic and intl payment gateways
  * which bear the common hashing algorithym.
- *
  * It should not be used alone.
  *
+ * _Đây là class cơ sở cho OnePayDomestic và OnePayInternational, chỉ chứa các thuật toán mã hóa chung.
+ * Lớp này không nên được sử dụng để khai báo._
  * @private
  */
 declare class OnePay {
@@ -48,17 +49,20 @@ declare class OnePay {
 	static LOCALE_VN: string;
 
 	/**
+	 * Instantiate a OnePay checkout helper
+	 *
+	 * _Khởi tạo class thanh toán OnePay_
 	 * @param  {OnePayConfig} config check OnePay.configSchema for data type requirements
 	 * @return {void}
 	 */
 	constructor(config: onepay.OnePayConfig, type?: string);
 
 	/**
-	 * Build checkout URL to redirect to the payment gateway. <br>
+	 * Build checkout URL to redirect to the payment gateway.
 	 *
-	 * Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
+	 * _Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key)._
 	 *
-	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
+	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder. _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload: onepay.OnePayCheckoutPayload): Promise<URL>;
@@ -66,61 +70,11 @@ declare class OnePay {
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 	 * Build the schema in subclass.
-	 * @param {OnePayCheckoutPayload} payload
-	 */
-	validateCheckoutPayload(payload: onepay.OnePayCheckoutPayload): void;
-
-	/**
-	 * Return default checkout Payloads
-	 * @return {OnePayCheckoutPayload} default payloads
-	 */
-	checkoutPayloadDefaults: onepay.OnePayCheckoutPayload;
-
-	/**
-	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
 	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ OnePay Payment
-	 *
-	 * @param  {object} query Query data object from GET handler (`response.query`)
-	 * @return {Promise<OnePayDomesticReturnObject>} Normalized return data object, with additional fields like isSuccess
-	 */
-	verifyReturnUrl(query: object): Promise<onepay.OnePayDomesticReturnObject>;
-}
-
-/**
- * OnePay Domestic payment gateway helper.
- *
- * Supports VN domestic ATM cards.
- *
- * @extends OnePay
- */
-declare class OnePayDomestic extends OnePay {
-	/**
-	 *
-	 * @param {*} responseCode Response code from gateway. <br> _Mã trả về từ cổng thanh toán._
-	 * @param {*} 	locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese. <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, Việt Nam là 'vn'_
-	 * @return {string}  A string contains error status converted from response code. <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
-	 */
-	static getReturnUrlStatus(responseCode: Object, locale: string): string;
-
-	/**
-	 * Instantiate a OnePayDomestic checkout helper
-	 * <br>
-	 * _Khởi tạo hàm thanh toán OnePayDomestic_
-	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
-	 * @return {void}
-	 */
-	constructor(config: onepay.OnePayConfig);
-
-	/**
-	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * <br>
-	 * Build the schema in subclass.
-	 * <br>
 	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
-	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 * Schema sẽ được tạo trong class con._
 	 * @param {OnePayCheckoutPayload} payload
-	 * @override
 	 */
 	validateCheckoutPayload(payload: onepay.OnePayCheckoutPayload): void;
 
@@ -128,14 +82,81 @@ declare class OnePayDomestic extends OnePay {
 	 * Return default checkout Payloads
 	 *
 	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
-	 * @return {OnePayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
+	 * @type {OnePayCheckoutPayload}
 	 */
 	checkoutPayloadDefaults: onepay.OnePayCheckoutPayload;
 
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
 	 *
-	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ OnePay Payment_
+	 *
+	 * @param  {object} query Query data object from GET handler (`response.query`). <br> _Object query trả về từ GET handler_
+	 * @return {Promise<OnePayDomesticReturnObject>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
+	 */
+	verifyReturnUrl(query: object): Promise<onepay.OnePayDomesticReturnObject>;
+}
+
+/**
+ * OnePay Domestic payment gateway helper.
+ * Supports VN domestic ATM cards.
+ *
+ * _Class hỗ trợ cổng thanh toán nội địa OnePay._
+ * _Hỗ trợ thẻ ATM nội địa._
+ *
+ * @extends OnePay
+ */
+declare class OnePayDomestic extends OnePay {
+	/**
+	 * OnePayDomestic test configs
+	 *
+	 * _Config test thử OnePay Domestic._
+	 */
+	static TEST_CONFIG: object;
+
+	/**
+	 * Get error status as string from response code.
+	 *
+	 * _Lấy chuỗi chứa trạng thái lỗi tương đương với mã response code_
+	 *
+	 * @param {*} responseCode Responde code from gateway <br> _Mã trả về từ cổng thanh toán._
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese. <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, Việt Nam là 'vn'_
+	 * @return {string} A string contains error status converted from response code. <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
+	 */
+	static getReturnUrlStatus(responseCode: Object, locale: string): string;
+
+	/**
+	 * Instantiate a OnePayDomestic checkout helper
+	 *
+	 * _Khởi tạo instance thanh toán OnePayDomestic_
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
+	 * @return {void}
+	 */
+	constructor(config: onepay.OnePayConfig);
+
+	/**
+	 * Validate checkout payload against specific schema. Throw **ValidationErrors** if invalid against checkoutSchema.
+	 * Called internally by **buildCheckoutUrl**
+	 *
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với **checkoutSchema**. Được gọi bên trong **buildCheckoutUrl**_
+	 * @param {OnePayCheckoutPayload} payload
+	 * @override
+	 */
+	validateCheckoutPayload(payload: onepay.OnePayCheckoutPayload): void;
+
+	/**
+	 * Default checkout payload object
+	 *
+	 * _Checkout payload mặc định cho cổng thanh toán này_
+	 * @type {OnePayCheckoutPayload}
+	 */
+	checkoutPayloadDefaults: onepay.OnePayCheckoutPayload;
+
+	/**
+	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
+	 *
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán_
 	 *
 	 * @param {*} query Query data object from GET handler (`response.query`). <br> _Object query trả về từ GET handler_
 	 * @returns { Promise<OnePayDomesticReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
@@ -147,7 +168,16 @@ export { OnePayDomestic };
 
 declare class OnePayInternational extends OnePay {
 	/**
+	 * OnePayDomestic test configs
 	 *
+	 * _Config test thử OnePay Domestic._
+	 */
+	static TEST_CONFIG: object;
+
+	/**
+	 * Get error status as string from response code.
+	 *
+	 * _Lấy chuỗi chứa trạng thái lỗi tương đương với mã response code_
 	 * @param {*} responseCode Responde code from gateway
 	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
 	 * @return {string} Localized status string from the response code
@@ -156,20 +186,19 @@ declare class OnePayInternational extends OnePay {
 
 	/**
 	 * Instantiate a OnePayInternational checkout helper
-	 *<br>
-	 * _Khởi tạo hàm thanh toán OnePayInternational_
+	 *
+	 * _Khởi tạo instance thanh toán OnePayInternational_
 	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config: onepay.OnePayConfig);
 
 	/**
-	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * <br>
-	 * Build the schema in subclass.
-	 * <br>
+	 * Validate checkout payload against specific schema. Throw **ValidationErrors** if invalid against checkoutSchema.
+	 * Called internally by **buildCheckoutUrl**
+	 *
 	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
-	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
+	 * Hiển thị lỗi nếu không hợp lệ với **checkoutSchema**. Được gọi bên trong **buildCheckoutUrl**_
 	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
@@ -185,15 +214,13 @@ declare class OnePayInternational extends OnePay {
 
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 * <br>
+	 *
 	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
 	 *
 	 * @param {*} query
 	 * @returns { Promise<OnePayInternationalReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
-	verifyReturnUrl(
-		query: onepay.OnePayInternationalReturnObject
-	): Promise<onepay.OnePayInternationalReturnObject>;
+	verifyReturnUrl(query: onepay.OnePayInternationalReturnObject): Promise<onepay.OnePayInternationalReturnObject>;
 }
 
 export { OnePayInternational };
@@ -201,19 +228,19 @@ export { OnePayInternational };
 declare namespace onepay {
 	export interface OnePayConfig {
 		/**
+		 * Merchant access code
+		 */
+		accessCode: string;
+		/**
 		 * Unique merchant code assigned by OnePay
 		 */
 		merchant: string;
 		/**
-		 *
-		 */
-		accessCode: string;
-		/**
-		 * Gateway URL provided by payment provider
+		 * Gateway URL to redirect provided by payment provider
 		 */
 		paymentGateway: string;
 		/**
-		 *
+		 * Merchant's secure secret
 		 */
 		secureSecret: string;
 	}
@@ -224,7 +251,7 @@ declare namespace onepay {
 		againLink?: string;
 
 		/**
-		 * The amount to be paid.<br> Khoản tiền cần thanh toán. max: 9999999999
+		 * The amount to be paid. max: 9999999999. <br> _Khoản tiền cần thanh toán_
 		 */
 		amount: number;
 		/**
@@ -322,6 +349,7 @@ declare namespace onepay {
 		 */
 		vpcVersion?: string;
 	}
+
 	export interface OnePayDomesticReturnObject {
 		/**
 		 * whether the payment succeeded or not
@@ -671,9 +699,8 @@ declare namespace onepay {
 
 /**
  * Ngan Luong payment gateway helper.
- * Supports VN domestic ATM cards.
  *
- * Hàm hỗ trợ thanh toán qua Ngân Lượng
+ * _Class hỗ trợ thanh toán qua Ngân Lượng._
  *
  */
 declare class NganLuong {
@@ -713,45 +740,55 @@ declare class NganLuong {
 	static LOCALE_VN: string;
 
 	/**
-	 * Instantiate a NganLuong checkout helper
-	 * <br>
-	 * Khởi tạo hàm thanh toán NganLuong
+	 * NganLuong test configs
 	 *
-	 * @param  {Object} config check NganLuong.configSchema for data type requirements <br> Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu
+	 * _Config test thử Ngân Lượng_
+	 */
+	static TEST_CONFIG: object;
+
+	/**
+	 * Instantiate a NganLuong checkout helper
+	 *
+	 * _Khởi tạo instance thanh toán NganLuong_
+	 *
+	 * @param  {Object} config check NganLuong.configSchema for data type requirements. <br> _Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config: nganluong.NganLuongConfig);
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
-	 * <br>
-	 * Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
-	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * _Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)_
+	 *
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above. <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload: nganluong.NganLuongCheckoutPayload): Promise<URL>;
 
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 *
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 *
 	 * @param {NganLuongCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload: nganluong.NganLuongCheckoutPayload): void;
 
 	/**
-	 * @return {NganLuongCheckoutPayload} default payload object
+	 * default payload object
+	 *
+	 * _checkout payload mặc định_
+	 * @type {NganLuongCheckoutPayload}
 	 */
 	checkoutPayloadDefaults: nganluong.NganLuongCheckoutPayload;
 
 	/**
 	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
-	 * <br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán_
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`). <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
 	 * @return {Promise<nganluong.NganLuongReturnObject>}
 	 */
 	verifyReturnUrl(query: object): Promise<nganluong.NganLuongReturnObject>;
@@ -763,6 +800,7 @@ declare namespace nganluong {
 	export interface NganLuongConfig {
 		/**
 		 * NganLuong payment gateway (API Url to send payment request)
+		 *
 		 */
 		paymentGateway: string;
 		/**
@@ -1056,7 +1094,7 @@ declare namespace nganluong {
 		 */
 		buyer_mobile: string;
 		/**
-		 * e.g: 'TEst'
+		 * e.g: 'Test'
 		 */
 		buyer_address: string;
 		/**
@@ -1072,10 +1110,8 @@ declare namespace nganluong {
 
 /**
  * SohaPay payment gateway helper.
- * NOTE: Our test card deprecated, so we couldn't test this gateway thoroughly.
  *
- * Hàm hỗ trợ thanh toán qua SohaPay
- * Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này
+ * _Class hỗ trợ thanh toán qua SohaPay_
  *
  */
 declare class SohaPay {
@@ -1105,45 +1141,54 @@ declare class SohaPay {
 	static LOCALE_VN: string;
 
 	/**
-	 * Instantiate a SohaPay checkout helper
-	 * <br>
-	 * Khởi tạo hàm thanh toán SohaPay
+	 * SohaPay test configs
 	 *
-	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * _Config test thử SohaPay_
+	 */
+	static TEST_CONFIG: object;
+
+	/**
+	 * Instantiate a SohaPay checkout helper
+	 *
+	 * _Khởi tạo instance thanh toán SohaPay_
+	 *
+	 * @param  {Object} config check SohaPay.configSchema for data type requirements. <br> _Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu._
 	 * @return {void}
 	 */
 	constructor(config: sohapay.SohaPayConfig);
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
-	 * <br>
-	 * Hàm xây dựng url để redirect qua SohaPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
 	 *
-	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * _Hàm xây dựng url để redirect qua SohaPay gateway, trong đó có tham số mã hóa (còn gọi là public key)_
+	 *
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above. <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload: sohapay.SohaPayCheckoutPayload): Promise<URL>;
 
 	/**
 	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
-	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
+	 *
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ._
 	 * @param {SohaPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload: sohapay.SohaPayCheckoutPayload): Promise<URL>;
 
 	/**
-	 * @return {SohaPayCheckoutPayload} default payload object
+	 * default payload object
+	 *
+	 * _checkout payload mặc định_
+	 * @type {SohaPayCheckoutPayload}
 	 */
 	checkoutPayloadDefaults: sohapay.SohaPayCheckoutPayload;
 
 	/**
 	 * Verify return query string from SohaPay using enclosed secureCode string
-	 * <br>
 	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán_
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> Dữ liệu được trả về từ GET handler (`response.query`)
+	 * @param  {Object} query Query data object from GET handler (`response.query`). <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
 	 * @return {Promise<sohapay.SohaPayReturnObject>}
 	 */
 	verifyReturnUrl(query: object): Promise<sohapay.SohaPayReturnObject>;
@@ -1162,7 +1207,7 @@ declare namespace sohapay {
 		 */
 		paymentGateway: string;
 		/**
-		 * NganLuong merchant secret string
+		 * SohaPay merchant secret string
 		 */
 		secureSecret: string;
 	}
@@ -1361,6 +1406,7 @@ declare namespace sohapay {
 
 		/**
 		 *  Error text returned from SohaPay Gateway
+		 *
 		 *  e.g: 'Giao dịch thanh toán bị huỷ bỏ'
 		 */
 		error_text: string;
@@ -1404,8 +1450,8 @@ declare namespace sohapay {
 
 /**
  * VNPay payment gateway helper
- * <br>
- * Hàm hỗ trợ thanh toán qua VNPay
+ *
+ * _Class hỗ trợ thanh toán qua VNPay_
  *
  */
 declare class VNPay {
@@ -1417,8 +1463,8 @@ declare class VNPay {
 
 	/**
 	 * The schema is based on field data requirements from VNPay's dev document
-	 * <br>
-	 * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu VNPay
+	 *
+	 * _Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu VNPay_
 	 * @type {SimpleSchema}
 	 */
 	static checkoutSchema: SimpleSchema;
@@ -1449,9 +1495,16 @@ declare class VNPay {
 	static LOCALE_VN: string;
 
 	/**
+	 * VNPay test configs
+	 *
+	 * _Config test thử VNPay_
+	 */
+	static TEST_CONFIG: object;
+
+	/**
 	 * Instantiate a VNPay checkout helper
-	 * <br>
-	 * Khởi tạo hàm thanh toán VNPay
+	 *
+	 * _Khởi tạo instance thanh toán VNPay_
 	 * @param  {Object} config check VNPay.configSchema for data type requirements <br> Xem VNPay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
@@ -1459,8 +1512,8 @@ declare class VNPay {
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
-	 * <br>
-	 * Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
+	 *
+	 * _Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)_
 	 *
 	 * @param  {VNPayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
 	 * @return {Promise<URL>} buildCheckoutUrl promise
@@ -1469,22 +1522,25 @@ declare class VNPay {
 
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 *
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 *
 	 * @param {VNPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload: vnpay.VNPayCheckoutPayload): void;
 
 	/**
-	 * @return {VNPayCheckoutPayload} default payload object
+	 * default payload object
+	 *
+	 * _checkout payload mặc định_
+	 * @type {VNPayCheckoutPayload}
 	 */
 	checkoutPayloadDefaults: vnpay.VNPayCheckoutPayload;
 
 	/**
 	 * Verify return query string from VNPay using enclosed vnp_SecureHash string
-	 * <br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
+	 *
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán_
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
 	 * @return {Promise<VNPayReturnObject>}
