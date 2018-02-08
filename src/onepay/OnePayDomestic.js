@@ -163,7 +163,7 @@ class OnePayDomestic extends OnePay {
 	 * Return default checkout Payloads
 	 *
 	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
-	 * @return {OnePayCheckoutPayload} default payload object
+	 * @return {OnePayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */

@@ -11,9 +11,9 @@ import { toUpperCase, hashHmac, pack } from '../utils';
  * <br>
  * NOTE: Our test card deprecated, so we couldn't test this gateway thoroughly.
  * <br>
- * Hàm hỗ trợ thanh toán qua SohaPay
+ * _Hàm hỗ trợ thanh toán qua SohaPay_
  *<br>
- * Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này
+ * _Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này_
  *
  * @example
  * import { SohaPay } from 'vn-payments';
@@ -37,9 +37,9 @@ class SohaPay {
 	/**
 	 * Instantiate a SohaPay checkout helper
 	 * <br>
-	 * Khởi tạo hàm thanh toán SohaPay
+	 * _Khởi tạo hàm thanh toán SohaPay_
 	 *
-	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> _Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config = {}) {
@@ -50,9 +50,9 @@ class SohaPay {
 	/**
 	 * Build checkout URL to redirect to the payment gateway
 	 * <br>
-	 * Hàm xây dựng url để redirect qua Soha gateway, trong đó có tham số mã hóa (còn gọi là public key)
-	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
-	 * @return {Promise<URL>}    The URL object used to redirect
+	 * _Hàm xây dựng url để redirect qua Soha gateway, trong đó có tham số mã hóa (còn gọi là public key)_
+	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
+	 * @return {Promise<URL>}    The URL object used to redirect <br> _Đối tượng URL dùng để chuyển trang qua cổng thanh toán_
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -120,13 +120,19 @@ class SohaPay {
 	/**
 	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
 	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ.
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ._
 	 * @param {SohaPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
 		SohaPay.checkoutSchema.validate(payload);
 	}
 
+	/**
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {SohaPayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
+	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
 		return {
@@ -164,11 +170,10 @@ class SohaPay {
 	 *
 	 * Verify return query string from SohaPay using enclosed secureCode string
 	 * <br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment_
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> Dữ liệu được trả về từ GET handler (`response.query`)
-	 * @return {SohaPayReturnObject}
-	 * @return {Promise<Object>}
+	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
+	 * @return {Promise<SohaPayReturnObject>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
@@ -312,7 +317,7 @@ SohaPay.VERSION = '2';
 /**
  * SohaPay test configs
  * <br>
- * Cấu hình dùng thử SohaPay
+ * _Cấu hình dùng thử SohaPay_
  */
 SohaPay.TEST_CONFIG = {
 	merchantCode: 'test',
