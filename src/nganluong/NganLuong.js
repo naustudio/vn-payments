@@ -167,8 +167,8 @@ class NganLuong {
 	 * @property {string} message Approve or error message based on response code
 	 * @property {string} merchant merchant ID, should be same with checkout request
 	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
-	 * @property {number} amount amount paid by customer
-	 * @property {number} orderInfo order info, should be same with checkout request
+	 * @property {string} amount amount paid by customer
+	 * @property {string} orderInfo order info, should be same with checkout request
 	 * @property {string} responseCode response code, payment has errors if it is non-zero
 	 * @property {string} bankCode bank code of the bank where payment was occurred
 	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
@@ -202,7 +202,7 @@ class NganLuong {
 	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
 	 *
 	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)
-	 * @return {Promise<Object>}
+	 * @return {Promise<NganLuongReturnObject>}
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
