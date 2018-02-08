@@ -9,11 +9,10 @@ import { urlRegExp } from '../utils';
  * OnePay Domestic payment gateway helper.
  * <br>
  * Supports VN domestic ATM cards
+ *
+ * _Hàm hỗ trợ cổng thanh toán nội địa OnePay_
  * <br>
- * <br>
- * Hàm hỗ trợ cổng thanh toán nội địa OnePay
- * <br>
- * Hỗ trợ thẻ ATM nội địa
+ * _Hỗ trợ thẻ ATM nội địa_
  *
  * @extends OnePay
  *
@@ -38,9 +37,9 @@ import { urlRegExp } from '../utils';
 class OnePayDomestic extends OnePay {
 	/**
 	 *
-	 * @param {*} responseCode Response code from gateway <br> Mã trả về từ cổng thanh toán
-	 * @param {*} 	locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam
-	 * @return {string}  A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
+	 * @param {*} responseCode Response code from gateway. <br> _Mã trả về từ cổng thanh toán._
+	 * @param {*} 	locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese. <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, Việt Nam là 'vn'_
+	 * @return {string}  A string contains error status converted from response code. <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -138,8 +137,8 @@ class OnePayDomestic extends OnePay {
 	/**
 	 * Instantiate a OnePayDomestic checkout helper
 	 * <br>
-	 * Khởi tạo hàm thanh toán OnePayDomestic
-	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * _Khởi tạo hàm thanh toán OnePayDomestic_
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config = {}) {
@@ -147,7 +146,12 @@ class OnePayDomestic extends OnePay {
 	}
 
 	/**
-	 *
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * Build the schema in subclass.
+	 * <br>
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
@@ -156,6 +160,9 @@ class OnePayDomestic extends OnePay {
 	}
 
 	/**
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
 	 * @return {OnePayCheckoutPayload} default payload object
 	 */
 	get checkoutPayloadDefaults() {
@@ -183,6 +190,7 @@ class OnePayDomestic extends OnePay {
 		};
 	}
 	/**
+	 *
 	 * @typedef {Object} OnePayDomesticReturnObject
 	 * @property {boolean} isSuccess whether the payment succeeded or not
 	 * @property {number} amount amount paid by customer, already divided by 100
@@ -213,11 +221,11 @@ class OnePayDomestic extends OnePay {
 	 */
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *	<br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
-	 * @param {*} query
-	 * @returns { Promise<OnePayDomesticReturnObject> }
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
+	 *
+	 * @param {*} query Query data object from GET handler (`response.query`). <br> _Object query trả về từ GET handler_
+	 * @returns { Promise<OnePayDomesticReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return super.verifyReturnUrl(query).then(verifyResults => {
@@ -246,7 +254,7 @@ class OnePayDomestic extends OnePay {
 /**
  * The schema is based on field data requirements from OnePay's dev document
  * <br>
- * Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu OnePay
+ * _Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu OnePay_
  * @type {SimpleSchema}
  */
 OnePayDomestic.checkoutSchema = new SimpleSchema({
@@ -283,8 +291,8 @@ OnePayDomestic.checkoutSchema = new SimpleSchema({
 
 /**
  * OnePayDomestic test configs
- * <br>
- * Cấu hình dùng thử OnePay Domestic
+ *
+ * _Cấu hình dùng thử OnePay Domestic._
  */
 OnePayDomestic.TEST_CONFIG = {
 	accessCode: 'D67342C2',

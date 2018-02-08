@@ -30,9 +30,9 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>NganLuong<span class="signature">(config)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">NganLuong payment gateway helper
+            <div class="class-description"><p>NganLuong payment gateway helper
 <br>
-Hàm hỗ trợ thanh toán qua Ngân Lượng</div>
+Hàm hỗ trợ thanh toán qua Ngân Lượng</p></div>
         
     
 </header>
@@ -55,9 +55,9 @@ Hàm hỗ trợ thanh toán qua Ngân Lượng</div>
 
 
 <div class="description">
-    Instantiate a NganLuong checkout helper
+    <p>Instantiate a NganLuong checkout helper
 <br>
-Khởi tạo hàm thanh toán NganLuong
+Khởi tạo hàm thanh toán NganLuong</p>
 </div>
 
 
@@ -109,7 +109,7 @@ Khởi tạo hàm thanh toán NganLuong
 
             
 
-            <td class="description last">check NganLuong.configSchema for data type requirements <br> Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu</td>
+            <td class="description last"><p>check NganLuong.configSchema for data type requirements <br> Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu</p></td>
         </tr>
 
     
@@ -224,9 +224,9 @@ this.response.end();</code></pre>
 
 
 <div class="description">
-    The schema is based on field data requirements from NganLuong's dev document
+    <p>The schema is based on field data requirements from NganLuong's dev document
 <br>
-Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng
+Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng</p>
 </div>
 
 
@@ -298,9 +298,9 @@ Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu N
 
 
 <div class="description">
-    NganLuong test configs
+    <p>NganLuong test configs
 <br>
-Cấu hình dùng thử Ngân Lượng
+Cấu hình dùng thử Ngân Lượng</p>
 </div>
 
 
@@ -432,9 +432,9 @@ Cấu hình dùng thử Ngân Lượng
 
 
 <div class="description">
-    Get known response code status
+    <p>Get known response code status
 <br>
-Lấy chuỗi trạng thái từ response code đã biết
+Lấy chuỗi trạng thái từ response code đã biết</p>
 </div>
 
 
@@ -492,7 +492,7 @@ Lấy chuỗi trạng thái từ response code đã biết
                 </td>
             
 
-            <td class="description last">Response code from gateway <br> Mã trả về từ cổng thanh toán</td>
+            <td class="description last"><p>Response code from gateway <br> Mã trả về từ cổng thanh toán</p></td>
         </tr>
 
     
@@ -521,7 +521,7 @@ Lấy chuỗi trạng thái từ response code đã biết
                 </td>
             
 
-            <td class="description last">Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam</td>
+            <td class="description last"><p>Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam</p></td>
         </tr>
 
     
@@ -589,7 +589,7 @@ Lấy chuỗi trạng thái từ response code đã biết
 
         
 <div class="param-desc">
-    A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code
+    <p>A string contains error status converted from response code <br> Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code</p>
 </div>
 
 
@@ -626,9 +626,9 @@ Lấy chuỗi trạng thái từ response code đã biết
 
 
 <div class="description">
-    Build checkoutUrl to redirect to the payment gateway
+    <p>Build checkoutUrl to redirect to the payment gateway
 <br>
-Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
+Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)</p>
 </div>
 
 
@@ -680,7 +680,7 @@ Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham s
 
             
 
-            <td class="description last">Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.</td>
+            <td class="description last"><p>Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.</p></td>
         </tr>
 
     
@@ -748,7 +748,7 @@ Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham s
 
         
 <div class="param-desc">
-    buildCheckoutUrl promise
+    <p>buildCheckoutUrl promise</p>
 </div>
 
 
@@ -785,9 +785,9 @@ Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham s
 
 
 <div class="description">
-    Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+    <p>Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 <br>
-Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.</p>
 </div>
 
 
@@ -914,7 +914,7 @@ Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấ
     
 
     
-    <h4 class="name" id="verifyReturnUrl"><span class="type-signature"></span>verifyReturnUrl<span class="signature">(query)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="verifyReturnUrl"><span class="type-signature"></span>verifyReturnUrl<span class="signature">(query)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#NganLuongReturnObject">NganLuongReturnObject</a>>}</span></h4>
     
 
     
@@ -922,9 +922,9 @@ Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấ
 
 
 <div class="description">
-    Verify return query string from NganLuong using enclosed vnp_SecureHash string
+    <p>Verify return query string from NganLuong using enclosed vnp_SecureHash string
 <br>
-Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
+Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment</p>
 </div>
 
 
@@ -976,7 +976,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 
             
 
-            <td class="description last">Query data object from GET handler (`response.query`) <br> Dữ liệu được trả về từ GET handler (`response.query`)</td>
+            <td class="description last"><p>Query data object from GET handler (<code>response.query</code>) <br> Dữ liệu được trả về từ GET handler (<code>response.query</code>)</p></td>
         </tr>
 
     
@@ -1051,7 +1051,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;<a href="global.html#NganLuongReturnObject">NganLuongReturnObject</a>></span>
 
 
     </dd>
@@ -1085,7 +1085,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 08 2018 10:24:56 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 08 2018 17:06:05 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

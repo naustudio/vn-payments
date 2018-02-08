@@ -20,7 +20,7 @@
 		"build": "eslint src test && jest --config test/jest.config.js --coverage && npm run clean && mkdir -p dist && babel src -s -D -d dist && codecov",
 		"test": "jest --watch --coverage",
 		"lint": "esw src test example",
-		"doc": "jsdoc src -r -d docs -R README.md"
+		"doc": "jsdoc -c jsdoc.config.json"
 	},
 	"keywords": [
 		"babel",

@@ -11,18 +11,19 @@ import { toUpperCase, pack, hashHmac } from '../utils';
  * <br>
  * It should not be used alone.
  * <br>
- * Đây là lớp cơ sở cho lớp OnePayDomestic và lớp OnePayInternational. Lớp này chứa các thuật toán mã hóa chung.
+ * _Đây là lớp cơ sở cho lớp OnePayDomestic và lớp OnePayInternational.
+ * Lớp này chứa các thuật toán mã hóa chung._
  * <br>
- * Lớp này không nên được sử dụng để khai báo.
+ * _Lớp này không nên được sử dụng để khai báo._
  * @private
  */
 class OnePay {
 	/**
 	 * Instantiate a OnePay checkout helper
 	 * <br>
-	 * Khởi tạo hàm thanh toán OnePay
+	 * _Khởi tạo class thanh toán OnePay_
 	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu._
 	 * @return {void}
 	 */
 	constructor(config = {}, type = 'domestic') {
@@ -35,9 +36,9 @@ class OnePay {
 	/**
 	 * Build checkout URL to redirect to the payment gateway.
 	 * <br>
-	 * Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
+	 * _Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key)._
 	 *
-	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.
+	 * @param  {OnePayCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above. <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
 	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
@@ -60,6 +61,8 @@ class OnePay {
 			data.amount = Math.floor(data.amount * 100);
 
 			// IMPORTANT: the keys' order must be exactly like below
+			// Note: we can also sort the keys alphabetically like in PHP, but by listing the keys
+			// in fixed order, we don't worry about missmatch checksum hashing
 			/* prettier-ignore */
 			const arrParam = {
 				AVS_City: data.billingCity,
@@ -132,11 +135,12 @@ class OnePay {
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
 	 * <br>
-	 * Build the schema in subclass
+	 * Build the schema in subclass.
 	 * <br>
-	 * Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 * <br>
-	 * Cấu trúc dữ liệu được thêm vào trong lớp con của lớp OnePay
+	 * _Schema sẽ được tạo trong class con._
 	 * @param {OnePayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(/*payload*/) {
@@ -145,6 +149,8 @@ class OnePay {
 
 	/**
 	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
 	 * @return {OnePayCheckoutPayload} default payloads
 	 */
 	get checkoutPayloadDefaults() {
@@ -153,11 +159,11 @@ class OnePay {
 
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *	<br>
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
 	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {Promise<Object>} Normalized return data object, with additional fields like isSuccess
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán_
+	 *
+	 * @param  {Object} query Query data object from GET handler (`response.query`). <br> _Object query trả về từ GET handler_
+	 * @return {Promise<Object>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
@@ -200,6 +206,8 @@ class OnePay {
 
 /**
  * OnePay checkout payload object, with normalized field names and validation rules based on OnePay's dev document
+ *
+ * _Object chuyển dữ liệu thanh toán cho OnePay, đã được chuẩn hóa tên biến và sẽ được kiểm _
  *
  * @typedef {Object} OnePayCheckoutPayload
  * @property {string} againLink optional: true, max: 64, regEx: urlRegExp

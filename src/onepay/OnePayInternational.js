@@ -119,7 +119,7 @@ class OnePayInternational extends OnePay {
 	 * Instantiate a OnePayInternational checkout helper
 	 *<br>
 	 * Khởi tạo hàm thanh toán OnePayInternational
-	 * @param  {Object} config check OnePay.configSchema for data type requirements <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu
 	 * @return {void}
 	 */
 	constructor(config = {}) {

@@ -30,10 +30,15 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>OnePay<span class="signature">(config)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">This is the base class for domestic and intl payment gateways
+            <div class="class-description"><p>This is the base class for OnePay's domestic and intl payment gateways
 which bear the common hashing algorithym.
-
-It should not be used alone.</div>
+<br>
+It should not be used alone.
+<br>
+<em>Đây là lớp cơ sở cho lớp OnePayDomestic và lớp OnePayInternational.
+Lớp này chứa các thuật toán mã hóa chung.</em>
+<br>
+<em>Lớp này không nên được sử dụng để khai báo.</em></p></div>
         
     
 </header>
@@ -56,7 +61,9 @@ It should not be used alone.</div>
 
 
 <div class="description">
-    Instantiate a OnePay checkout helper
+    <p>Instantiate a OnePay checkout helper
+<br>
+<em>Khởi tạo class thanh toán OnePay</em></p>
 </div>
 
 
@@ -108,7 +115,7 @@ It should not be used alone.</div>
 
             
 
-            <td class="description last">check OnePay.configSchema for data type requirements</td>
+            <td class="description last"><p>check OnePay.configSchema for data type requirements. <br> <em>Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu.</em></p></td>
         </tr>
 
     
@@ -149,7 +156,7 @@ It should not be used alone.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line14">line 14</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -193,6 +200,145 @@ It should not be used alone.</div>
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".configSchema"><span class="type-signature">(static) </span>configSchema<span class="type-signature"> :SimpleSchema</span></h4>
+
+
+
+
+<div class="description">
+    <p>OnePay configSchema</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">SimpleSchema</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line243">line 243</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="checkoutPayloadDefaults"><span class="type-signature"></span>checkoutPayloadDefaults<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Return default checkout Payloads</p>
+<p><em>Lấy checkout payload mặc định cho cổng thanh toán này</em></p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -203,7 +349,7 @@ It should not be used alone.</div>
     
 
     
-    <h4 class="name" id="buildCheckoutUrl"><span class="type-signature"></span>buildCheckoutUrl<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="buildCheckoutUrl"><span class="type-signature"></span>buildCheckoutUrl<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise.&lt;URL>}</span></h4>
     
 
     
@@ -211,9 +357,9 @@ It should not be used alone.</div>
 
 
 <div class="description">
-    Build checkout URL to redirect to the payment gateway.
-
-Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).
+    <p>Build checkout URL to redirect to the payment gateway.
+<br>
+<em>Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số mã hóa (còn gọi là public key).</em></p>
 </div>
 
 
@@ -255,7 +401,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><a href="global.html#OnePayCheckoutPayload">OnePayCheckoutPayload</a></span>
 
 
             
@@ -265,7 +411,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
 
             
 
-            <td class="description last">Object that contains needed data for the URL builder, refer to typeCheck object above</td>
+            <td class="description last"><p>Object that contains needed data for the URL builder, refer to typeCheck object above. <br> <em>Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.</em></p></td>
         </tr>
 
     
@@ -306,7 +452,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line36">line 36</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -333,7 +479,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
 
         
 <div class="param-desc">
-    buildCheckoutUrl promise
+    <p>buildCheckoutUrl promise</p>
 </div>
 
 
@@ -344,7 +490,7 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type">Promise.&lt;URL></span>
 
 
     </dd>
@@ -370,8 +516,14 @@ Hàm xây dựng url để redirect qua OnePay gateway, trong đó có tham số
 
 
 <div class="description">
-    Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
-Build the schema in subclass
+    <p>Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+<br>
+Build the schema in subclass.
+<br>
+<em>Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+Hiển thị lỗi nếu không hợp lệ với checkoutSchema.</em>
+<br>
+<em>Schema sẽ được tạo trong class con.</em></p>
 </div>
 
 
@@ -413,7 +565,7 @@ Build the schema in subclass
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type"><a href="global.html#OnePayCheckoutPayload">OnePayCheckoutPayload</a></span>
 
 
             
@@ -464,7 +616,7 @@ Build the schema in subclass
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line131">line 131</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -506,9 +658,8 @@ Build the schema in subclass
 
 
 <div class="description">
-    Verify return query string from OnePay using enclosed vpc_SecureHash string
-
-Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
+    <p>Verify return query string from OnePay using enclosed vpc_SecureHash string</p>
+<p><em>Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ cổng thanh toán</em></p>
 </div>
 
 
@@ -560,7 +711,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 
             
 
-            <td class="description last">Query data object from GET handler (`response.query`)</td>
+            <td class="description last"><p>Query data object from GET handler (<code>response.query</code>). <br> <em>Object query trả về từ GET handler</em></p></td>
         </tr>
 
     
@@ -601,7 +752,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line147">line 147</a>
+        <a href="onepay_OnePay.js.html">onepay/OnePay.js</a>, <a href="onepay_OnePay.js.html#line167">line 167</a>
     </li></ul></dd>
     
 
@@ -628,7 +779,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 
         
 <div class="param-desc">
-    Normalized return data object, with additional fields like isSuccess
+    <p>Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> <em>Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess</em></p>
 </div>
 
 
@@ -667,13 +818,13 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NganLuong.html">NganLuong</a></li><li><a href="OnePay.html">OnePay</a></li><li><a href="OnePayDomestic.html">OnePayDomestic</a></li><li><a href="OnePayInternational.html">OnePayInternational</a></li><li><a href="SohaPay.html">SohaPay</a></li><li><a href="VNPay.html">VNPay</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createMd5Hash">createMd5Hash</a></li><li><a href="global.html#hashHmac">hashHmac</a></li><li><a href="global.html#pack">pack</a></li><li><a href="global.html#to2DigitNumber">to2DigitNumber</a></li><li><a href="global.html#toUpperCase">toUpperCase</a></li><li><a href="global.html#vnPayDateFormat">vnPayDateFormat</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="NganLuong.html">NganLuong</a></li><li><a href="OnePay.html">OnePay</a></li><li><a href="OnePayDomestic.html">OnePayDomestic</a></li><li><a href="OnePayInternational.html">OnePayInternational</a></li><li><a href="SohaPay.html">SohaPay</a></li><li><a href="VNPay.html">VNPay</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 17:03:39 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 08 2018 16:50:53 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>
