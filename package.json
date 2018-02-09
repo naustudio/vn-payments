@@ -1,6 +1,6 @@
 {
 	"name": "vn-payments",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Helpers for various Payment Gateway in Vietnam",
 	"repository": "https://github.com/naustudio/vn-payments",
 	"author": "Nau Studio <contact@naustud.io>",
