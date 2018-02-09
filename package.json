@@ -15,6 +15,7 @@
 		"npm": ">=3.10.0"
 	},
 	"scripts": {
+		"prepublish": "npm run clean && npm run build",
 		"start": "nodemon example/index.js --exec \"node -r babel-register\"",
 		"clean": "rimraf dist",
 		"build": "eslint src test && jest --config test/jest.config.js --coverage && npm run clean && mkdir -p dist && babel src -s -D -d dist && codecov",
