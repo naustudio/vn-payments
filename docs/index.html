@@ -44,36 +44,43 @@
 
     <section>
         <article><h1>vn-payments</h1><p><a href="https://naustud.io"><img src="https://img.shields.io/badge/By-Nau%20Studio-977857.svg" alt="By Nau Studio"></a>
-<a href="https://travis-ci.org/naustudio/node-vn-payments/"><img src="https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg" alt="Travis CI build status"></a>
-<a href="https://codecov.io/gh/naustudio/node-vn-payments/branch/develop"><img src="https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg" alt="Code coverage status"></a>
+<a href="https://travis-ci.org/naustudio/node-vn-payments/"><img src="https://img.shields.io/travis/naustudio/node-vn-payments.svg" alt="Travis CI build status"></a>
+<a href="https://codecov.io/gh/naustudio/node-vn-payments"><img src="https://img.shields.io/codecov/c/github/naustudio/node-vn-payments.svg" alt="Code coverage status"></a>
 <a href="https://www.npmjs.com/package/vn-payments"><img src="https://img.shields.io/npm/v/vn-payments.svg" alt="npm version"></a>
 <a href="https://github.com/naustudio/node-vn-payments/blob/master/LICENSE"><img src="https://img.shields.io/github/license/naustudio/node-vn-payments.svg" alt="GitHub license"></a></p>
 <p>Vietnam payment gateway helpers for NodeJS. Check out live demo <a href="https://vn-payments-demo.now.sh">here</a>.</p>
+<p><em>Thư viện hỗ trợ xây dựng URL tương tác với các cổng thanh toán trực tuyến ở Việt Nam.</em></p>
 <blockquote>
 <p>From our experience doing NodeJS e-commerce website in Vietnam, implementing online payment process is often troublesome and error-prone due to strict hashing algorithm and uncertain remote request rejections.
 Besides, many payment gateways in Vietnam don't have sample code or SDK for server-side JavaScript (yet). Therefore, we have gathered a set of JavaScript classes (written in ES6) that help NodeJS apps exchange data with payment gateways with more confidence and ease by validating payload object and normalize multiple gateways specs into a common API.</p>
 </blockquote>
-<h2>Supported Payment Gateways</h2><ul>
+<h2>Supported Payment Gateways</h2><p><em>Các cổng thanh toán đang được hỗ trợ</em></p>
+<ul>
 <li><a href="http://onepay.com.vn/">OnePay</a> (Domestic &amp; International)</li>
 <li><a href="https://vnpay.vn/">VNPay</a></li>
 <li><a href="https://sohapay.vn/">SohaPay</a></li>
 <li><a href="https://www.nganluong.vn/nganluong/home.html">NganLuong</a></li>
 </ul>
-<p>Planned gateways:</p>
+<h4>Planned gateways:</h4><p><em>Các cổng thanh toán dự định hỗ trợ:</em></p>
 <ul>
-<li>[ ] AlePay</li>
-<li>[ ] 123Pay</li>
+<li>123Pay (chúng tôi chưa có tài liệu tích hợp, <a href="https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md#add-more-payment-gateway">bạn có thể giúp</a>?)</li>
+<li><del>AlePay</del> (AlePay chỉ hỗ trợ phương thức recurrent/subscription)</li>
 </ul>
 <h2>Install</h2><pre class="prettyprint source lang-sh"><code># npm
 npm install vn-payments --save
 # yarn
 yarn add vn-payments</code></pre><h2>Usage</h2><h3>Payment Workflow:</h3><p>Below is sequence diagram of typical payment gateway process:</p>
+<p><em>Bên dưới là sequence diagram minh họa quy trình thanh toán trực tuyến tiêu biểu:</em></p>
 <p><img src="https://raw.githubusercontent.com/naustudio/node-vn-payments/master/docs/payment-gateway-process.jpg" alt="Typical payment gateway process"></p>
 <p align="center"><em>Diagram taken from OnePay Intl documentation</em></p>
 
 <p><strong><code>vn-payments</code></strong> provides helper classes that build URL for <em>DO request</em> and verify <em>DR Response</em> for supported payment gateway.</p>
 <p>Currently we haven't implemented the <em>QueryQR()</em> functions. It is in our road map for next release.</p>
+<p><em><strong><code>vn-payments</code></strong> cung cấp các class giúp xây dựng URL với tham số mã hóa để thực hiện &quot;DO request&quot; và
+giúp kiểm tra &quot;DR Response&quot; trả về từ cổng thanh toán.</em></p>
+<p><em>Hiện tại chúng tôi chưa hiện thực chức năng &quot;QueryDR&quot;.</em></p>
 <h3>JavaScript sample code:</h3><p>Import one of the payment gateway class from <code>vn-payments</code>:</p>
+<p><em>Đầu tiên, import các class hỗ trợ thanh toán:</em></p>
 <pre class="prettyprint source lang-js"><code>// ESM
 import { OnePayDomestic } from 'vn-payments';
 import { OnePayInternational } from 'vn-payments';
@@ -86,6 +93,8 @@ const { OnePayInternational } = require('vn-payments');
 const { VNPay } = require('vn-payments');
 const { SohaPay } = require('vn-payments');
 const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the helper with merchant configs provided from the payment provider:</p>
+<p><em>Tiếp theo, khởi tạo instance của các class thanh toán với thông tin thiết lập dành riêng cho merchant
+được cung cấp bởi cổng thanh toán:</em></p>
 <pre class="prettyprint source lang-js"><code>const onepayIntl = new OnePayInternational({
   paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
   merchant: 'TESTONEPAY',
@@ -94,6 +103,7 @@ const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the hel
 });</code></pre><p>Build checkout URL by passing checkout data to <strong>buildCheckoutUrl</strong> method. The checkout data is a structured object and will be validated with <strong>GatewayClass.checkoutSchema</strong> which is an instance of <a href="https://github.com/aldeed/simple-schema-js"><code>simpl-schema</code></a>.</p>
 <p>Checkout URL is an instance of so-called <a href="https://nodejs.org/api/url.html#url_url">WHATWG URL</a>, which assist parsing URL string into parts.</p>
 <p>Then, redirect client to payment gateway's checkout handler:</p>
+<p>_Xây dựng URL chuyển đến cổng thanh toán bằng hàm <strong>buildCheckoutUrl</strong>. Dữ liệu truyền vào là một object có cấu trúc được định nghĩa sẵn bởi thư viện và sẽ được kiểm tra hợp lệ bởi <strong>GatewayClass.checkoutSchema</strong>. Hàm <strong>buildCheckoutUrl</strong> sẽ trả về Promise bất đồng bộ, khi hoàn tất, sẽ trả về một <a href="https://nodejs.org/api/url.html#url_url">WHATWG URL</a>. Sau khi có được URL checkout, redirect trình duyệt của khách qua URL này:_</p>
 <pre class="prettyprint source lang-js"><code>routes.post('/payment/checkout', (req, res) => {
   const params = Object.assign({}, req.body);
 
@@ -115,7 +125,8 @@ const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the hel
     .catch(err => {
       res.send(err);
     });
-});</code></pre><p>Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along</p>
+});</code></pre><p>Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along:</p>
+<p><em>Cuối cùng, bạn sẽ cần xử lý URL callback từ cổng thanh toán. Một trong các yêu cầu đó là các tham số trong URL query trả về phải được kiểm tra tính hợp lệ với chuỗi mã hóa đính kèm:</em></p>
 <pre class="prettyprint source lang-js"><code>routes.get('/payment/callback', (req, res) => {
   const query = req.query;
 
@@ -134,7 +145,8 @@ const { NganLuong } = require('vn-payments');</code></pre><p>Instantiate the hel
       });
     }
   });
-});</code></pre><p>For <em>IPN Request</em> to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the <code>verifyReturnUrl</code> to validate parameters sent from Gateway.</p>
+});</code></pre><p>For <strong>IPN Request</strong> to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the <code>verifyReturnUrl</code> to validate parameters sent from Gateway.</p>
+<p><em>Về việc xử lý <strong>IPN Request</strong> gửi trực tiếp đến backend của trang bán hàng, bạn cần hiện thực một route handler theo tài liệu hướng dẫn của cổng thanh toán và sử dụng lại hàm <code>verifyReturnUrl</code> để kiểm tra tính hợp lệ của request gửi từ cổng thanh toán.</em></p>
 <h2>Example (<a href="https://vn-payments-demo.now.sh">Live Demo</a>)</h2><p>See the Express checkout cart in the <strong>example</strong> folder.</p>
 <h4>Example Getting Started:</h4><ul>
 <li>Clone this repository.</li>
@@ -181,7 +193,7 @@ limitations under the License.</p></article>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 05 2018 17:48:51 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Feb 09 2018 15:31:46 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

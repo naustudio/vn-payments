@@ -53,6 +53,9 @@ describe('NganLuong', () => {
 			checkoutPayload.orderId = 'TEST123';
 			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Payment method is required');
 
+			checkoutPayload.paymentMethod = 'VISA';
+			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Customer email is required');
+
 			checkoutPayload.paymentMethod = 'ATM_ONLINE';
 			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Bank code is required');
 
@@ -96,9 +99,7 @@ describe('NganLuong', () => {
 			it('should throw errors at wrong amount input', async () => {
 				checkoutPayload.amount = '100';
 
-				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe(
-					'Amount must be of type Integer'
-				);
+				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Amount must be of type Integer');
 
 				checkoutPayload.amount = 123.45;
 				await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Amount must be an integer');

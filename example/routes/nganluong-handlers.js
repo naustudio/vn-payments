@@ -14,8 +14,6 @@ export function checkoutNganLuong(req, res) {
 	checkoutData.returnUrl = `http://${req.headers.host}/payment/nganluong/callback`;
 	checkoutData.cancelUrl = `http://${req.headers.host}/`;
 	checkoutData.orderInfo = 'Thanh toan giay adidas';
-	checkoutData.paymentMethod = 'ATM_ONLINE';
-	checkoutData.bankCode = 'BAB';
 	checkoutData.locale = checkoutData.locale === 'en' ? 'en' : 'vi';
 	checkoutData.paymentType = '1';
 	checkoutData.totalItem = '1';

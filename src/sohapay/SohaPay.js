@@ -8,8 +8,12 @@ import { toUpperCase, hashHmac, pack } from '../utils';
 
 /**
  * SohaPay payment gateway helper.
- *
- * NOTE: Our test card deprecated, so we couldn't test this gateway thoroghly.
+ * <br>
+ * NOTE: Our test card deprecated, so we couldn't test this gateway thoroughly.
+ * <br>
+ * _Hàm hỗ trợ thanh toán qua SohaPay_
+ *<br>
+ * _Lưu ý: Thẻ thanh toán dùng thử của chúng tôi đã hết được hỗ trợ nên chúng tôi không thể kiểm tra hoàn toàn cổng thanh toán này_
  *
  * @example
  * import { SohaPay } from 'vn-payments';
@@ -30,6 +34,14 @@ import { toUpperCase, hashHmac, pack } from '../utils';
  * this.response.end();
  */
 class SohaPay {
+	/**
+	 * Instantiate a SohaPay checkout helper
+	 * <br>
+	 * _Khởi tạo hàm thanh toán SohaPay_
+	 *
+	 * @param  {Object} config check SohaPay.configSchema for data type requirements <br> _Xem SohaPay.configSchema để biết yêu cầu kiểu dữ liệu_
+	 * @return {void}
+	 */
 	constructor(config = {}) {
 		this.config = Object.assign({}, config);
 		SohaPay.configSchema.validate(this.config);
@@ -37,9 +49,10 @@ class SohaPay {
 
 	/**
 	 * Build checkout URL to redirect to the payment gateway
-	 *
-	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder
-	 * @return {Promise<URL>}    The URL object used to redirect
+	 * <br>
+	 * _Hàm xây dựng url để redirect qua Soha gateway, trong đó có tham số mã hóa (còn gọi là public key)_
+	 * @param  {SohaPayCheckoutPayload} payload Object that contains needed data for the URL builder <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
+	 * @return {Promise<URL>}    The URL object used to redirect <br> _Đối tượng URL dùng để chuyển trang qua cổng thanh toán_
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -106,17 +119,24 @@ class SohaPay {
 
 	/**
 	 * Validate checkout payload against checkoutSchema. Throw ValidationErrors if invalid.
-	 *
+	 * <br>
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ._
 	 * @param {SohaPayCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
 		SohaPay.checkoutSchema.validate(payload);
 	}
 
+	/**
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {SohaPayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
+	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
 		return {
-			language             : SohaPay.LANGUAGE_VN,
+			language             : SohaPay.LOCALE_VN,
 			version           	 : SohaPay.VERSION,
 		};
 	}
@@ -149,12 +169,11 @@ class SohaPay {
 	/**
 	 *
 	 * Verify return query string from SohaPay using enclosed secureCode string
+	 * <br>
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment_
 	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ SohaPay Payment
-	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {SohaPayReturnObject}
-	 * @return {Promise<Object>}
+	 * @param  {Object} query Query data object from GET handler (`response.query`)  <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
+	 * @return {Promise<SohaPayReturnObject>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
@@ -182,16 +201,16 @@ class SohaPay {
 					});
 
 				const isEqual =
-					toUpperCase(secureHash) ===
-					toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
+					toUpperCase(secureHash) === toUpperCase(hashHmac('SHA256', secureCode.join('&'), pack(config.secureSecret)));
 
 				if (!isEqual) {
 					verifyResults.isSuccess = false;
 					verifyResults.message = 'Wrong checksum';
 				} else if (data.error_text) {
 					verifyResults.isSuccess = false;
-					verifyResults.message = data.error_text;
+					verifyResults.message = returnObject.errorMessage;
 				} else {
+					verifyResults.message = returnObject.responseMessage;
 					verifyResults.isSuccess = returnObject.responseCode === '0';
 				}
 			}
@@ -202,7 +221,7 @@ class SohaPay {
 
 	_mapQueryToObject(query) {
 		const returnObject = {
-			message: query.error_text,
+			errorMessage: query.error_text,
 			transactionId: query.order_code,
 			orderEmail: query.order_email,
 			orderSession: query.order_session,
@@ -291,12 +310,14 @@ SohaPay.checkoutSchema = new SimpleSchema({
 	customerId				: { type: String, optional: true, max: 255 },
 });
 
-SohaPay.LANGUAGE_VN = 'vi';
-SohaPay.LANGUAGE_EN = 'en';
+SohaPay.LOCALE_VN = 'vi';
+SohaPay.LOCALE_EN = 'en';
 SohaPay.VERSION = '2';
 
 /**
  * SohaPay test configs
+ * <br>
+ * _Cấu hình dùng thử SohaPay_
  */
 SohaPay.TEST_CONFIG = {
 	merchantCode: 'test',

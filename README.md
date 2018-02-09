@@ -1,27 +1,33 @@
 # vn-payments
 
 [![By Nau Studio](https://img.shields.io/badge/By-Nau%20Studio-977857.svg)](https://naustud.io)
-[![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments/develop.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
-[![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments/develop.svg)](https://codecov.io/gh/naustudio/node-vn-payments/branch/develop)
+[![Travis CI build status](https://img.shields.io/travis/naustudio/node-vn-payments.svg)](https://travis-ci.org/naustudio/node-vn-payments/)
+[![Code coverage status](https://img.shields.io/codecov/c/github/naustudio/node-vn-payments.svg)](https://codecov.io/gh/naustudio/node-vn-payments)
 [![npm version](https://img.shields.io/npm/v/vn-payments.svg)](https://www.npmjs.com/package/vn-payments)
 [![GitHub license](https://img.shields.io/github/license/naustudio/node-vn-payments.svg)](https://github.com/naustudio/node-vn-payments/blob/master/LICENSE)
 
 Vietnam payment gateway helpers for NodeJS. Check out live demo [here](https://vn-payments-demo.now.sh).
+
+_Thư viện hỗ trợ xây dựng URL tương tác với các cổng thanh toán trực tuyến ở Việt Nam._
 
 > From our experience doing NodeJS e-commerce website in Vietnam, implementing online payment process is often troublesome and error-prone due to strict hashing algorithm and uncertain remote request rejections.
 > Besides, many payment gateways in Vietnam don't have sample code or SDK for server-side JavaScript (yet). Therefore, we have gathered a set of JavaScript classes (written in ES6) that help NodeJS apps exchange data with payment gateways with more confidence and ease by validating payload object and normalize multiple gateways specs into a common API.
 
 ## Supported Payment Gateways
 
+_Các cổng thanh toán đang được hỗ trợ_
+
 * [OnePay](http://onepay.com.vn/) (Domestic & International)
 * [VNPay](https://vnpay.vn/)
 * [SohaPay](https://sohapay.vn/)
 * [NganLuong](https://www.nganluong.vn/nganluong/home.html)
 
-Planned gateways:
+#### Planned gateways:
 
-* [ ] AlePay
-* [ ] 123Pay
+_Các cổng thanh toán dự định hỗ trợ:_
+
+* 123Pay (chúng tôi chưa có tài liệu tích hợp, [bạn có thể giúp](https://github.com/naustudio/node-vn-payments/blob/master/CONTRIBUTING.md#add-more-payment-gateway)?)
+* ~~AlePay~~ (AlePay chỉ hỗ trợ phương thức recurrent/subscription)
 
 ## Install
 
@@ -38,6 +44,8 @@ yarn add vn-payments
 
 Below is sequence diagram of typical payment gateway process:
 
+_Bên dưới là sequence diagram minh họa quy trình thanh toán trực tuyến tiêu biểu:_
+
 ![Typical payment gateway process](https://raw.githubusercontent.com/naustudio/node-vn-payments/master/docs/payment-gateway-process.jpg)
 
 <p align="center"><em>Diagram taken from OnePay Intl documentation</em></p>
@@ -46,9 +54,16 @@ Below is sequence diagram of typical payment gateway process:
 
 Currently we haven't implemented the _QueryQR()_ functions. It is in our road map for next release.
 
+_**`vn-payments`** cung cấp các class giúp xây dựng URL với tham số mã hóa để thực hiện "DO request" và
+giúp kiểm tra "DR Response" trả về từ cổng thanh toán._
+
+_Hiện tại chúng tôi chưa hiện thực chức năng "QueryDR"._
+
 ### JavaScript sample code:
 
 Import one of the payment gateway class from `vn-payments`:
+
+_Đầu tiên, import các class hỗ trợ thanh toán:_
 
 ```js
 // ESM
@@ -67,6 +82,9 @@ const { NganLuong } = require('vn-payments');
 
 Instantiate the helper with merchant configs provided from the payment provider:
 
+_Tiếp theo, khởi tạo instance của các class thanh toán với thông tin thiết lập dành riêng cho merchant
+được cung cấp bởi cổng thanh toán:_
+
 ```js
 const onepayIntl = new OnePayInternational({
   paymentGateway: 'https://mtf.onepay.vn/vpcpay/vpcpay.op',
@@ -81,6 +99,8 @@ Build checkout URL by passing checkout data to **buildCheckoutUrl** method. The 
 Checkout URL is an instance of so-called [WHATWG URL](https://nodejs.org/api/url.html#url_url), which assist parsing URL string into parts.
 
 Then, redirect client to payment gateway's checkout handler:
+
+_Xây dựng URL chuyển đến cổng thanh toán bằng hàm **buildCheckoutUrl**. Dữ liệu truyền vào là một object có cấu trúc được định nghĩa sẵn bởi thư viện và sẽ được kiểm tra hợp lệ bởi **GatewayClass.checkoutSchema**. Hàm **buildCheckoutUrl** sẽ trả về Promise bất đồng bộ, khi hoàn tất, sẽ trả về một [WHATWG URL](https://nodejs.org/api/url.html#url_url). Sau khi có được URL checkout, redirect trình duyệt của khách qua URL này:_
 
 ```js
 routes.post('/payment/checkout', (req, res) => {
@@ -107,7 +127,9 @@ routes.post('/payment/checkout', (req, res) => {
 });
 ```
 
-Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along
+Finally, handle payment gateway callback. One of the requirements is that the callback query parameters must be validated with the checksum sent along:
+
+_Cuối cùng, bạn sẽ cần xử lý URL callback từ cổng thanh toán. Một trong các yêu cầu đó là các tham số trong URL query trả về phải được kiểm tra tính hợp lệ với chuỗi mã hóa đính kèm:_
 
 ```js
 routes.get('/payment/callback', (req, res) => {
@@ -131,7 +153,9 @@ routes.get('/payment/callback', (req, res) => {
 });
 ```
 
-For _IPN Request_ to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the `verifyReturnUrl` to validate parameters sent from Gateway.
+For **IPN Request** to Website's Back End from Gateway server, implement another route handler according Gateway documentation and use the `verifyReturnUrl` to validate parameters sent from Gateway.
+
+_Về việc xử lý **IPN Request** gửi trực tiếp đến backend của trang bán hàng, bạn cần hiện thực một route handler theo tài liệu hướng dẫn của cổng thanh toán và sử dụng lại hàm `verifyReturnUrl` để kiểm tra tính hợp lệ của request gửi từ cổng thanh toán._
 
 ## Example ([Live Demo](https://vn-payments-demo.now.sh))
 

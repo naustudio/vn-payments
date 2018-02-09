@@ -30,7 +30,9 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>VNPay<span class="signature">(config)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">VNPay payment gateway helper</div>
+            <div class="class-description"><p>VNPay payment gateway helper
+<br>
+<em>Hàm hỗ trợ thanh toán qua VNPay</em></p></div>
         
     
 </header>
@@ -53,7 +55,9 @@
 
 
 <div class="description">
-    Instantiate a VNPay checkout helper
+    <p>Instantiate a VNPay checkout helper
+<br>
+<em>Khởi tạo hàm thanh toán VNPay</em></p>
 </div>
 
 
@@ -105,7 +109,7 @@
 
             
 
-            <td class="description last">check VNPay.configSchema for data type requirements</td>
+            <td class="description last"><p>check VNPay.configSchema for data type requirements <br> <em>Xem VNPay.configSchema để biết yêu cầu kiểu dữ liệu</em></p></td>
         </tr>
 
     
@@ -146,7 +150,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line29">line 29</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -213,13 +217,15 @@ this.response.end();</code></pre>
 
         
             
-<h4 class="name" id=".configSchema"><span class="type-signature">(static) </span>configSchema<span class="type-signature"> :SimpleSchema</span></h4>
+<h4 class="name" id=".checkoutSchema"><span class="type-signature">(static) </span>checkoutSchema<span class="type-signature"> :SimpleSchema</span></h4>
 
 
 
 
 <div class="description">
-    VNPay configSchema
+    <p>The schema is based on field data requirements from VNPay's dev document
+<br>
+<em>Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu VNPay</em></p>
 </div>
 
 
@@ -267,7 +273,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line398">line 398</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line373">line 373</a>
     </li></ul></dd>
     
 
@@ -285,13 +291,13 @@ this.response.end();</code></pre>
 
         
             
-<h4 class="name" id=".dataSchema"><span class="type-signature">(static) </span>dataSchema<span class="type-signature"> :SimpleSchema</span></h4>
+<h4 class="name" id=".configSchema"><span class="type-signature">(static) </span>configSchema<span class="type-signature"> :SimpleSchema</span></h4>
 
 
 
 
 <div class="description">
-    The schema is based on field data requirements from VNPay's dev document
+    <p>VNPay configSchema</p>
 </div>
 
 
@@ -339,7 +345,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line364">line 364</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line407">line 407</a>
     </li></ul></dd>
     
 
@@ -362,6 +368,11 @@ this.response.end();</code></pre>
 
 
 
+<div class="description">
+    <p>Return default checkout Payloads</p>
+<p><em>Lấy checkout payload mặc định cho cổng thanh toán này</em></p>
+</div>
+
 
 
 
@@ -397,7 +408,7 @@ this.response.end();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line134">line 134</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -425,6 +436,200 @@ this.response.end();</code></pre>
     
 
     
+    <h4 class="name" id=".getReturnUrlStatus"><span class="type-signature">(static) </span>getReturnUrlStatus<span class="signature">(responseCode, locale)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get known response code status
+<br>
+<em>Lấy chuỗi trạng thái từ response code đã biết</em></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>responseCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Responde code from gateway <br> <em>Mã trả về từ cổng thanh toán</em></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    vn
+                
+                </td>
+            
+
+            <td class="description last"><p>Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> <em>Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam</em></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line248">line 248</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A string contains error status converted from response code <br> <em>Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code</em></p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="buildCheckoutUrl"><span class="type-signature"></span>buildCheckoutUrl<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise.&lt;URL>}</span></h4>
     
 
@@ -433,9 +638,9 @@ this.response.end();</code></pre>
 
 
 <div class="description">
-    Build checkoutUrl to redirect to the payment gateway
-
-Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)
+    <p>Build checkoutUrl to redirect to the payment gateway
+<br>
+<em>Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số mã hóa (còn gọi là public key)</em></p>
 </div>
 
 
@@ -487,7 +692,7 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
 
             
 
-            <td class="description last">Object that contains needed data for the URL builder, refer to typeCheck object above</td>
+            <td class="description last"><p>Object that contains needed data for the URL builder, refer to typeCheck object above <br> <em>Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn.</em></p></td>
         </tr>
 
     
@@ -528,7 +733,7 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line50">line 50</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -555,7 +760,7 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
 
         
 <div class="param-desc">
-    buildCheckoutUrl promise
+    <p>buildCheckoutUrl promise</p>
 </div>
 
 
@@ -592,7 +797,9 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
 
 
 <div class="description">
-    Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+    <p>Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+<br>
+<em>Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema.</em></p>
 </div>
 
 
@@ -685,7 +892,7 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line127">line 127</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line129">line 129</a>
     </li></ul></dd>
     
 
@@ -727,9 +934,9 @@ Hàm xây dựng url để redirect qua VNPay gateway, trong đó có tham số 
 
 
 <div class="description">
-    Verify return query string from VNPay using enclosed vnp_SecureHash string
-
-Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment
+    <p>Verify return query string from VNPay using enclosed vnp_SecureHash string
+<br>
+<em>Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ vnpay Payment</em></p>
 </div>
 
 
@@ -781,7 +988,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 
             
 
-            <td class="description last">Query data object from GET handler (`response.query`)</td>
+            <td class="description last"><p>Query data object from GET handler (<code>response.query</code>) <br> <em>Dữ liệu được trả về từ GET handler (<code>response.query</code>)</em></p></td>
         </tr>
 
     
@@ -822,7 +1029,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line180">line 180</a>
+        <a href="vnpay_VNPay.js.html">vnpay/VNPay.js</a>, <a href="vnpay_VNPay.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -848,6 +1055,10 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> <em>Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess</em></p>
+</div>
+
 
 
 <dl>
@@ -890,7 +1101,7 @@ Hàm thực hiện xác minh tính đúng đắn của các tham số trả về
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 05 2018 17:48:51 GMT+0700 (+07)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Feb 09 2018 15:31:46 GMT+0700 (+07)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -9,6 +9,8 @@ import { createMd5Hash } from '../utils';
 
 /**
  * NganLuong payment gateway helper
+ * <br>
+ * _Hàm hỗ trợ thanh toán qua Ngân Lượng_
  *
  * @example
  * import { NganLuong } from 'vn-payments';
@@ -31,8 +33,10 @@ import { createMd5Hash } from '../utils';
 class NganLuong {
 	/**
 	 * Instantiate a NganLuong checkout helper
+	 * <br>
+	 * _Khởi tạo hàm thanh toán NganLuong_
 	 *
-	 * @param  {Object} config check NganLuong.configSchema for data type requirements
+	 * @param  {Object} config check NganLuong.configSchema for data type requirements <br> _Xem NganLuong.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config) {
@@ -43,11 +47,11 @@ class NganLuong {
 
 	/**
 	 * Build checkoutUrl to redirect to the payment gateway
+	 * <br>
+	 * _Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)_
 	 *
-	 * Hàm xây dựng url để redirect qua NganLuong gateway, trong đó có tham số mã hóa (còn gọi là public key)
-	 *
-	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above
-	 * @return {Promise} buildCheckoutUrl promise
+	 * @param  {NganLuongCheckoutPayload} payload Object that contains needed data for the URL builder, refer to typeCheck object above <br> _Đối tượng chứa các dữ liệu cần thiết để thiết lập đường dẫn._
+	 * @return {Promise<URL>} buildCheckoutUrl promise
 	 */
 	buildCheckoutUrl(payload) {
 		return new Promise((resolve, reject) => {
@@ -135,15 +139,20 @@ class NganLuong {
 
 	/**
 	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema
+	 * <br>
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên một cấu trúc dữ liệu cụ thể. Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 *
 	 * @param {NganLuongCheckoutPayload} payload
 	 */
 	validateCheckoutPayload(payload) {
-		NganLuong.dataSchema.validate(payload);
+		NganLuong.checkoutSchema.validate(payload);
 	}
 
 	/**
-	 * @return {NganLuongCheckoutPayload} default payload object
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {NganLuongCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -161,8 +170,8 @@ class NganLuong {
 	 * @property {string} message Approve or error message based on response code
 	 * @property {string} merchant merchant ID, should be same with checkout request
 	 * @property {string} transactionId merchant's transaction ID, should be same with checkout request
-	 * @property {number} amount amount paid by customer
-	 * @property {number} orderInfo order info, should be same with checkout request
+	 * @property {string} amount amount paid by customer
+	 * @property {string} orderInfo order info, should be same with checkout request
 	 * @property {string} responseCode response code, payment has errors if it is non-zero
 	 * @property {string} bankCode bank code of the bank where payment was occurred
 	 * @property {string} gatewayTransactionNo Gateway's own transaction ID, used to look up at Gateway's side
@@ -192,11 +201,11 @@ class NganLuong {
 	 */
 	/**
 	 * Verify return query string from NganLuong using enclosed vnp_SecureHash string
+	 *<br>
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment_
 	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ nganluong Payment
-	 *
-	 * @param  {Object} query Query data object from GET handler (`response.query`)
-	 * @return {NganLuongReturnObject}
+	 * @param  {Object} query Query data object from GET handler (`response.query`) <br> _Dữ liệu được trả về từ GET handler (`response.query`)_
+	 * @return {Promise<NganLuongReturnObject>} Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return new Promise(resolve => {
@@ -255,9 +264,7 @@ class NganLuong {
 						} else {
 							resolve({
 								isSuccess: false,
-								message:
-									objectResponse.description ||
-									NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
+								message: objectResponse.description || NganLuong.getReturnUrlStatus(objectResponse.error_code[0]),
 							});
 						}
 					});
@@ -288,9 +295,11 @@ class NganLuong {
 
 	/**
 	 * Get known response code status
-	 * @param  {string} responseCode [description]
-	 * @param  {string} locale       [description]
-	 * @return {Object}              [description]
+	 * <br>
+	 * _Lấy chuỗi trạng thái từ response code đã biết_
+	 * @param  {string} responseCode Response code from gateway <br> _Mã trả về từ cổng thanh toán_
+	 * @param  {string} locale       Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam_
+	 * @return {string}              A string contains error status converted from response code <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -485,8 +494,8 @@ class NganLuong {
  * @property {string} locale  allowedValues: ['vi', 'en']
  * @property {string} orderId  max: 34
  * @property {string} receiverEmail  max: 255, regEx: SimpleSchema.RegEx.Email
- * @property {string} paymentMethod  allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
- * @property {string} bankCode  max: 50
+ * @property {string} paymentMethod  allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
+ * @property {string} bankCode  optional: true, max: 50 (required with method ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
  * @property {string} paymentType  optional: true, allowedValues: ['1', '2']
  * @property {string} orderInfo  optional: true, max: 500
  * @property {number} taxAmount Integer, optional: true
@@ -513,9 +522,11 @@ class NganLuong {
 /* prettier-ignore */
 /**
  * The schema is based on field data requirements from NganLuong's dev document
+ * <br>
+ * _Cấu trúc dữ liệu được dựa trên các yêu cầu của tài liệu Ngân Lượng_
  * @type {SimpleSchema}
  */
-NganLuong.dataSchema = new SimpleSchema({
+NganLuong.checkoutSchema = new SimpleSchema({
 	createdDate 		 : { type: String, optional: true },
 	amount               : { type: SimpleSchema.Integer },
 	clientIp             : { type: String, optional: true, max: 16 },
@@ -533,8 +544,26 @@ NganLuong.dataSchema = new SimpleSchema({
 	locale               : { type: String, allowedValues: ['vi', 'en'] },
 	orderId              : { type: String, max: 34 },
 	receiverEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
-	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
-	bankCode             : { type: String, max: 50 },
+	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
+	bankCode             : {
+		type: String,
+		optional: true,
+		max: 50,
+		custom() {
+			let shouldBeRequired = false;
+			const method = this.field('paymentMethod').value;
+			if (['ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'CREDIT_CARD_PREPAID'].indexOf(method) > -1) {
+				shouldBeRequired = true;
+			}
+
+			if (shouldBeRequired && (this.value == null || this.value === '')) {
+				return SimpleSchema.ErrorTypes.REQUIRED;
+			}
+
+			// field is valid
+			return undefined;
+		},
+	},
 	paymentType          : { type: String, optional: true, allowedValues: ['1', '2'] },
 	orderInfo            : { type: String, optional: true, max: 500 },
 	taxAmount            : { type: SimpleSchema.Integer, optional: true },
@@ -571,6 +600,8 @@ NganLuong.LOCALE_VN = 'vi';
 
 /**
  * NganLuong test configs
+ * <br>
+ * _Cấu hình dùng thử Ngân Lượng_
  */
 NganLuong.TEST_CONFIG = {
 	paymentGateway: 'https://sandbox.nganluong.vn:8088/nl30/checkout.api.nganluong.post.php',

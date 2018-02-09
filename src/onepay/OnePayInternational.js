@@ -7,8 +7,13 @@ import { urlRegExp } from '../utils';
 
 /**
  * OnePay International payment gateway helper.
- *
+ * <br>
  * Supports Master Card, Visa.
+ *
+ * _Hàm hỗ trợ thanh toán qua OnePay Quốc Tế_
+ * <br>
+ * _Hỗ trợ thẻ Master và Visa_
+ *
  *
  * @extends OnePay
  * @example
@@ -32,8 +37,9 @@ import { urlRegExp } from '../utils';
 class OnePayInternational extends OnePay {
 	/**
 	 *
-	 * @param {*} responseCode Responde code from gateway
-	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese
+	 * @param {*} responseCode Responde code from gateway <br> _Mã trả về từ cổng thanh toán_
+	 * @param {*} locale Same locale at the buildCheckoutUrl. Note, 'vn' for Vietnamese <br> _Cùng nơi với hàm buildCheckoutUrl. Lưu ý, 'vn' là Việt Nam_
+	 * @return {string}  A string contains error status converted from response code <br> _Một chuỗi chứa trạng thái lỗi được chuyển lại từ response code_
 	 */
 	static getReturnUrlStatus(responseCode, locale = 'vn') {
 		const responseCodeTable = {
@@ -111,8 +117,9 @@ class OnePayInternational extends OnePay {
 
 	/**
 	 * Instantiate a OnePayInternational checkout helper
-	 *
-	 * @param  {Object} config check OnePay.configSchema for data type requirements
+	 *<br>
+	 * _Khởi tạo hàm thanh toán OnePayInternational_
+	 * @param  {Object} config check OnePay.configSchema for data type requirements. <br> _Xem OnePay.configSchema để biết yêu cầu kiểu dữ liệu_
 	 * @return {void}
 	 */
 	constructor(config = {}) {
@@ -120,7 +127,10 @@ class OnePayInternational extends OnePay {
 	}
 
 	/**
+	 * Validate checkout payload against specific schema. Throw ValidationErrors if invalid against checkoutSchema.
 	 *
+	 * _Kiểm tra tính hợp lệ của dữ liệu thanh toán dựa trên schema đã được đồng bộ với tài liệu của nhà cung cấp.
+	 * Hiển thị lỗi nếu không hợp lệ với checkoutSchema._
 	 * @param {OnePayCheckoutPayload} payload
 	 * @override
 	 */
@@ -129,7 +139,10 @@ class OnePayInternational extends OnePay {
 	}
 
 	/**
-	 * @return {OnePayCheckoutPayload} default payload object
+	 * Return default checkout Payloads
+	 *
+	 * _Lấy checkout payload mặc định cho cổng thanh toán này_
+	 * @return {OnePayCheckoutPayload} default payload object <br> _Dữ liệu mặc định của đối tượng_
 	 */
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
@@ -220,11 +233,11 @@ class OnePayInternational extends OnePay {
 	 */
 	/**
 	 * Verify return query string from OnePay using enclosed vpc_SecureHash string
-	 *
-	 * Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment
+	 * <br>
+	 * _Hàm thực hiện xác minh tính đúng đắn của các tham số trả về từ onepay Payment_
 	 *
 	 * @param {*} query
-	 * @returns { OnePayInternationalReturnObject }
+	 * @returns { Promise<OnePayInternationalReturnObject> } Promise object which resolved with normalized returned data object, with additional fields like isSuccess. <br> _Promise khi hoàn thành sẽ trả về object data từ cổng thanh toán, được chuẩn hóa tên theo camelCase và đính kèm thuộc tính isSuccess_
 	 */
 	verifyReturnUrl(query) {
 		return super.verifyReturnUrl(query).then(verifyResults => {
@@ -295,6 +308,8 @@ OnePayInternational.checkoutSchema = new SimpleSchema({
 
 /**
  * OnePayInternational test config
+ *
+ * _Cấu hình dùng thử OnePayInternational_
  */
 OnePayInternational.TEST_CONFIG = {
 	accessCode: '6BEB2546',

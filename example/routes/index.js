@@ -98,6 +98,14 @@ routes.post('/payment/checkout', (req, res) => {
 		case 'nganluong':
 			// this param is not expected in other gateway
 			checkoutData.customerName = `${params.firstname || ''} ${params.lastname || ''}`.trim();
+			checkoutData.paymentMethod = 'ATM_ONLINE';
+			checkoutData.bankCode = 'BAB';
+			asyncCheckout = checkoutNganLuong(req, res);
+			break;
+		case 'nganluongvisa':
+			// this param is not expected in other gateway
+			checkoutData.customerName = `${params.firstname || ''} ${params.lastname || ''}`.trim();
+			checkoutData.paymentMethod = 'VISA';
 			asyncCheckout = checkoutNganLuong(req, res);
 			break;
 		case 'sohaPay':

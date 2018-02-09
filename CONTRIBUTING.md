@@ -1,4 +1,4 @@
-# CONTRIBUTING
+# `vn-payments` CONTRIBUTING
 
 Thanks for your interest in **vn-payments** development. We welcome any kind of contributions to this project.
 
@@ -14,11 +14,13 @@ If you want to contribute with new feature and fixes, please read below guidelin
 
 ## Getting Started with Development:
 
-* Install Node.
+* Install [Node](https://nodejs.org/) (>= 6.0.0).
 * Clone source code to your machine.
 * In the project root folder, execute command in terminal: `npm install`.
+* Link this repo as local npm package: `npm link`.
 * Change to `example/` folder, execute command : `npm install`.
-* Start the example from project root with: `npm start`.
+* Make `vn-payments` package in the example point to our local npm package: `npm link vn-payments`.
+* Start the example with: `npm start`.
   This will launch a [nodemon](https://nodemon.io/) process for automatic server restarts when your code changes.
 
 ### Testing
@@ -49,12 +51,18 @@ npm test --coverage
 
 ## Add more Payment Gateway:
 
-[TBC]
+* We intend to implement helpers for payment gateways in Vietnam only.
+* Follow one of the class implementation in the `src/` folder. Then send us PR.
+* OR send us **integration documentation** from gateway providers. See below.
 
-## Documentation
+#### Hỗ trợ tài liệu tích hợp:
+
+Một số cổng thanh toán không cung cấp tài liệu tích hợp ra ngoài mà chỉ gửi cho đối tác cần sử dụng. Bạn có thể gửi cho [chúng tôi](mailto:dev@naustud.io) tài liệu tích hợp của cổng thánh toán để chúng tôi hiện thực giúp.
+
+## API Documentation
 
 * Comment code following [JSDoc](http://usejsdoc.org/) specifications.
-* From terminal, execute command to generate new documentation site:
+* From terminal, execute command to generate new documentation site (output to `docs`):
 
 ```sh
 # yarn
@@ -62,6 +70,11 @@ yarn doc
 # npm
 npm run doc
 ```
+
+## Type definitions for editors' auto completion:
+
+* Update all interfaces and definitions in `src/index.d.ts`.
+* We follow [TypeScript Declaration File](https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html) specs to enable auto-completion in VSCode and other editors which use TypeScript as auto-completion engine
 
 ## Testing cards for payment tests
 
