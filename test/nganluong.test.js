@@ -53,7 +53,12 @@ describe('NganLuong', () => {
 			checkoutPayload.orderId = 'TEST123';
 			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Payment method is required');
 
+			checkoutPayload.paymentMethod = 'VISA';
+			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Customer email is required');
+
 			checkoutPayload.paymentMethod = 'ATM_ONLINE';
+			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Bank code is required');
+
 			checkoutPayload.bankCode = 'BAB';
 			await expect(nganluong.buildCheckoutUrl(checkoutPayload)).rejects.toBe('Customer email is required');
 

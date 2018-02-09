@@ -891,7 +891,7 @@ declare namespace nganluong {
 		 */
 		paymentMethod: string;
 		/**
-		 *   optional: true, max: 50 (required with ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
+		 *   optional: true, max: 50 (required with method ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
 		 */
 		bankCode?: string;
 		/**

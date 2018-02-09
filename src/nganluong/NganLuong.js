@@ -495,7 +495,7 @@ class NganLuong {
  * @property {string} orderId  max: 34
  * @property {string} receiverEmail  max: 255, regEx: SimpleSchema.RegEx.Email
  * @property {string} paymentMethod  allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE']
- * @property {string} bankCode  optional: true, max: 50 (required with ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
+ * @property {string} bankCode  optional: true, max: 50 (required with method ATM_ONLINE, ATM_OFFLINE, NH_OFFLINE, CREDIT_CARD_PREPAID)
  * @property {string} paymentType  optional: true, allowedValues: ['1', '2']
  * @property {string} orderInfo  optional: true, max: 500
  * @property {number} taxAmount Integer, optional: true
@@ -545,7 +545,25 @@ NganLuong.checkoutSchema = new SimpleSchema({
 	orderId              : { type: String, max: 34 },
 	receiverEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
 	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
-	bankCode             : { type: String, optional: true, max: 50 },
+	bankCode             : {
+		type: String,
+		optional: true,
+		max: 50,
+		custom() {
+			let shouldBeRequired = false;
+			const method = this.field('paymentMethod').value;
+			if (['ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'CREDIT_CARD_PREPAID'].indexOf(method) > -1) {
+				shouldBeRequired = true;
+			}
+
+			if (shouldBeRequired && (this.value == null || this.value === '')) {
+				return SimpleSchema.ErrorTypes.REQUIRED;
+			}
+
+			// field is valid
+			return undefined;
+		},
+	},
 	paymentType          : { type: String, optional: true, allowedValues: ['1', '2'] },
 	orderInfo            : { type: String, optional: true, max: 500 },
 	taxAmount            : { type: SimpleSchema.Integer, optional: true },
