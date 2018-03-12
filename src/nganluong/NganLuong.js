@@ -73,31 +73,31 @@ class NganLuong {
 			// Step 1: Map data to ngan luong checkout params
 			/* prettier-ignore */
 			const arrParam = {
-				function               : data.nganluongCommand,
-				cur_code               : data.currency ? data.currency.toLowerCase() : 'vnd',
-				version                : data.nganluongVersion,
-				merchant_id            : data.nganluongMerchant,
-				receiver_email         : data.receiverEmail,
-				merchant_password      : createMd5Hash(data.nganluongSecretKey),
-				order_code             : data.orderId,
-				total_amount           : String(data.amount),
-				payment_method         : data.paymentMethod,
-				bank_code              : data.bankCode,
-				payment_type           : data.paymentType,
-				order_description      : data.orderInfo,
-				tax_amount             : data.taxAmount,
-				fee_shipping           : data.feeShipping || '0',
-				discount_amount        : data.discountAmount || '0',
-				return_url             : data.returnUrl,
-				cancel_url             : data.cancelUrl,
-				buyer_fullname         : data.customerName,
-				buyer_email            : data.customerEmail,
-				buyer_mobile           : data.customerPhone,
-				buyer_address          : data.billingStreet,
-				time_limit             : data.timeLimit,
-				lang_code              : data.locale,
-				affiliate_code         : data.affiliateCode,
-				total_item             : data.totalItem,
+				function: data.nganluongCommand,
+				cur_code: data.currency ? data.currency.toLowerCase() : 'vnd',
+				version: data.nganluongVersion,
+				merchant_id: data.nganluongMerchant,
+				receiver_email: data.receiverEmail,
+				merchant_password: createMd5Hash(data.nganluongSecretKey),
+				order_code: data.orderId,
+				total_amount: String(data.amount),
+				payment_method: data.paymentMethod,
+				bank_code: data.bankCode,
+				payment_type: data.paymentType,
+				order_description: data.orderInfo,
+				tax_amount: data.taxAmount,
+				fee_shipping: data.feeShipping || '0',
+				discount_amount: data.discountAmount || '0',
+				return_url: data.returnUrl,
+				cancel_url: data.cancelUrl,
+				buyer_fullname: data.customerName,
+				buyer_email: data.customerEmail,
+				buyer_mobile: data.customerPhone,
+				buyer_address: data.billingStreet,
+				time_limit: data.timeLimit,
+				lang_code: data.locale,
+				affiliate_code: data.affiliateCode,
+				total_item: data.totalItem,
 			};
 
 			// Step 2: Post checkout data to ngan luong server
@@ -127,7 +127,11 @@ class NganLuong {
 						const objectResponse = result.result || {};
 						if (objectResponse.error_code[0] === '00') {
 							resolve({
-								href: objectResponse.checkout_url[0],
+								error_code: objectResponse.error_code[0],
+								token: objectResponse.token[0],
+								description: objectResponse.description[0],
+								time_limit: objectResponse.time_limit[0],
+								checkout_url: objectResponse.checkout_url[0],
 							});
 						} else {
 							reject(new Error(objectResponse.description[0]));
@@ -157,10 +161,10 @@ class NganLuong {
 	get checkoutPayloadDefaults() {
 		/* prettier-ignore */
 		return {
-			currency             : NganLuong.CURRENCY_VND,
-			locale               : NganLuong.LOCALE_VN,
-			nganluongVersion     : NganLuong.VERSION,
-			nganluongCommand	 : NganLuong.COMMAND,
+			currency: NganLuong.CURRENCY_VND,
+			locale: NganLuong.LOCALE_VN,
+			nganluongVersion: NganLuong.VERSION,
+			nganluongCommand: NganLuong.COMMAND,
 		};
 	}
 
@@ -225,10 +229,10 @@ class NganLuong {
 			// Step 1: Map data to ngan luong get detail params
 			/* prettier-ignore */
 			const arrParam = {
-				merchant_id            : data.nganluongMerchant,
-				merchant_password      : createMd5Hash(data.nganluongSecretKey),
-				version                : data.nganluongVersion,
-				function               : 'GetTransactionDetail',
+				merchant_id: data.nganluongMerchant,
+				merchant_password: createMd5Hash(data.nganluongSecretKey),
+				version: data.nganluongVersion,
+				function: 'GetTransactionDetail',
 				token,
 			};
 
@@ -527,25 +531,25 @@ class NganLuong {
  * @type {SimpleSchema}
  */
 NganLuong.checkoutSchema = new SimpleSchema({
-	createdDate 		 : { type: String, optional: true },
-	amount               : { type: SimpleSchema.Integer },
-	clientIp             : { type: String, optional: true, max: 16 },
-	currency             : { type: String, allowedValues: ['vnd', 'VND', 'USD', 'usd'] },
-	billingCity          : { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
-	billingCountry       : { type: String, optional: true, max: 255 },
-	billingPostCode      : { type: String, optional: true, max: 255 },
-	billingStateProvince : { type: String, optional: true, max: 255 },
-	billingStreet        : { type: String, optional: true, max: 255 },
-	customerId           : { type: String, optional: true, max: 255 },
-	deliveryAddress      : { type: String, optional: true, max: 255 },
-	deliveryCity         : { type: String, optional: true, max: 255 },
-	deliveryCountry      : { type: String, optional: true, max: 255 },
-	deliveryProvince     : { type: String, optional: true, max: 255 },
-	locale               : { type: String, allowedValues: ['vi', 'en'] },
-	orderId              : { type: String, max: 34 },
-	receiverEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
-	paymentMethod        : { type: String, allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
-	bankCode             : {
+	createdDate: { type: String, optional: true },
+	amount: { type: SimpleSchema.Integer },
+	clientIp: { type: String, optional: true, max: 16 },
+	currency: { type: String, allowedValues: ['vnd', 'VND', 'USD', 'usd'] },
+	billingCity: { type: String, optional: true, max: 255 }, // NOTE: no max limit documented for optional fields, this is just a safe value
+	billingCountry: { type: String, optional: true, max: 255 },
+	billingPostCode: { type: String, optional: true, max: 255 },
+	billingStateProvince: { type: String, optional: true, max: 255 },
+	billingStreet: { type: String, optional: true, max: 255 },
+	customerId: { type: String, optional: true, max: 255 },
+	deliveryAddress: { type: String, optional: true, max: 255 },
+	deliveryCity: { type: String, optional: true, max: 255 },
+	deliveryCountry: { type: String, optional: true, max: 255 },
+	deliveryProvince: { type: String, optional: true, max: 255 },
+	locale: { type: String, allowedValues: ['vi', 'en'] },
+	orderId: { type: String, max: 34 },
+	receiverEmail: { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
+	paymentMethod: { type: String, allowedValues: ['NL', 'VISA', 'MASTER', 'JCB', 'ATM_ONLINE', 'ATM_OFFLINE', 'NH_OFFLINE', 'TTVP', 'CREDIT_CARD_PREPAID', 'IB_ONLINE'] },
+	bankCode: {
 		type: String,
 		optional: true,
 		max: 50,
@@ -564,24 +568,24 @@ NganLuong.checkoutSchema = new SimpleSchema({
 			return undefined;
 		},
 	},
-	paymentType          : { type: String, optional: true, allowedValues: ['1', '2'] },
-	orderInfo            : { type: String, optional: true, max: 500 },
-	taxAmount            : { type: SimpleSchema.Integer, optional: true },
-	discountAmount       : { type: SimpleSchema.Integer, optional: true },
-	feeShipping          : { type: SimpleSchema.Integer, optional: true },
-	customerEmail        : { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
-	customerPhone        : { type: String, max: 255 },
-	customerName         : { type: String, max: 255 },
-	returnUrl            : { type: String, max: 255 },
-	cancelUrl            : { type: String, max: 255, optional: true },
-	timeLimit            : { type: SimpleSchema.Integer, optional: true }, // minutes
-	affiliateCode        : { type: String, max: 255, optional: true },
-	totalItem            : { type: String, optional: true },
-	transactionId        : { type: String, max: 40 },
-	nganluongSecretKey   : { type: String, max: 32 },
-	nganluongMerchant    : { type: String, max: 16 },
-	nganluongCommand     : { type: String, max: 32 },
-	nganluongVersion     : { type: String, max: 3 },
+	paymentType: { type: String, optional: true, allowedValues: ['1', '2'] },
+	orderInfo: { type: String, optional: true, max: 500 },
+	taxAmount: { type: SimpleSchema.Integer, optional: true },
+	discountAmount: { type: SimpleSchema.Integer, optional: true },
+	feeShipping: { type: SimpleSchema.Integer, optional: true },
+	customerEmail: { type: String, max: 255, regEx: SimpleSchema.RegEx.Email },
+	customerPhone: { type: String, max: 255 },
+	customerName: { type: String, max: 255 },
+	returnUrl: { type: String, max: 255 },
+	cancelUrl: { type: String, max: 255, optional: true },
+	timeLimit: { type: SimpleSchema.Integer, optional: true }, // minutes
+	affiliateCode: { type: String, max: 255, optional: true },
+	totalItem: { type: String, optional: true },
+	transactionId: { type: String, max: 40 },
+	nganluongSecretKey: { type: String, max: 32 },
+	nganluongMerchant: { type: String, max: 16 },
+	nganluongCommand: { type: String, max: 32 },
+	nganluongVersion: { type: String, max: 3 },
 });
 
 NganLuong.configSchema = new SimpleSchema({
