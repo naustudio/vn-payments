@@ -17,7 +17,7 @@ describe('NganLuong', () => {
 	describe('NganLuong.buildCheckoutUrl', () => {
 		it('should return correct payment request URL for some details', async () => {
 			// we'll use this demo URL from NganLuong developer website for authenticity
-			// https://sandbox.nganluong.vn:8088/nl30/checkout.api.nganluong.post.php?merchant_id=45571&merchant_password=2b9467c171707b3766fb41f50eee8013&version=3.1&function=SetExpressCheckout&receiver_email=tung.tran@naustud.io&order_code=node-2018-01-22T05:05:17.266Z&total_amount=90000&payment_method=ATM_ONLINE&bank_code=BAB&order_description=Thanh%20toan%20giay%20adidas&return_url=http://localhost:8080/payment/nganluong/callback&cancel_url=http://localhost:8080/&buyer_fullname=T%C3%BA%20%C4%90%E1%BB%8Bch&buyer_email=tu.nguyen@naustud.io&buyer_mobile=0999999999&buyer_address=441%20C%C3%A1ch%20M%E1%BA%A1ng%20Th%C3%A1ng%20T%C3%A1m&cur_code=vnd&lang_code=vi
+			// https://sandbox.nganluong.vn:8088/nl35/checkout.api.nganluong.post.php?merchant_id=45571&merchant_password=2b9467c171707b3766fb41f50eee8013&version=3.1&function=SetExpressCheckout&receiver_email=tung.tran@naustud.io&order_code=node-2018-01-22T05:05:17.266Z&total_amount=90000&payment_method=ATM_ONLINE&bank_code=BAB&order_description=Thanh%20toan%20giay%20adidas&return_url=http://localhost:8080/payment/nganluong/callback&cancel_url=http://localhost:8080/&buyer_fullname=T%C3%BA%20%C4%90%E1%BB%8Bch&buyer_email=tu.nguyen@naustud.io&buyer_mobile=0999999999&buyer_address=441%20C%C3%A1ch%20M%E1%BA%A1ng%20Th%C3%A1ng%20T%C3%A1m&cur_code=vnd&lang_code=vi
 			const checkoutPayload = {
 				orderId: 'node-2018-01-22T05:05:17.266Z',
 				transactionId: 'node-2018-01-22T05:05:17.266Z',
@@ -39,7 +39,7 @@ describe('NganLuong', () => {
 			const redirectUrl = await nganluong.buildCheckoutUrl(checkoutPayload);
 
 			expect(redirectUrl.href).toMatch(
-				/https:\/\/sandbox.nganluong.vn:8088\/nl30\/checkout\/version31\/index\/token_code\/.*/
+				/https:\/\/sandbox.nganluong.vn:8088\/nl35\/checkout\/version31\/index\/token_code\/.*/
 			);
 		});
 

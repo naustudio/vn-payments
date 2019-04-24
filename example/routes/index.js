@@ -99,7 +99,7 @@ routes.post('/payment/checkout', (req, res) => {
 			// this param is not expected in other gateway
 			checkoutData.customerName = `${params.firstname || ''} ${params.lastname || ''}`.trim();
 			checkoutData.paymentMethod = 'ATM_ONLINE';
-			checkoutData.bankCode = 'BAB';
+			checkoutData.bankCode = 'EXB';
 			asyncCheckout = checkoutNganLuong(req, res);
 			break;
 		case 'nganluongvisa':
@@ -122,7 +122,7 @@ routes.post('/payment/checkout', (req, res) => {
 				res.end();
 			})
 			.catch(err => {
-				res.send(err);
+				res.send(err.message);
 			});
 	} else {
 		res.send('Payment method not found');
