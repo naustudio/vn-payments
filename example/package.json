@@ -13,12 +13,12 @@
     "npm": ">=3.10.0"
   },
   "dependencies": {
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "express-handlebars": "^3.0.0",
-    "morgan": "^1.9.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "morgan": "^1.9.1",
     "vn-payments": "^1.0.3"
   },
   "devDependencies": {},
