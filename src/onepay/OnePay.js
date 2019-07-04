@@ -1,7 +1,6 @@
 /* © 2018 NauStud.io
  * @author Jacob Pham, Thanh Tran
  */
-import { URL } from 'url';
 import SimpleSchema from 'simpl-schema';
 import { toUpperCase, pack, hashHmac } from '../utils';
 
